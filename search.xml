@@ -1,340 +1,83 @@
-<!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="docker,nginx,busybox,overlay," />
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="简介 用docker容器进行打包服务非常方便 不需要考虑依赖的问题 只要把容器复制到其他有docker daemon的服务器就可以直接启动 并能很方便的利用Cgroup, Namespace技术实现资源控制和资源隔离这篇文档以Nginx为例 其他的像redis mysql php等服务也是可以使用这个方法进行打包为最精简的 只包含必须依赖的服务容器">
-<meta name="keywords" content="docker,nginx,busybox,overlay">
-<meta property="og:type" content="article">
-<meta property="og:title" content="构建基于Busybox的Nginx服务容器">
-<meta property="og:url" content="http://yoursite.com/2016/04/22/构建基于Busybox的Nginx服务容器/index.html">
-<meta property="og:site_name" content="理想国">
-<meta property="og:description" content="简介 用docker容器进行打包服务非常方便 不需要考虑依赖的问题 只要把容器复制到其他有docker daemon的服务器就可以直接启动 并能很方便的利用Cgroup, Namespace技术实现资源控制和资源隔离这篇文档以Nginx为例 其他的像redis mysql php等服务也是可以使用这个方法进行打包为最精简的 只包含必须依赖的服务容器">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-10T06:50:05.513Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="构建基于Busybox的Nginx服务容器">
-<meta name="twitter:description" content="简介 用docker容器进行打包服务非常方便 不需要考虑依赖的问题 只要把容器复制到其他有docker daemon的服务器就可以直接启动 并能很方便的利用Cgroup, Namespace技术实现资源控制和资源隔离这篇文档以Nginx为例 其他的像redis mysql php等服务也是可以使用这个方法进行打包为最精简的 只包含必须依赖的服务容器">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '5.1.3',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="http://yoursite.com/2016/04/22/构建基于Busybox的Nginx服务容器/"/>
-
-
-
-
-
-  <title>构建基于Busybox的Nginx服务容器 | 理想国</title>
-  
-
-
-
-
-
-
-
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
   
     
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">理想国</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
+    <entry>
+      <title><![CDATA[Build your own blog with hexo]]></title>
+      <url>/2017/11/10/what-is-hexo/</url>
+      <content type="html"><![CDATA[<h2 id="What-is-Hexo"><a href="#What-is-Hexo" class="headerlink" title="What is Hexo?"></a><font color="#5CACEE">What is Hexo?</font></h2><blockquote>
+<p>Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.<br>Installing Hexo is quite easy. However, you do need to have Nodejs &amp; Git installed first.<br>In order to install Nodejs you can see Install &amp; run your first application Nodejs.<br>In order to install Git you can see <a href="https://git-scm.com/" target="_blank" rel="external">https://git-scm.com/</a> .</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Install-Hexo"><a href="#Install-Hexo" class="headerlink" title="Install Hexo"></a><font color="#5CACEE">Install Hexo</font></h2><p>  Once all the requirements are installed,you can install Hexo.<br> <br> $ npm install -g hexo-cli</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOiqe.png" alt="vOiqe.png"></p>
+</blockquote>
+<h2 id="Create-a-blog"><a href="#Create-a-blog" class="headerlink" title="Create a blog"></a><font color="#5CACEE">Create a blog</font></h2><p>  Now that hexo is installed run the following commands to initialise Hexo project<br> <br>$ hexo init myblog <br> $ cd myblog  <br>$ npm install</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOIiN.png" alt="vOIiN.png"></p>
+</blockquote>
+<p>You can modify site settings in <font color="brow" size="2">_config.yml</font>. for the sake of simplicity we�re only modify the Title and author name .</p>
+<h2 id="Run-the-Blog"><a href="#Run-the-Blog" class="headerlink" title="Run the Blog"></a><font color="#5CACEE">Run the Blog</font></h2><p>  Run the server:<br><br>    $ hexo server </p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOfzK.png" alt="vOfzK.png"><br>  launch your browser and navigate to <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a>.<br><img src="https://t1.picb.cc/uploads/2017/11/10/vOZcj.png" alt="vOZcj.png"><br>Voila your first blog is working!</p>
+</blockquote>
+<h2 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a><font color="#5CACEE">Create a new post</font></h2><p>  Create a new post is very simlpe all what you have to do is :<br>  <br>   $ hexo new “My Fist Post with hexo”</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOVrX.png" alt="vOVrX.png"><br>Update the file using Markdown language:</p>
+</blockquote>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: My Fist Post with hexo</span><br><span class="line">date: 2016-09-25 20:03:25</span><br><span class="line">tags:</span><br><span class="line">---</span><br><span class="line">This my first post using [<span class="string">Hexo</span>](<span class="link">https://hexo.io/</span>)! </span><br><span class="line"></span><br><span class="line"><span class="section">## First title</span></span><br><span class="line"></span><br><span class="line"><span class="section">### a first subtitile </span></span><br><span class="line"></span><br><span class="line"><span class="code">    /usr/bin/bash</span></span><br><span class="line"><span class="code">    $ hexo new "My New Post"</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"></span><br><span class="line"><span class="section">## Second title</span></span><br><span class="line"></span><br><span class="line">More info: [<span class="string">Writing</span>](<span class="link">https://hexo.io/docs/writing.html</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOgSG.png" alt="vOgSG.png"><br>  Run the server again:<br> <br>   $ hexo server<br><img src="https://t1.picb.cc/uploads/2017/11/10/vOnxs.png" alt="vOnxs.png"></p>
+</blockquote>
+<h2 id="Deployment-on-Github"><a href="#Deployment-on-Github" class="headerlink" title="Deployment on Github"></a><font color="#5CACEE">Deployment on Github</font></h2><p>  Now what about Deployment, it�s exactly what we are going to do, first Create new Github repository :</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOwQc.png" alt="vOwQc.png"><br>  Click settings<br><img src="https://t1.picb.cc/uploads/2017/11/10/vOlt7.png" alt="vOlt7.png"><br><img src="https://t1.picb.cc/uploads/2017/11/10/vOCST.png" alt="vOCST.png"><br>  Then install hexo-deployer-git:<br> <br>  $ npm install hexo-deployer-git –save<br><img src="https://t1.picb.cc/uploads/2017/11/10/vOyx8.png" alt="vOyx8.png"></p>
+</blockquote>
+<p>  Click clone or download button:</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOu56.png" alt="vOu56.png"></p>
+</blockquote>
+<p>  Update _config.yaml file :</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOtyy.png" alt="vOtyy.png"></p>
+</blockquote>
+<p>  It�s time for deployement :<br>  <br> $ hexo deploy</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOJtg.png" alt="vOJtg.png"></p>
+</blockquote>
+<p>  To preview launch your browser.</p>
+<blockquote>
+<p><img src="https://t1.picb.cc/uploads/2017/11/10/vOmyM.png" alt="vOmyM.png"></p>
+</blockquote>
+<p>You can get see the blog on <a href="https://malektrainer.github.io/" target="_blank" rel="external">https://malektrainer.github.io/</a>.<br><br>You can find source code on <a href="https://github.com/malektrainer/myblog" target="_blank" rel="external">https://github.com/malektrainer/myblog</a>.</p>
+]]></content>
       
-        <p class="site-subtitle"></p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+        <categories>
             
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+            <category> blog </category>
             
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-            归档
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/22/构建基于Busybox的Nginx服务容器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chaos">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="理想国">
-    </span>
-
-    
-      <header class="post-header">
-
+        </categories>
         
         
-          <h1 class="post-title" itemprop="name headline">构建基于Busybox的Nginx服务容器</h1>
+        <tags>
+            
+            <tag> blog </tag>
+            
+            <tag> server </tag>
+            
+            <tag> environment </tag>
+            
+            <tag> mark </tag>
+            
+        </tags>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-22T10:12:00-04:00">
-                2016-04-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/docker/" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
+    </entry>
     
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h2><blockquote>
+    <entry>
+      <title><![CDATA[构建基于Busybox的Nginx服务容器]]></title>
+      <url>/2016/04/22/%E6%9E%84%E5%BB%BA%E5%9F%BA%E4%BA%8EBusybox%E7%9A%84Nginx%E6%9C%8D%E5%8A%A1%E5%AE%B9%E5%99%A8/</url>
+      <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h2><blockquote>
 <p>用docker容器进行打包服务非常方便 不需要考虑依赖的问题 只要把容器复制到其他有docker daemon的服务器就可以直接启动 并能很方便的利用Cgroup, Namespace技术实现资源控制和资源隔离<br>这篇文档以Nginx为例 其他的像redis mysql php等服务也是可以使用这个方法进行打包为最精简的 只包含必须依赖的服务容器</p>
 </blockquote>
 <a id="more"></a>
@@ -569,409 +312,29 @@ root@ubuntu:~# docker inspect --format {{.Config.Cmd}} nginx:1.9.15
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save nginx:1.9.15 |gzip &gt; nginx_1.9.15-image.tar.gz</span><br></pre></td></tr></table></figure>
 <p>要恢复的话也很简单 docker支持直接从gz压缩包中恢复<br>导入新的镜像 这个镜像的标签可能会丢失 但是id号还在 给这个id好重新打个标签</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker load &lt; nginx_1.9.15-image.tar.gz</span><br><span class="line">docker tag 99089cedcc48 nginx:1.9.15</span><br></pre></td></tr></table></figure>
-
+]]></content>
       
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/docker/" rel="tag"># docker</a>
-          
-            <a href="/tags/nginx/" rel="tag"># nginx</a>
-          
-            <a href="/tags/busybox/" rel="tag"># busybox</a>
-          
-            <a href="/tags/overlay/" rel="tag"># overlay</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
+        <categories>
             
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
+            <category> docker </category>
             
-              <a href="/2017/11/10/what-is-hexo/" rel="prev" title="Build your own blog with hexo">
-                Build your own blog with hexo <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-
-
-
-        </div>
+        </categories>
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
-                alt="chaos" />
-            
-              <p class="site-author-name" itemprop="name">chaos</p>
-              <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives">
-              
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">分类</span>
-                
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">8</span>
-                  <span class="site-state-item-name">标签</span>
-                
-              </div>
-            
-
-          </nav>
-
-          
-
-          <div class="links-of-author motion-element">
-            
-              
-                <span class="links-of-author-item">
-                  <a href="https://github.com/uxtuo" target="_blank" title="GitHub">
-                    
-                      <i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-            
-          </div>
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主机环境"><span class="nav-number">2.1.</span> <span class="nav-text">主机环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软件环境"><span class="nav-number">2.2.</span> <span class="nav-text">软件环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#步骤"><span class="nav-number">3.</span> <span class="nav-text">步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建Busybox最小容器"><span class="nav-number">3.1.</span> <span class="nav-text">构建Busybox最小容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装Nginx"><span class="nav-number">3.2.</span> <span class="nav-text">编译安装Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装nginx到非默认根"><span class="nav-number">3.2.1.</span> <span class="nav-text">安装nginx到非默认根</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制Nginx运行依赖库"><span class="nav-number">3.2.2.</span> <span class="nav-text">复制Nginx运行依赖库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包Nginx服务容器"><span class="nav-number">3.3.</span> <span class="nav-text">打包Nginx服务容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#认识overlayFS"><span class="nav-number">3.3.1.</span> <span class="nav-text">认识overlayFS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chroot进行根切换"><span class="nav-number">3.3.2.</span> <span class="nav-text">Chroot进行根切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根据执行Nginx的报错进行配置"><span class="nav-number">3.3.3.</span> <span class="nav-text">根据执行Nginx的报错进行配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改Nginx配置文件"><span class="nav-number">3.3.4.</span> <span class="nav-text">修改Nginx配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将目录打包为Docker容器"><span class="nav-number">3.3.5.</span> <span class="nav-text">将目录打包为Docker容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动容器-检查是否成功"><span class="nav-number">3.3.6.</span> <span class="nav-text">启动容器 检查是否成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#overlayFS文件误删的恢复"><span class="nav-number">3.3.7.</span> <span class="nav-text">overlayFS文件误删的恢复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#将Nginx容器镜像保存为文件"><span class="nav-number">4.1.</span> <span class="nav-text">将Nginx容器镜像保存为文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置一个默认启动命令"><span class="nav-number">4.1.1.</span> <span class="nav-text">配置一个默认启动命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#保存为文件"><span class="nav-number">4.1.2.</span> <span class="nav-text">保存为文件</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
         
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">chaos</span>
-
-  
-</div>
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
-
-
-
-
+        <tags>
+            
+            <tag> docker </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> busybox </tag>
+            
+            <tag> overlay </tag>
+            
+        </tags>
         
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+    </entry>
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
   
   
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
-</body>
-</html>
+</search>
