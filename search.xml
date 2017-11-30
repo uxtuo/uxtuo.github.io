@@ -3,6 +3,82 @@
   
     
     <entry>
+      <title><![CDATA[搭建个人博客]]></title>
+      <url>/2017/11/14/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+      <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h2><blockquote>
+<p>  Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。看官档是个好习惯，<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external"><font color="#AAAAAA">戳这里</font></a>跟着官方的文档走清晰明确又全面。</p>
+<p><br>很久前搭建过一个基于wordpress的博客，然而那个时候并没有写东西的兴趣，完成了环境搭建之后确定博客可用，实验过程可复现就没再管理。</p>
+<p><br>最近一直在看世界历史，越发感觉到生产关系和生产资料在人类文明史发展过程中的核心地位，可以清楚得看到历史的脉络跟生产力的发展之间的关系.</p>
+<p><br>做个对社会有贡献的人真的不是一句套话。生产资料的占有者，生产关系中的生产者，社会财富的创造者,这些人才真的有机会去在社会变革的浪潮中大幅度改变既定的人生轨迹。</p>
+<p><br>在信息时代，在下一次科技革命的前夕，在即将到来注定是数字化信息化的世界里，一切皆数据。数据就是新的生产资料，用数据去形成各种特定功能的产品，解决问题，就是新世界的生产关系，就如同石器时代会做石斧，铁器时代掌握了冶金技术，化石能源时代掌握了开采石油并加工成产品，核能时代掌握了可控核聚变技术一样，在数据时代中掌握了跟数据相关的姿势，从数据的收集和传递，存储，到在线分析，机器学习，人工智能、从数据支持的企业商务决策到各种炫酷到不行的网页设计，前端展示。就算站不到浪潮之巅，苟全性命于盛世绰绰有余。</p>
+<p><br>这个博客第一是把我的学习状态和进度拿出来晒一晒，即使没人看，也是对我自己的一种鼓励（ps：万一有人看到了呢），现在处于大数据职业技能树生成阶段，既然走在正确的路上，用点手段督促自己走快点。再一个就是分享一些技术文档，刚从菜鸟阶段提升了一点，踩过的坑，做过的事都摆出来，看看能不能帮到一起前进的同道中人，也算是一种展现自己价值的方式。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a><font color="#5CACEE">思路</font></h2><blockquote>
+<p>要搭建一个自己的博客，可以选择类似CSDN之类的网站，网站提供现成服务和模板，作者编辑内容后提交，网站审核发布。也可以在自己的服务器上用博客模板搭建服务，编辑内容后发布，游客通过访问服务器来访问作者的博客。我在某服务商那里常年租借VPS，所以选择自己搭建。<br> <br>搭建的时候可以选择<a href="https://baike.baidu.com/item/WordPress/450615?fr=aladdin" target="_blank" rel="external"><font color="#AAAAAA">wrodpress</font></a>，<a href="https://gohugo.io/" target="_blank" rel="external"><font color="#AAAAAA">hugo</font></a>，<a href="https://jekyllrb.com/" target="_blank" rel="external"><font color="#AAAAAA">jekyll</font></a>,<a href="https://hexo.io/zh-cn/" target="_blank" rel="external"><font color="#AAAAAA">hexo</font></a>等博客框架和生成静态网页的工具，这里选择使用的是hexo。<br><br>确定了要做什么和怎么做，之后的事情就简单了。用xshell或CRT终端连接VPS，部署服务，编辑内容，测试，发布，博客就算搭建完成。<br><br>搭建完成后得提供访问地址，总不能给别人一个IP和端口说“这是我的博客，跑在这个服务器这个端口上，欢迎访问”。一不专业，二不安全，建议申请域名进行<a href="https://baike.baidu.com/item/%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/574285?fr=aladdin" target="_blank" rel="external"><font color="#AAAAAA">域名解析</font></a>，可以选择国内的域名，申请备案然后使用。笔者这里选择在<a href="http://www.freenom.com/zh/index.html?lang=zh" target="_blank" rel="external"><font color="#AAAAAA">freenom</font></a>申请一个免费域名并设置解析VPS，达到通过域名直接访问博客的目的，同时因为是境外的域名，所以不涉及到备案，可以直接访问。还可以通过更改配置文件，添加公钥等步骤将博客设置托管到github上，通过github提供的服务来访问博客，好处是所有的内容都会推送一份到github上，哪怕服务器挂了也算有个备份。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a><font color="#5CACEE">环境</font></h2></blockquote>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> node.js</td>
+<td><a href="https://nodejs.org/zh-cn/download/" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td> git</td>
+<td><font color="#AAAAAA">yum安装即可</font></td>
+</tr>
+<tr>
+<td> hexo</td>
+<td><font color="#AAAAAA">npm安装即可</font></td>
+</tr>
+<tr>
+<td> nginx</td>
+<td><a href="http://nginx.org/download/nginx-1.13.6.tar.gz" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a><font color="#5CACEE">步骤</font></h2><h3 id="一-安装"><a href="#一-安装" class="headerlink" title="一 安装 "></a><font color="#CDAA7D">一 安装 </font></h3><h4 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1. 安装node.js"></a><font color="#CDAA7D">1. 安装node.js</font></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh node-8.4.0-el6.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p><img src="" alt="avatar"></p>
+<h4 id="2-安装git"><a href="#2-安装git" class="headerlink" title="2. 安装git"></a><font color="#CDAA7D">2. 安装git</font></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure>
+<h4 id="3-安装hexo"><a href="#3-安装hexo" class="headerlink" title="3. 安装hexo"></a><font color="#CDAA7D">3. 安装hexo</font></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<h4 id="4-创建工作文件夹"><a href="#4-创建工作文件夹" class="headerlink" title="4. 创建工作文件夹"></a><font color="#CDAA7D">4. 创建工作文件夹</font></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog</span><br></pre></td></tr></table></figure>
+<h4 id="5-启动服务"><a href="#5-启动服务" class="headerlink" title="5. 启动服务"></a><font color="#CDAA7D">5. 启动服务</font></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s (完整命令hexo server，可简写)</span><br></pre></td></tr></table></figure>
+<p>访问4000端口可以看到已经提供服务</p>
+<h3 id="二-使用"><a href="#二-使用" class="headerlink" title="二 使用 "></a><font color="#CDAA7D">二 使用 </font></h3><h4 id="1-推一篇文章"><a href="#1-推一篇文章" class="headerlink" title="1.推一篇文章"></a><font color="#DDA0DD">1.推一篇文章</font></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;My first post with hexo&quot;</span><br></pre></td></tr></table></figure>
+<p>该命令会在工作文件夹存放博客内容的文件夹下面生成一个My first post with hexo.md文件,写入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: My Fist Post with hexo</span><br><span class="line">date: 2016-09-25 20:03:25</span><br><span class="line">tags:</span><br><span class="line">---</span><br><span class="line">This my first post using [Hexo](https://hexo.io/)! </span><br><span class="line"></span><br><span class="line">## First title</span><br><span class="line"></span><br><span class="line">### a first subtitile </span><br><span class="line"></span><br><span class="line">    $ hexo new &quot;My New Post&quot;</span><br><span class="line"></span><br><span class="line">## Second title</span><br><span class="line"></span><br><span class="line">More info: [Writing](https://hexo.io/docs/writing.html)</span><br></pre></td></tr></table></figure>
+<p>使用hexo g(hexo generate)命令根据内容生成静态文件，hexo s 开始测试并访问4000端口</p>
+<h4 id="2-将博客托管在github上"><a href="#2-将博客托管在github上" class="headerlink" title="2.将博客托管在github上"></a><font color="#DDA0DD">2.将博客托管在github上</font></h4><p>github创建的仓库可以提供一个链接，将静态页面文件以网页的形式展示出来，我们现在git里面创建一个特殊的仓库，然后在hexo的配置文件里面将托管形式改成git，并且链接到该仓库，便可以通过github提供的服务访问博客。</p>
+<h5 id="添加密钥"><a href="#添加密钥" class="headerlink" title="* 添加密钥"></a><font color="#DDA0DD">* 添加密钥</font></h5><p>在服务器生成密钥，添加到github里，使服务器和github可以进行文件的读写</p>
+<h5 id="安装可以实现将hexo文件部署到git的组建"><a href="#安装可以实现将hexo文件部署到git的组建" class="headerlink" title="* 安装可以实现将hexo文件部署到git的组建"></a><font color="#DDA0DD">* 安装可以实现将hexo文件部署到git的组建</font></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<h5 id="修改配置文件并将内容推送到git"><a href="#修改配置文件并将内容推送到git" class="headerlink" title="* 修改配置文件并将内容推送到git"></a><font color="#DDA0DD">* 修改配置文件并将内容推送到git</font></h5><p>至此，部署博客服务器(安装nodejs，git，hexo，创建博客内容文件夹) ， 将博客文件托管到github，使用github仓库的访问链接来访问博客，创建一个托管在github的博客网站，通过链接 <a href="https://uxtuo.github.io" target="_blank" rel="external">https://uxtuo.github.io</a> 访问，get！</p>
+<h4 id="3-设置域名并用nginx代理"><a href="#3-设置域名并用nginx代理" class="headerlink" title="3.设置域名并用nginx代理 "></a><font color="#DDA0DD">3.设置域名并用nginx代理 </font></h4><p>将博客托管在github上和通过域名直接访问服务器的博客不冲突。<br><br>hexo作为生成静态文件的工具，编辑内容并生成博客文件,推送并访问位于git上的文件，亦或者通过ip或者域名访问服务器上的文件没有区别，这里申请一个域名对vps的ip进行解析，使游客可以通过域名直接访问服务器上的博客，并用nginx做代理处理对服务器的请求。</p>
+<h5 id="申请域名并设置解析地址"><a href="#申请域名并设置解析地址" class="headerlink" title="* 申请域名并设置解析地址"></a><font color="#DDA0DD">* 申请域名并设置解析地址</font></h5><p>在<a href="http://www.freenom.com/zh/index.html?lang=zh" target="_blank" rel="external"><font color="#AAAAAA">freenom</font></a>申请免费域名，设置域名解析为vps地址</p>
+<h5 id="设置nginx做代理以应付可能的高并发访问"><a href="#设置nginx做代理以应付可能的高并发访问" class="headerlink" title="* 设置nginx做代理以应付可能的高并发访问"></a><font color="#DDA0DD">* 设置nginx做代理以应付可能的高并发访问</font></h5><p>安装nginx（下载压缩包后解压到/usr/local/目录即可使用），修改配置文件，使nginx代理对该服务器80端口的所有访问，设置nginx解析位于/myblog/public目录hexo生成的静态网页文件</p>
+<p>这样就可以实现通过域名访问部署在VPS上的博客，get！</p>
+<p>那啥，缺了好多图，改天补，先放上来，拖了好久了，再拖要凉了</p>
+]]></content>
+      
+        <categories>
+            
+            <category> env </category>
+            
+            <category> hexo </category>
+            
+            <category> vps </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Build your own blog with hexo]]></title>
       <url>/2017/11/10/what-is-hexo/</url>
       <content type="html"><![CDATA[<h2 id="What-is-Hexo"><a href="#What-is-Hexo" class="headerlink" title="What is Hexo?"></a><font color="#5CACEE">What is Hexo?</font></h2><blockquote>
