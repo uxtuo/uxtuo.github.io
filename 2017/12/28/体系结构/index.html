@@ -79,15 +79,21 @@
 
 
 
-<meta name="description" content="体系结构  内存结构 进程结构 物理存储结构  Oracle服务器由数据库实例和数据库文件构成 Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。要访问数据库，先启动实例,分配内存区，然后启动后台进程">
+<meta name="description" content="体系结构  内存结构 进程结构 物理存储结构  Oracle服务器由数据库实例和数据库文件构成 数据库 = 数据文件 + 控制文件 + 日志文件 实例 = 内存池 + 后台进程 Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。要访问数据库，先启动实例,分配内存区，然后启动后台进程">
 <meta name="keywords" content="theory,DB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="体系结构">
 <meta property="og:url" content="sargeras.tk/2017/12/28/体系结构/index.html">
 <meta property="og:site_name" content="理想国">
-<meta property="og:description" content="体系结构  内存结构 进程结构 物理存储结构  Oracle服务器由数据库实例和数据库文件构成 Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。要访问数据库，先启动实例,分配内存区，然后启动后台进程">
+<meta property="og:description" content="体系结构  内存结构 进程结构 物理存储结构  Oracle服务器由数据库实例和数据库文件构成 数据库 = 数据文件 + 控制文件 + 日志文件 实例 = 内存池 + 后台进程 Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。要访问数据库，先启动实例,分配内存区，然后启动后台进程">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1513927427014.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514537708795.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514538245662.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514538085023.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514537996791.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514538315144.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514538043664.png">
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514449341804.png">
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514452284051.png">
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514452594076.png">
@@ -97,10 +103,10 @@
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514427510106.png">
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514428149844.png">
 <meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514447367034.png">
-<meta property="og:updated_time" content="2017-12-29T01:16:55.584Z">
+<meta property="og:updated_time" content="2017-12-29T09:11:19.238Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="体系结构">
-<meta name="twitter:description" content="体系结构  内存结构 进程结构 物理存储结构  Oracle服务器由数据库实例和数据库文件构成 Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。要访问数据库，先启动实例,分配内存区，然后启动后台进程">
+<meta name="twitter:description" content="体系结构  内存结构 进程结构 物理存储结构  Oracle服务器由数据库实例和数据库文件构成 数据库 = 数据文件 + 控制文件 + 日志文件 实例 = 内存池 + 后台进程 Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。要访问数据库，先启动实例,分配内存区，然后启动后台进程">
 <meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1513927427014.png">
 
 
@@ -352,11 +358,15 @@
 <li>物理存储结构</li>
 </ul>
 <p>Oracle服务器由数据库实例和数据库文件构成</p>
+<p>数据库 = 数据文件 + 控制文件 + 日志文件</p>
+<p>实例 = 内存池 + 后台进程</p>
 <p>Oracle实例就是由一些内存区和后台进程构成的一个逻辑概念。<br>要访问数据库，先启动实例,分配内存区，然后启动后台进程</p>
 </blockquote>
 <a id="more"></a>
 <h2 id="内存结构-SGA-PGA"><a href="#内存结构-SGA-PGA" class="headerlink" title="内存结构 SGA+PGA"></a><font color="green">内存结构 SGA+PGA</font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1513927427014.png" alt=""></p>
-<h3 id="SGA-system-global-area"><a href="#SGA-system-global-area" class="headerlink" title="SGA  system global area"></a><font color="red">SGA  system global area</font></h3><h4 id="shared-pool"><a href="#shared-pool" class="headerlink" title="shared pool"></a>shared pool</h4><blockquote>
+<h3 id="SGA-–-system-global-area"><a href="#SGA-–-system-global-area" class="headerlink" title="SGA – system global area"></a><font color="red">SGA – system global area</font></h3><pre><code>由所有服务进程和后台进程共享
+</code></pre><h4 id="shared-pool"><a href="#shared-pool" class="headerlink" title="shared pool"></a>shared pool</h4><pre><code>缓存了各用户间可共享的各种结构
+</code></pre><blockquote>
 <p><br>数据字典，执行计划<br><br>数据块相关性高，版本转换产生bug的几率更大<br><br>SQL执行计划，硬解析和软解析<br><br>语法语句检查，软解析去shared pool调用缓存的执行计划，硬解析，分析统计信息，生成执行计划执行，得到数据，缓存到buffer cache，执行计划缓存到shared pool，发送给客户，网络问题产生的等待事件<br><br>当客户端进程，将SQL语句通过监听器发送到Oracle时, 会触发一个Server process生成，来对该客户进程服务。Server process得到SQL语句之后，对SQL语句进行Hash运算，然后根据Hash值到library cache中查找，如果存在，则直接将library cache中的缓存的执行计划拿来执行，最后将执行结果返回该客户端，这种SQL解析叫做软解析；如果不存在，则会对该SQL进行解析parse，然后执行，返回结果，这种SQL解析叫做硬解析。</p>
 </blockquote>
 <p>硬解析的步骤：</p>
@@ -364,14 +374,79 @@
 <p><br>1）对SQL语句进行语法检查，看是否有语法错误。如果存在语法错误，则退出解析过程；<br><br> 2）通过数据字典(row cache)，检查SQL语句中涉及的对象和列是否存在，检查SQL语句的用户是否对涉及到的对象是否有权限。<br><br>3）通过优化器创建一个最优的执行计划。这个过程会根据数据字典中的对象的统计信息，来计算多个执行计划的cost，从而得到一个最优的执行计划。这一步涉及到大量的数据运算，从而会消耗大量的CPU资源；(library cache最主要的目的就是通过软解析来减少这个步骤)；<br><br>4）将该游标所产生的执行计划，SQL文本等装载进library cache中的heap中。</p>
 </blockquote>
 <p>软解析：就是因为相同文本的SQL语句存在于library cache中，所以本次SQL语句的解析就可以去掉硬解析中的一个或多个步骤，从而节省大量的资源的耗费。<br><br>软软解析：就是不解析。</p>
-<h4 id="buffer-cache"><a href="#buffer-cache" class="headerlink" title="buffer cache"></a>buffer cache</h4><p>别名buffer pool<br>最主要的作用就是用于缓存从数据库中检索到的数据块<br>灌数据     内存或者进程读数据，server process<br>排数据     dbwr<br>某个表经常使用，放在keep池中，防止冲出去</p>
+<h4 id="buffer-cache"><a href="#buffer-cache" class="headerlink" title="buffer cache"></a>buffer cache</h4><pre><code>缓存了从磁盘上检索的数据块
+</code></pre><p>灌数据     内存或者进程读数据，server process<br>排数据     dbwr<br>某个表经常使用，放在keep池中，防止冲出去</p>
 <p>user I/O 等待事件，都是往buffer cache里灌的时候引起的，<br>system I/O 等待事件，都是往出排的时候</p>
-<h4 id="log-buffer"><a href="#log-buffer" class="headerlink" title="log buffer"></a>log buffer</h4><p>重做信息（用于实例恢复）在写入磁盘中存储的物理重做日志文件 之前，将缓存在此处<br>数据，undo的改变，会产生redo日志，写进logbuffer<br>触发事件后 lgwr 进程写出去，生成归档日志</p>
-<h3 id="PGA-process-global-area"><a href="#PGA-process-global-area" class="headerlink" title="PGA process global area"></a><font color="red">PGA process global area</font></h3><p>进程全局区<br>各走各的进程，没有闩和锁的事</p>
-<p>私有的</p>
+<h4 id="redo-log-buffer"><a href="#redo-log-buffer" class="headerlink" title="redo log buffer"></a>redo log buffer</h4><pre><code>缓存了写到磁盘之前的重做信息
+</code></pre><p>重做信息（用于实例恢复）在写入磁盘中存储的物理重做日志文件 之前，将缓存在此处<br>数据，undo的改变，会产生redo日志，写进logbuffer<br>触发事件后 lgwr 进程写出去，生成归档日志</p>
+<h3 id="PGA-–-process-global-area"><a href="#PGA-–-process-global-area" class="headerlink" title="PGA – process global area"></a><font color="red">PGA – process global area</font></h3><pre><code>由每个服务进程、后台进程专有；每个进程都有一个PGA
+</code></pre><blockquote>
+<p>1.Private SQL area：包含绑定信息、运行时的内存结构。每个发出sql语句的会话，都有一个private SQL area（私有SQL区）</p>
+<p>2.Session memory：为保存会话中的变量以及其他与会话相关的信息，而分配的内存区。</p>
+</blockquote>
 <p>pga不足的时候使用临时表空间</p>
-<h2 id="进程结构"><a href="#进程结构" class="headerlink" title="进程结构"></a><font color="green">进程结构</font></h2><p>五个主要后台进程</p>
-<h3 id="SMON-系统监控进程"><a href="#SMON-系统监控进程" class="headerlink" title="SMON 系统监控进程 "></a><font color="red">SMON 系统监控进程 </font></h3><h3 id="PMON-进程监控"><a href="#PMON-进程监控" class="headerlink" title="PMON 进程监控 "></a><font color="red">PMON 进程监控 </font></h3><h3 id="DBWR-数据写进程"><a href="#DBWR-数据写进程" class="headerlink" title="DBWR 数据写进程"></a><font color="red">DBWR 数据写进程</font></h3><h3 id="LGWR-日志写进程"><a href="#LGWR-日志写进程" class="headerlink" title="LGWR 日志写进程 "></a><font color="red">LGWR 日志写进程 </font></h3><h3 id="CKPT-校验点进程"><a href="#CKPT-校验点进程" class="headerlink" title="CKPT  校验点进程"></a><font color="red">CKPT  校验点进程</font></h3><h2 id="物理结构"><a href="#物理结构" class="headerlink" title="物理结构"></a><font color="green">物理结构</font></h2><p>oracle数据库是个运行在操作系统上最终目的是存储和管理相关数据的软件</p>
+<h3 id="SGA和PGA分配"><a href="#SGA和PGA分配" class="headerlink" title="SGA和PGA分配 "></a><font color="red">SGA和PGA分配 </font></h3><p>Oracle官方文档推荐:</p>
+<pre><code>MEMORY_TARGET=物理内存 x 80%
+
+MEMORY_MAX_SIZE=物理内存 x 80%
+
+对于OLTP系统： 
+
+SGA_TARGET=(物理内存 x 80%) x 80%
+
+SGA_MAX_SIZE=(物理内存 x 80%) x 80%
+
+PGA_AGGREGATE_TARGET=(物理内存 x 80%) x 20%
+
+对于DSS系统：
+
+SGA_TARGET=(物理内存 x 80%) x 50%
+
+SGA_MAX_SIZE=(物理内存 x 80%) x 50%
+
+PGA_AGGREGATE_TARGET=(物理内存 x 80%) x 50%
+</code></pre><h2 id="进程结构"><a href="#进程结构" class="headerlink" title="进程结构"></a><font color="green">进程结构</font></h2><p>五个主要后台进程</p>
+<pre><code>SQL&gt; select name,description from v$bgprocess where paddr&lt;&gt;&apos;00&apos;;
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514537708795.png" alt=""></p>
+<h3 id="SMON-–-System-monitor-系统监控进程"><a href="#SMON-–-System-monitor-系统监控进程" class="headerlink" title="SMON – System monitor 系统监控进程 "></a><font color="red">SMON – System monitor 系统监控进程 </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514538245662.png" alt=""></p>
+<blockquote>
+<p>SMON启动后会自动的用于在实例崩溃时进行数据库实例自动恢复。 </p>
+<p>清除作废的排序临时段，回收整理碎片，合并空闲空间，释放临时段，维护闪回的时间点。 </p>
+<p>在老数据库版本中，当我们大量删除表的时候，会观测到SMON进程很忙，直到把所有的碎片空间都整理完毕。</p>
+</blockquote>
+<h3 id="PMON-–-Process-monitor-进程监控"><a href="#PMON-–-Process-monitor-进程监控" class="headerlink" title="PMON – Process monitor 进程监控 "></a><font color="red">PMON – Process monitor 进程监控 </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514538085023.png" alt=""></p>
+<blockquote>
+<p>PMON在后台进程执行失败后负责清理数据库缓存和闲置资源，是Oracle的自动维护机制。</p>
+<ul>
+<li>清除死进程</li>
+<li>重新启动部分进程（如调度进程）</li>
+<li>监听的自动注册</li>
+<li>回滚事务</li>
+<li>释放锁</li>
+<li>释放其他资源</li>
+</ul>
+</blockquote>
+<h3 id="DBWR-数据写进程"><a href="#DBWR-数据写进程" class="headerlink" title="DBWR 数据写进程"></a><font color="red">DBWR 数据写进程</font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514537996791.png" alt=""></p>
+<blockquote>
+<p>Server process连接Oracle后，通过数据库写进程(DBWn)将数据缓冲区中的“脏缓冲区”的数据块写入到存储结构(数据文件、磁盘文件)</p>
+<p>只做一件事，将数据写到磁盘。就是将数据库的变化写入到数据文件。<br>该进程最多20 个，即使你有36 个CPU 也只能最多有20 个数据库写进程。<br>进程名称DBW0-DBW9 DBWa-DBWj </p>
+</blockquote>
+<h3 id="LGWR-日志写进程"><a href="#LGWR-日志写进程" class="headerlink" title="LGWR 日志写进程 "></a><font color="red">LGWR 日志写进程 </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514538315144.png" alt=""></p>
+<blockquote>
+<p>主要用于记录数据库的改变和记录数据库被改变之前的原始状态，所以应当对其作多重备份，用于恢复和排错。</p>
+<p>激活LGWR的情况：</p>
+<ul>
+<li>提交指令</li>
+<li>日志缓冲区超过1/3</li>
+<li>每三秒</li>
+<li>每次DBWn执行之前</li>
+</ul>
+</blockquote>
+<h3 id="CKPT-校验点进程"><a href="#CKPT-校验点进程" class="headerlink" title="CKPT  校验点进程"></a><font color="red">CKPT  校验点进程</font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514538043664.png" alt=""></p>
+<blockquote>
+<p>主要用户更新数据文件头，更新控制文件和触发DBWn数据库写进程。<br>Ckpt 进程会降低数据库性能，但是提高数据库崩溃时，自我恢复的性能。我们可以理解为阶段性的保存数据，一定的条件满足就触发，执行DBWn存盘操作。</p>
+</blockquote>
+<h2 id="物理结构"><a href="#物理结构" class="headerlink" title="物理结构"></a><font color="green">物理结构</font></h2><p>oracle数据库是个运行在操作系统上最终目的是存储和管理相关数据的软件</p>
 <p>每一个Oracle数据库都是由三种类型的文件组成：数据文件（Data File）、日志文件（Log File）和控制文件（Control File）。数据库的文件为数据库信息提供真正的物理存储。</p>
 <h3 id="一-控制文件"><a href="#一-控制文件" class="headerlink" title="一. 控制文件"></a><font color="red">一. 控制文件</font></h3><p>为二进制文件，初始化大小由CREATE DATABASE指定,可以使用RMAN备份</p>
 <p>记录了当前数据库的结构信息,同时也包含数据文件及日志文件的信息以及相关的状态,归档信息等等</p>
@@ -785,7 +860,7 @@ v$archive_processes #归档相关的后台进程信息
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#体系结构"><span class="nav-number">1.</span> <span class="nav-text">体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存结构-SGA-PGA"><span class="nav-number">2.</span> <span class="nav-text">内存结构 SGA+PGA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SGA-system-global-area"><span class="nav-number">2.1.</span> <span class="nav-text">SGA  system global area</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shared-pool"><span class="nav-number">2.1.1.</span> <span class="nav-text">shared pool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#buffer-cache"><span class="nav-number">2.1.2.</span> <span class="nav-text">buffer cache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#log-buffer"><span class="nav-number">2.1.3.</span> <span class="nav-text">log buffer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PGA-process-global-area"><span class="nav-number">2.2.</span> <span class="nav-text">PGA process global area</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程结构"><span class="nav-number">3.</span> <span class="nav-text">进程结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SMON-系统监控进程"><span class="nav-number">3.1.</span> <span class="nav-text">SMON 系统监控进程 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PMON-进程监控"><span class="nav-number">3.2.</span> <span class="nav-text">PMON 进程监控 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DBWR-数据写进程"><span class="nav-number">3.3.</span> <span class="nav-text">DBWR 数据写进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LGWR-日志写进程"><span class="nav-number">3.4.</span> <span class="nav-text">LGWR 日志写进程 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CKPT-校验点进程"><span class="nav-number">3.5.</span> <span class="nav-text">CKPT  校验点进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理结构"><span class="nav-number">4.</span> <span class="nav-text">物理结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一-控制文件"><span class="nav-number">4.1.</span> <span class="nav-text">一. 控制文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、何时创建新的控制文件"><span class="nav-number">4.1.1.</span> <span class="nav-text">一、何时创建新的控制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、多路复用控制文件"><span class="nav-number">4.1.2.</span> <span class="nav-text">二、多路复用控制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、备份与恢复控制文件"><span class="nav-number">4.1.3.</span> <span class="nav-text">三、备份与恢复控制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验-rac-asm控制文件的多路复用"><span class="nav-number">4.1.4.</span> <span class="nav-text">实验:rac+asm控制文件的多路复用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二-数据文件"><span class="nav-number">4.2.</span> <span class="nav-text">二.数据文件 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间：是一个或多个数据文件的逻辑集合"><span class="nav-number">4.2.1.</span> <span class="nav-text">表空间：是一个或多个数据文件的逻辑集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间逻辑存储对象："><span class="nav-number">4.2.2.</span> <span class="nav-text">表空间逻辑存储对象：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间分类："><span class="nav-number">4.2.3.</span> <span class="nav-text">表空间分类：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间管理"><span class="nav-number">4.2.4.</span> <span class="nav-text">表空间管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间的四种状态："><span class="nav-number">4.2.5.</span> <span class="nav-text">表空间的四种状态：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间相关视图"><span class="nav-number">4.2.6.</span> <span class="nav-text">表空间相关视图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三-归档文件"><span class="nav-number">4.3.</span> <span class="nav-text"> 三.归档文件 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验-rac环境下修改归档模式"><span class="nav-number">4.3.1.</span> <span class="nav-text">实验: rac环境下修改归档模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#归档日志相关视图"><span class="nav-number">4.3.2.</span> <span class="nav-text">归档日志相关视图</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#体系结构"><span class="nav-number">1.</span> <span class="nav-text">体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存结构-SGA-PGA"><span class="nav-number">2.</span> <span class="nav-text">内存结构 SGA+PGA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SGA-–-system-global-area"><span class="nav-number">2.1.</span> <span class="nav-text">SGA – system global area</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shared-pool"><span class="nav-number">2.1.1.</span> <span class="nav-text">shared pool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#buffer-cache"><span class="nav-number">2.1.2.</span> <span class="nav-text">buffer cache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log-buffer"><span class="nav-number">2.1.3.</span> <span class="nav-text">redo log buffer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PGA-–-process-global-area"><span class="nav-number">2.2.</span> <span class="nav-text">PGA – process global area</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SGA和PGA分配"><span class="nav-number">2.3.</span> <span class="nav-text">SGA和PGA分配 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程结构"><span class="nav-number">3.</span> <span class="nav-text">进程结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SMON-–-System-monitor-系统监控进程"><span class="nav-number">3.1.</span> <span class="nav-text">SMON – System monitor 系统监控进程 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PMON-–-Process-monitor-进程监控"><span class="nav-number">3.2.</span> <span class="nav-text">PMON – Process monitor 进程监控 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DBWR-数据写进程"><span class="nav-number">3.3.</span> <span class="nav-text">DBWR 数据写进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LGWR-日志写进程"><span class="nav-number">3.4.</span> <span class="nav-text">LGWR 日志写进程 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CKPT-校验点进程"><span class="nav-number">3.5.</span> <span class="nav-text">CKPT  校验点进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理结构"><span class="nav-number">4.</span> <span class="nav-text">物理结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一-控制文件"><span class="nav-number">4.1.</span> <span class="nav-text">一. 控制文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、何时创建新的控制文件"><span class="nav-number">4.1.1.</span> <span class="nav-text">一、何时创建新的控制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、多路复用控制文件"><span class="nav-number">4.1.2.</span> <span class="nav-text">二、多路复用控制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、备份与恢复控制文件"><span class="nav-number">4.1.3.</span> <span class="nav-text">三、备份与恢复控制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验-rac-asm控制文件的多路复用"><span class="nav-number">4.1.4.</span> <span class="nav-text">实验:rac+asm控制文件的多路复用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二-数据文件"><span class="nav-number">4.2.</span> <span class="nav-text">二.数据文件 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间：是一个或多个数据文件的逻辑集合"><span class="nav-number">4.2.1.</span> <span class="nav-text">表空间：是一个或多个数据文件的逻辑集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间逻辑存储对象："><span class="nav-number">4.2.2.</span> <span class="nav-text">表空间逻辑存储对象：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间分类："><span class="nav-number">4.2.3.</span> <span class="nav-text">表空间分类：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间管理"><span class="nav-number">4.2.4.</span> <span class="nav-text">表空间管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间的四种状态："><span class="nav-number">4.2.5.</span> <span class="nav-text">表空间的四种状态：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表空间相关视图"><span class="nav-number">4.2.6.</span> <span class="nav-text">表空间相关视图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三-归档文件"><span class="nav-number">4.3.</span> <span class="nav-text"> 三.归档文件 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验-rac环境下修改归档模式"><span class="nav-number">4.3.1.</span> <span class="nav-text">实验: rac环境下修改归档模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#归档日志相关视图"><span class="nav-number">4.3.2.</span> <span class="nav-text">归档日志相关视图</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
