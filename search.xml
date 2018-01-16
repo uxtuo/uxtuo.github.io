@@ -130,8 +130,18 @@ find $BASEDIR -mtime +14 -exec rm -rf {} \;
 <p>$ docker exec -ti cbc598f37d50 sh</p>
 <p>$ tar xf leanote.tar.xz </p>
 <p>$ mongorestore -h 127.0.0.1 -d leanote –drop –dir ./leanote</p>
-<h2 id="3-使用技巧详细介绍"><a href="#3-使用技巧详细介绍" class="headerlink" title="3.使用技巧详细介绍"></a><font color="green">3.使用技巧详细介绍</font></h2><p>待我深入使用之后过来填坑</p>
-]]></content>
+<h2 id="3-使用技巧详细介绍"><a href="#3-使用技巧详细介绍" class="headerlink" title="3.使用技巧详细介绍"></a><font color="green">3.使用技巧详细介绍</font></h2><h3 id="1-普通用户傻瓜攻略"><a href="#1-普通用户傻瓜攻略" class="headerlink" title="1.普通用户傻瓜攻略"></a><font color="red">1.普通用户傻瓜攻略</font></h3><blockquote>
+<p>普通用户不用管上述搭建过程，有兴趣的可以研究下，没兴趣知道怎么使用就足够了。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067579674.png" alt=""><br>首先，访问。要在线写文章并保存以待后来回顾，写博客发布出去给别人看，得知道在哪里写，先访问我搭建的<a href="http://lovepanda.tk:9000/" target="_blank" rel="external"><font color="#AAAAAA">私人leanote</font></a>的网页；</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516092135404.png" alt=""></p>
+<p>然后，登陆。你需要一个账号密码来登陆站点使用各种功能，我已经关闭了注册权限，新用户只能沟通后由我后台手动建立账号。因为服务器存储计算网络资源有限，这个服务也不是盈利性质，就是个使用方便小范围共享的利器，所以使用者那必须是有限制的。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/toblog.gif" alt=""></p>
+<p>最后，编辑。登陆成功就可以为所欲为了，具体功能看本文中间段落<strong>效果演示</strong>。所有编写的文章和markdown（后缀为.md的博客文件）保存在我的服务器上，每天备份，保留两周的备份集，所以就可劲作吧。</p>
+<p>最最后，可以写什么？</p>
+<p>什么都可以写，在线写的文章和博客如果不发布，没有任何人可以看到，包括管理员，所有文章加密后保存在数据库；<br>可以发布出去，比如<a href="http://lovepanda.tk:9000/blog/post/alxinfff/Leanote" target="_blank" rel="external"><font color="#AAAAAA">这样</font></a>，发布的内容所有人都可以通过网络访问。</p>
+<p>你可以写一些技术文档分类保存不发布，当作一个在线笔记存储，可以写一些游戏攻略经验发不出去装逼，可以写一些抒情的文章然后发布，把链接给别人看（说真的，这个有点骚包，我绝逼干不出来这种事），具体功能我也刚开始用，你自己开发，enjoy it！！！</p>
+</blockquote>
+<h3 id="2-深度用户高级攻略"><a href="#2-深度用户高级攻略" class="headerlink" title="2.深度用户高级攻略"></a><font color="red">2.深度用户高级攻略</font></h3>]]></content>
       
         <categories>
             
