@@ -3,6 +3,156 @@
   
     
     <entry>
+      <title><![CDATA[Leanote]]></title>
+      <url>/2018/01/16/Leanote/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>Leanote 蚂蚁笔记是一款国产的在线网页版云笔记软件， 集知识管理、笔记、分享、博客功能于一身，界面简约但功能不简单！它支持多笔记本、标签分类、笔记共享、添加保存附件等，而且还提供了免打扰写作模式、支持图片尺寸调整、并且支持 Markdown 语法写作，最重要的是，它还能完美支持代码高亮显示！</p>
+<p>该项目采用 Golang+MongoDB 开发，现已完全开源并能免费使用。普通用户可以直接使用 Leanote 提供的公共服务，也可以自行搭建属于自己或公司局域网内的私有云笔记平台。 而且，Leanote 可以让用户创建一个用户组，并将笔记共享到这个组里，所有组员都可以浏览、编辑笔记，可以非常方便地进行协作或知识共享。（题外话：团队内还可以通过 SeaFile 搭建私有的云存储配合使用）</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="搭建思路"><a href="#搭建思路" class="headerlink" title=" 搭建思路 "></a><font color="#5CACEE"> 搭建思路 </font></h1><pre><code>1.上传mongodb软件包到服务器，解压，起服务
+
+2.上传leanote软件包到服务器，解压，修改配置文件，向mongodb导入lenote文件夹下的原始库表
+
+4.起leanote服务
+</code></pre><h1 id="软件包"><a href="#软件包" class="headerlink" title=" 软件包 "></a><font color="#5CACEE"> 软件包 </font></h1><table>
+<thead>
+<tr>
+<th>软件包</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mongodb-linux-x86_64-3.0.1</td>
+<td><a href="https://pan.baidu.com/s/1dGGE0hV" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>leanote-linux-amd64-v2.6</td>
+<td><a href="https://pan.baidu.com/s/1jJynuOQ" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>leanote-desktop</td>
+<td><a href="https://pan.baidu.com/s/1sncACfb" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="实验步骤"><a href="#实验步骤" class="headerlink" title=" 实验步骤 "></a><font color="#5CACEE"> 实验步骤 </font></h1><h2 id="1-上传，解压，创建数据文件夹，起服务"><a href="#1-上传，解压，创建数据文件夹，起服务" class="headerlink" title="1.上传，解压，创建数据文件夹，起服务"></a><font color="green">1.上传，解压，创建数据文件夹，起服务</font></h2><pre><code>$ tar xf mongodb-linux-x86_64-3.0.1.tgz -C /usr/local
+
+$ mv mongodb-linux-x86_64-3.0.1/ mongodb
+
+$ mkdir -p /usr/local/mongodb/data
+
+$ /usr/local/mongodb/bin/mongod --dbpath /usr/local/mongodb/data/ --bind_ip 127.0.0.1 &amp;&gt;&gt; /tmp/mongo.log &amp;  
+
+$ kill -4 xxx        # xxx为mongo的进程号，安全关闭
+</code></pre><h2 id="2-上传，解压，修改配置文件，导原始库表"><a href="#2-上传，解压，修改配置文件，导原始库表" class="headerlink" title="2.上传，解压，修改配置文件，导原始库表"></a><font color="green">2.上传，解压，修改配置文件，导原始库表</font></h2><pre><code>$ tar xf leanote-linux-amd64-v2.6.bin.tar.gz -C /usr/local/
+
+$ vi /usr/local/leanote/conf/app.conf 
+
+修改服务端口，加密字符串
+
+$ /usr/local/mongodb/bin/mongorestore -h localhost -d leanote --dir /usr/local/leanote/mongodb_backup/leanote_install_data/
+</code></pre><h2 id="3-起服务并验证可用"><a href="#3-起服务并验证可用" class="headerlink" title="3.起服务并验证可用"></a><font color="green">3.起服务并验证可用</font></h2><pre><code>$ cd /usr/local/leanote/bin
+
+$ nohup ./run.sh &amp;   
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067074310.png" alt=""></p>
+<blockquote>
+<p>进程正常</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067113075.png" alt=""></p>
+<blockquote>
+<p>服务正常</p>
+</blockquote>
+<p><em>至此以私人服务器为server，<strong>仅供个人及好友使用</strong>的leanote搭建完成。</em></p>
+<p><em>能在线编辑保存普通文件</em></p>
+<p><em>能在线编辑保存markdown文件并发布为个人博客等</em></p>
+<h1 id="效果演示"><a href="#效果演示" class="headerlink" title=" 效果演示 "></a><font color="#5CACEE"> 效果演示 </font></h1><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067579674.png" alt=""></p>
+<blockquote>
+<p>这是leanote登陆页面，访问服务器的9000端口，如该服务器ip为192.168.x.x，访问”<a href="http://192.168.x.x:9000&quot;即可进入该页面。" target="_blank" rel="external">http://192.168.x.x:9000&quot;即可进入该页面。</a></p>
+<p>因私人服务器性能有限，且非盈利自用，管理员已经关闭注册功能，使用该私人服务的唯一途径就是向管理者申请，通过后台单独添加用户</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516070707862.png" alt=""></p>
+<blockquote>
+<p>这是在线编辑页面，可以设置头像，访问别名，自定义很多参数，可以创建普通文本文件并保存，进行上传附件，插入图片，网页链接，版本管理等操作，类似有道云，为知等在线笔记</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/toblog.gif" alt=""></p>
+<blockquote>
+<p>可以将写好的markdown文件公布为博客，任何人都可以通过链接访问该博客，添加评论。</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516071739785.png" alt=""></p>
+<blockquote>
+<p>访问该网站就是对server服务器的9000端口发起访问请求，leanote将数据库的数据展示出来，用户编辑的普通文件和博客文件在保存后都会经过leanote的加密字符串运算加密后存放在数据库，本人对自己的文章具有最高权限，admin管理员具有后台添加删除用户并设置一些参数等权限，对普通用户的博客文章没有修改删除等权限。</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/desk.gif" alt=""></p>
+<blockquote>
+<p>有没有发现软件包有三个文件至此只用了两个，没错，第三个是leanote桌面版，下载解压就能用，不用安装，登陆的时候选择登陆自建服务，进去后可以像在线一样编辑文件，完成后保存，公布为博客，软件内即可访问自己的博客，而这所有的都是开源免费，如此干净高效，良心得我有点感动。</p>
+</blockquote>
+<h1 id="解锁更多姿势"><a href="#解锁更多姿势" class="headerlink" title=" 解锁更多姿势 "></a><font color="#5CACEE"> 解锁更多姿势 </font></h1><h2 id="1-数据库备份策略"><a href="#1-数据库备份策略" class="headerlink" title="1.数据库备份策略"></a><font color="green">1.数据库备份策略</font></h2><pre><code>备份
+$ /usr/local/mongodb/bin/mongodump -h 127.0.0.1 -d leanote -o /~（备份集存放路径）
+
+
+恢复
+$ /usr/local/mongodb/bin/mongorestore -h 127.0.0.1 -d leanote --drop --dir ~/leanote （备份集所在路径）
+</code></pre><blockquote>
+<p>用linux系统自带的crontab定时执行备份脚本，实现每天三次备份，数据备份集可以保证即使服务挂了，甚至服务器挂了，被回收了，随时找个腾讯云或者阿里云的主机，分分钟重新搭建一套，导入数据后恢复服务，对普通用户来说除了期间无法使用之外，没有区别，所有数据都在。</p>
+</blockquote>
+<pre><code>$ crontab -l
+
+0 6,14,22 * * * /usr/local/mongodb/backup/back.sh
+
+$ more /usr/local/mongodb/backup/back.sh
+
+#!/bin/sh
+
+#该脚本通过crontab定时执行，实现每天6，14，22整点共三次备份mongo数据，保留两周内的备份集
+
+#备份目录为BASEDIR，将带时间戳文件夹的备份集压缩，最后检测是否有14天前的文件夹，有则删除
+
+BASEDIR=&quot;/usr/local/mongodb/backup&quot;
+
+CURDIR=$BASEDIR/`date &quot;+%Y-%m-%d_%H.%M.%S&quot;`
+
+/usr/local/mongodb/bin/mongodump -h 127.0.0.1 -d leanote -o $CURDIR
+
+cd $CURDIR
+
+tar -zcvf leanote.tar.gz leanote
+
+rm -rf leanote/
+
+find $BASEDIR -mtime +14 -exec rm -rf {} \;
+</code></pre><h2 id="2-docker部署"><a href="#2-docker部署" class="headerlink" title="2.docker部署"></a><font color="green">2.docker部署</font></h2><p>1.制作docker镜像</p>
+<p>docker是个很好用的工具，将系统，应用，程序制作成docker镜像，分发部署使用都会特别方便，这里是leanote的docker镜像，服务器有docker可以直接导入然后使用，没有需要先安装docker。导入制作好的<a href="https://pan.baidu.com/s/1slZC8TR" target="_blank" rel="external"><font color="#AAAAAA">docker镜像</font></a>并启动，这时所有前面配置过程的安装包，备份策略，配置文件更改都已经解决，使用效果一致。</p>
+<p>2.一键部署使用<br>$ docker load -i leanote_2.6-image.tar.gz</p>
+<p>$ docker history 69e799db2e66</p>
+<p>$ docker run -tid –name leanote -p 80:80 –restart always -v /data/leanote:/data/  leanote:2.6</p>
+<p>$ docker exec -ti cbc598f37d50 sh</p>
+<p>$ tar xf leanote.tar.xz </p>
+<p>$ mongorestore -h 127.0.0.1 -d leanote –drop –dir ./leanote</p>
+<h2 id="3-使用技巧详细介绍"><a href="#3-使用技巧详细介绍" class="headerlink" title="3.使用技巧详细介绍"></a><font color="green">3.使用技巧详细介绍</font></h2><p>待我深入使用之后过来填坑</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Software </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> service </tag>
+            
+            <tag> blog </tag>
+            
+            <tag> community </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Google三大论文]]></title>
       <url>/2018/01/03/Google%E4%B8%89%E5%A4%A7%E8%AE%BA%E6%96%87/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>

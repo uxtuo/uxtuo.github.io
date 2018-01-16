@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="service,blog,community," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介 Leanote 蚂蚁笔记是一款国产的在线网页版云笔记软件， 集知识管理、笔记、分享、博客功能于一身，界面简约但功能不简单！它支持多笔记本、标签分类、笔记共享、添加保存附件等，而且还提供了免打扰写作模式、支持图片尺寸调整、并且支持 Markdown 语法写作，最重要的是，它还能完美支持代码高亮显示！ 该项目采用 Golang+MongoDB 开发，现已完全开源并能免费使用。普通用户可以直接使用">
+<meta name="keywords" content="service,blog,community">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leanote">
+<meta property="og:url" content="sargeras.tk/2018/01/16/Leanote/index.html">
+<meta property="og:site_name" content="理想国">
+<meta property="og:description" content="简介 Leanote 蚂蚁笔记是一款国产的在线网页版云笔记软件， 集知识管理、笔记、分享、博客功能于一身，界面简约但功能不简单！它支持多笔记本、标签分类、笔记共享、添加保存附件等，而且还提供了免打扰写作模式、支持图片尺寸调整、并且支持 Markdown 语法写作，最重要的是，它还能完美支持代码高亮显示！ 该项目采用 Golang+MongoDB 开发，现已完全开源并能免费使用。普通用户可以直接使用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516067074310.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516067113075.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516067579674.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516070707862.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/toblog.gif">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516071739785.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/desk.gif">
+<meta property="og:updated_time" content="2018-01-16T08:23:29.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Leanote">
+<meta name="twitter:description" content="简介 Leanote 蚂蚁笔记是一款国产的在线网页版云笔记软件， 集知识管理、笔记、分享、博客功能于一身，界面简约但功能不简单！它支持多笔记本、标签分类、笔记共享、添加保存附件等，而且还提供了免打扰写作模式、支持图片尺寸调整、并且支持 Markdown 语法写作，最重要的是，它还能完美支持代码高亮显示！ 该项目采用 Golang+MongoDB 开发，现已完全开源并能免费使用。普通用户可以直接使用">
+<meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1516067074310.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="sargeras.tk/2018/01/16/Leanote/"/>
+
+
+
+
+
+  <title>Leanote | 理想国</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">理想国</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="sargeras.tk/2018/01/16/Leanote/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chaos">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="理想国">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Leanote</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T16:20:40-05:00">
+                2018-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Software/" itemprop="url" rel="index">
+                    <span itemprop="name">Software</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>Leanote 蚂蚁笔记是一款国产的在线网页版云笔记软件， 集知识管理、笔记、分享、博客功能于一身，界面简约但功能不简单！它支持多笔记本、标签分类、笔记共享、添加保存附件等，而且还提供了免打扰写作模式、支持图片尺寸调整、并且支持 Markdown 语法写作，最重要的是，它还能完美支持代码高亮显示！</p>
+<p>该项目采用 Golang+MongoDB 开发，现已完全开源并能免费使用。普通用户可以直接使用 Leanote 提供的公共服务，也可以自行搭建属于自己或公司局域网内的私有云笔记平台。 而且，Leanote 可以让用户创建一个用户组，并将笔记共享到这个组里，所有组员都可以浏览、编辑笔记，可以非常方便地进行协作或知识共享。（题外话：团队内还可以通过 SeaFile 搭建私有的云存储配合使用）</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="搭建思路"><a href="#搭建思路" class="headerlink" title=" 搭建思路 "></a><font color="#5CACEE"> 搭建思路 </font></h1><pre><code>1.上传mongodb软件包到服务器，解压，起服务
+
+2.上传leanote软件包到服务器，解压，修改配置文件，向mongodb导入lenote文件夹下的原始库表
+
+4.起leanote服务
+</code></pre><h1 id="软件包"><a href="#软件包" class="headerlink" title=" 软件包 "></a><font color="#5CACEE"> 软件包 </font></h1><table>
+<thead>
+<tr>
+<th>软件包</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mongodb-linux-x86_64-3.0.1</td>
+<td><a href="https://pan.baidu.com/s/1dGGE0hV" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>leanote-linux-amd64-v2.6</td>
+<td><a href="https://pan.baidu.com/s/1jJynuOQ" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>leanote-desktop</td>
+<td><a href="https://pan.baidu.com/s/1sncACfb" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="实验步骤"><a href="#实验步骤" class="headerlink" title=" 实验步骤 "></a><font color="#5CACEE"> 实验步骤 </font></h1><h2 id="1-上传，解压，创建数据文件夹，起服务"><a href="#1-上传，解压，创建数据文件夹，起服务" class="headerlink" title="1.上传，解压，创建数据文件夹，起服务"></a><font color="green">1.上传，解压，创建数据文件夹，起服务</font></h2><pre><code>$ tar xf mongodb-linux-x86_64-3.0.1.tgz -C /usr/local
+
+$ mv mongodb-linux-x86_64-3.0.1/ mongodb
+
+$ mkdir -p /usr/local/mongodb/data
+
+$ /usr/local/mongodb/bin/mongod --dbpath /usr/local/mongodb/data/ --bind_ip 127.0.0.1 &amp;&gt;&gt; /tmp/mongo.log &amp;  
+
+$ kill -4 xxx        # xxx为mongo的进程号，安全关闭
+</code></pre><h2 id="2-上传，解压，修改配置文件，导原始库表"><a href="#2-上传，解压，修改配置文件，导原始库表" class="headerlink" title="2.上传，解压，修改配置文件，导原始库表"></a><font color="green">2.上传，解压，修改配置文件，导原始库表</font></h2><pre><code>$ tar xf leanote-linux-amd64-v2.6.bin.tar.gz -C /usr/local/
+
+$ vi /usr/local/leanote/conf/app.conf 
+
+修改服务端口，加密字符串
+
+$ /usr/local/mongodb/bin/mongorestore -h localhost -d leanote --dir /usr/local/leanote/mongodb_backup/leanote_install_data/
+</code></pre><h2 id="3-起服务并验证可用"><a href="#3-起服务并验证可用" class="headerlink" title="3.起服务并验证可用"></a><font color="green">3.起服务并验证可用</font></h2><pre><code>$ cd /usr/local/leanote/bin
+
+$ nohup ./run.sh &amp;   
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067074310.png" alt=""></p>
+<blockquote>
+<p>进程正常</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067113075.png" alt=""></p>
+<blockquote>
+<p>服务正常</p>
+</blockquote>
+<p><em>至此以私人服务器为server，<strong>仅供个人及好友使用</strong>的leanote搭建完成。</em></p>
+<p><em>能在线编辑保存普通文件</em></p>
+<p><em>能在线编辑保存markdown文件并发布为个人博客等</em></p>
+<h1 id="效果演示"><a href="#效果演示" class="headerlink" title=" 效果演示 "></a><font color="#5CACEE"> 效果演示 </font></h1><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516067579674.png" alt=""></p>
+<blockquote>
+<p>这是leanote登陆页面，访问服务器的9000端口，如该服务器ip为192.168.x.x，访问”<a href="http://192.168.x.x:9000&quot;即可进入该页面。" target="_blank" rel="external">http://192.168.x.x:9000&quot;即可进入该页面。</a></p>
+<p>因私人服务器性能有限，且非盈利自用，管理员已经关闭注册功能，使用该私人服务的唯一途径就是向管理者申请，通过后台单独添加用户</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516070707862.png" alt=""></p>
+<blockquote>
+<p>这是在线编辑页面，可以设置头像，访问别名，自定义很多参数，可以创建普通文本文件并保存，进行上传附件，插入图片，网页链接，版本管理等操作，类似有道云，为知等在线笔记</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/toblog.gif" alt=""></p>
+<blockquote>
+<p>可以将写好的markdown文件公布为博客，任何人都可以通过链接访问该博客，添加评论。</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516071739785.png" alt=""></p>
+<blockquote>
+<p>访问该网站就是对server服务器的9000端口发起访问请求，leanote将数据库的数据展示出来，用户编辑的普通文件和博客文件在保存后都会经过leanote的加密字符串运算加密后存放在数据库，本人对自己的文章具有最高权限，admin管理员具有后台添加删除用户并设置一些参数等权限，对普通用户的博客文章没有修改删除等权限。</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/desk.gif" alt=""></p>
+<blockquote>
+<p>有没有发现软件包有三个文件至此只用了两个，没错，第三个是leanote桌面版，下载解压就能用，不用安装，登陆的时候选择登陆自建服务，进去后可以像在线一样编辑文件，完成后保存，公布为博客，软件内即可访问自己的博客，而这所有的都是开源免费，如此干净高效，良心得我有点感动。</p>
+</blockquote>
+<h1 id="解锁更多姿势"><a href="#解锁更多姿势" class="headerlink" title=" 解锁更多姿势 "></a><font color="#5CACEE"> 解锁更多姿势 </font></h1><h2 id="1-数据库备份策略"><a href="#1-数据库备份策略" class="headerlink" title="1.数据库备份策略"></a><font color="green">1.数据库备份策略</font></h2><pre><code>备份
+$ /usr/local/mongodb/bin/mongodump -h 127.0.0.1 -d leanote -o /~（备份集存放路径）
+
+
+恢复
+$ /usr/local/mongodb/bin/mongorestore -h 127.0.0.1 -d leanote --drop --dir ~/leanote （备份集所在路径）
+</code></pre><blockquote>
+<p>用linux系统自带的crontab定时执行备份脚本，实现每天三次备份，数据备份集可以保证即使服务挂了，甚至服务器挂了，被回收了，随时找个腾讯云或者阿里云的主机，分分钟重新搭建一套，导入数据后恢复服务，对普通用户来说除了期间无法使用之外，没有区别，所有数据都在。</p>
+</blockquote>
+<pre><code>$ crontab -l
+
+0 6,14,22 * * * /usr/local/mongodb/backup/back.sh
+
+$ more /usr/local/mongodb/backup/back.sh
+
+#!/bin/sh
+
+#该脚本通过crontab定时执行，实现每天6，14，22整点共三次备份mongo数据，保留两周内的备份集
+
+#备份目录为BASEDIR，将带时间戳文件夹的备份集压缩，最后检测是否有14天前的文件夹，有则删除
+
+BASEDIR=&quot;/usr/local/mongodb/backup&quot;
+
+CURDIR=$BASEDIR/`date &quot;+%Y-%m-%d_%H.%M.%S&quot;`
+
+/usr/local/mongodb/bin/mongodump -h 127.0.0.1 -d leanote -o $CURDIR
+
+cd $CURDIR
+
+tar -zcvf leanote.tar.gz leanote
+
+rm -rf leanote/
+
+find $BASEDIR -mtime +14 -exec rm -rf {} \;
+</code></pre><h2 id="2-docker部署"><a href="#2-docker部署" class="headerlink" title="2.docker部署"></a><font color="green">2.docker部署</font></h2><p>1.制作docker镜像</p>
+<p>docker是个很好用的工具，将系统，应用，程序制作成docker镜像，分发部署使用都会特别方便，这里是leanote的docker镜像，服务器有docker可以直接导入然后使用，没有需要先安装docker。导入制作好的<a href="https://pan.baidu.com/s/1slZC8TR" target="_blank" rel="external"><font color="#AAAAAA">docker镜像</font></a>并启动，这时所有前面配置过程的安装包，备份策略，配置文件更改都已经解决，使用效果一致。</p>
+<p>2.一键部署使用<br>$ docker load -i leanote_2.6-image.tar.gz</p>
+<p>$ docker history 69e799db2e66</p>
+<p>$ docker run -tid –name leanote -p 80:80 –restart always -v /data/leanote:/data/  leanote:2.6</p>
+<p>$ docker exec -ti cbc598f37d50 sh</p>
+<p>$ tar xf leanote.tar.xz </p>
+<p>$ mongorestore -h 127.0.0.1 -d leanote –drop –dir ./leanote</p>
+<h2 id="3-使用技巧详细介绍"><a href="#3-使用技巧详细介绍" class="headerlink" title="3.使用技巧详细介绍"></a><font color="green">3.使用技巧详细介绍</font></h2><p>待我深入使用之后过来填坑</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/service/" rel="tag"># service</a>
+          
+            <a href="/tags/blog/" rel="tag"># blog</a>
+          
+            <a href="/tags/community/" rel="tag"># community</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/03/Google三大论文/" rel="next" title="Google三大论文">
+                <i class="fa fa-chevron-left"></i> Google三大论文
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
+                alt="chaos" />
+            
+              <p class="site-author-name" itemprop="name">chaos</p>
+              <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/uxtuo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建思路"><span class="nav-number">2.</span> <span class="nav-text"> 搭建思路 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件包"><span class="nav-number">3.</span> <span class="nav-text"> 软件包 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验步骤"><span class="nav-number">4.</span> <span class="nav-text"> 实验步骤 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-上传，解压，创建数据文件夹，起服务"><span class="nav-number">4.1.</span> <span class="nav-text">1.上传，解压，创建数据文件夹，起服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-上传，解压，修改配置文件，导原始库表"><span class="nav-number">4.2.</span> <span class="nav-text">2.上传，解压，修改配置文件，导原始库表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-起服务并验证可用"><span class="nav-number">4.3.</span> <span class="nav-text">3.起服务并验证可用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#效果演示"><span class="nav-number">5.</span> <span class="nav-text"> 效果演示 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解锁更多姿势"><span class="nav-number">6.</span> <span class="nav-text"> 解锁更多姿势 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据库备份策略"><span class="nav-number">6.1.</span> <span class="nav-text">1.数据库备份策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-docker部署"><span class="nav-number">6.2.</span> <span class="nav-text">2.docker部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用技巧详细介绍"><span class="nav-number">6.3.</span> <span class="nav-text">3.使用技巧详细介绍</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chaos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
