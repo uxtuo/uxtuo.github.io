@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Database,Original,Part-transported," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介 HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价 PC Server 上搭建起大规模结构化存储集群。 面向可扩展性的分布式数据库，如hbase，与面向高性能并发读写的key-value数据库，如Redis，面向海量数据访问的文档数据库，如MongoDB共同构成的应用场景，是用于解决在当前互联网发展阶段产生的巨量">
+<meta name="keywords" content="Database,Original,Part-transported">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HBase入门">
+<meta property="og:url" content="sargeras.tk/2018/01/10/HBbase入门/index.html">
+<meta property="og:site_name" content="理想国">
+<meta property="og:description" content="简介 HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价 PC Server 上搭建起大规模结构化存储集群。 面向可扩展性的分布式数据库，如hbase，与面向高性能并发读写的key-value数据库，如Redis，面向海量数据访问的文档数据库，如MongoDB共同构成的应用场景，是用于解决在当前互联网发展阶段产生的巨量">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515029250857.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516938659693.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515137523563.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515031598634.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515031712437.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515031843096.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515032000264.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515032454254.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515033447893.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515048287534.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515048543469.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515049020714.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1515063082942.png">
+<meta property="og:updated_time" content="2018-01-26T03:58:36.601Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HBase入门">
+<meta name="twitter:description" content="简介 HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价 PC Server 上搭建起大规模结构化存储集群。 面向可扩展性的分布式数据库，如hbase，与面向高性能并发读写的key-value数据库，如Redis，面向海量数据访问的文档数据库，如MongoDB共同构成的应用场景，是用于解决在当前互联网发展阶段产生的巨量">
+<meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1515029250857.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="sargeras.tk/2018/01/10/HBbase入门/"/>
+
+
+
+
+
+  <title>HBase入门 | 理想国</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">理想国</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="sargeras.tk/2018/01/10/HBbase入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chaos">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="理想国">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HBase入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T11:54:27-05:00">
+                2018-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HBase/" itemprop="url" rel="index">
+                    <span itemprop="name">HBase</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价 PC Server 上搭建起大规模结构化存储集群。</p>
+<p>面向可扩展性的<strong>分布式数据库</strong>，如<code>hbase</code>，与面向高性能并发读写的<strong>key-value</strong>数据库，如<code>Redis</code>，面向海量数据访问的<strong>文档数据库</strong>，如<code>MongoDB</code>共同构成的应用场景，是用于解决在当前互联网发展阶段产生的巨量数据分布式处理，大量非结构化数据处理，各种社交平台日常生活中产生的的文本信息处理的重要解决方案。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="Hbase是什么"><a href="#Hbase是什么" class="headerlink" title=" Hbase是什么 "></a><font color="#5CACEE"> Hbase是什么 </font></h1><p>HBase 是 Google Bigtable 的开源实现，类似 Google Bigtable 利用 GFS  作为其文件存储系统，HBase 利用 Hadoop HDFS 作为其文件存储系统；Google运行 MapReduce 来处理 Bigtable 中的海量数据，HBase 利用 Hadoop MapReduce 来处理 HBase 中的海量数据；Google Bigtable 利用 Chubby 作为协同服务，HBase 利用 ookeeper 作为对应。</p>
+<p>HBase 是一个分布式的、面向列的开源数据库,是 Apache 的 Hadoop 项目的子项目。HBase 不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库,另一个不同是 HBase 基于列而不是基于行的模式。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515029250857.png" alt=""></p>
+<p>如图,HBase 位于结构化存储层，Hadoop HDFS 为 HBase  提供了高可靠性的底层存储支持，Hadoop MapReduc 为 HBase 提供了高性能的计算能力，Zookeeper 为 HBase 提供了稳定服务和 failover 机制。</p>
+<p>Pig 和 Hive 还为 HBase 提供了高层语言支持，使得在 HBase 上进行数据统计处理变的非常简单。 Sqoop 则为 HBase 提供了方便的 RDBMS 数据导入功能，使得传统数据库数据向 HBase 中迁移变的非常方便。</p>
+<p><strong>spark的构成</strong></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516938659693.png" alt=""></p>
+<h1 id="如何访问Hbase"><a href="#如何访问Hbase" class="headerlink" title=" 如何访问Hbase "></a><font color="#5CACEE"> 如何访问Hbase </font></h1><pre><code>1. Native Java API，最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据
+2. HBase Shell，HBase的命令行工具，最简单的接口，适合HBase管理使用
+3. Thrift Gateway，利用Thrift序列化技术，支持C++，PHP，Python等多种语言，适合其他异构系统在线访问HBase表数据
+4. REST Gateway，支持REST 风格的Http API访问HBase, 解除了语言限制
+5. Pig，可以使用Pig Latin流式编程语言来操作HBase中的数据，和Hive类似，本质最终也是编译成MapReduce Job来处理HBase表数据，适合做数据统计
+6. Hive，当前Hive的Release版本尚没有加入对HBase的支持，但在下一个版本Hive 0.7.0中将会支持HBase，可以使用类似SQL语言来访问HBase
+</code></pre><h1 id="Hbase数据模型"><a href="#Hbase数据模型" class="headerlink" title=" Hbase数据模型 "></a><font color="#5CACEE"> Hbase数据模型 </font></h1><h2 id="HBase的特点"><a href="#HBase的特点" class="headerlink" title=" HBase的特点 "></a><font color="green"> HBase的特点 </font></h2><blockquote>
+<ol>
+<li>大：一个表可以有上亿行，上百万列。</li>
+<li>面向列：面向列表（簇）的存储和权限控制，列（簇）独立检索。</li>
+<li>稀疏：对于为空（NULL）的列，并不占用存储空间，因此，表可以设计的非常稀疏。</li>
+<li>无模式：每一行都有一个可以排序的主键和任意多的列，列可以根据需要动态增加，同一张表中不同的行可以有截然不同的列。</li>
+<li>数据多版本：每个单元中的数据可以有多个版本，默认情况下，版本号自动分配，版本号就是单元格插入时的时间戳。</li>
+<li>数据类型单一：HBase中的数据都是字符串，没有类型。</li>
+</ol>
+</blockquote>
+<h2 id="Table-amp-Column-Family"><a href="#Table-amp-Column-Family" class="headerlink" title=" Table &amp; Column Family "></a><font color="green"> Table &amp; Column Family </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515137523563.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515031598634.png" alt=""></p>
+<blockquote>
+<p>Row Key: 行键，Table的主键，Table中的记录按照Row Key排序<br>访问 HBase table 中的行，只有三种方式：</p>
+</blockquote>
+<p>1)通过单个 Row Key 访问。</p>
+<p>2)通过 Row Key 的 range 全表扫描。</p>
+<p>3)Row Key 可以使任意字符串（最大长度是64KB，实际应用中长度一般为 10 ~ 100bytes），在HBase 内部，Row Key 保存为字节数组。</p>
+<blockquote>
+<p>Timestamp: 时间戳，每次数据操作对应的时间戳，可以看作是数据的version number</p>
+<p>Column Family：列簇，Table在水平方向有一个或者多个Column Family组成，一个Column Family中可以由任意多个Column组成，即Column Family支持动态扩展，无需预先定义Column的数量以及类型，所有Column均以二进制格式存储，用户需要自行进行类型转换。</p>
+<p>逻辑数据模型中空白cell在物理上是不存储的，因为根本没有必要存储，因此若一个请求为要获取t8时间的contents:html，他的结果就是空。相似的，若请求为获取t9时间的anchor:my.look.ca，结果也是空。但是，如果不指明时间，将会返回最新时间的行，每个最新的都会返回</p>
+</blockquote>
+<h2 id="Table-amp-Region"><a href="#Table-amp-Region" class="headerlink" title=" Table &amp; Region "></a><font color="green"> Table &amp; Region </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515031712437.png" alt=""></p>
+<blockquote>
+<p>当Table随着记录数不断增加而变大后，会逐渐分裂成多份splits，成为regions，一个region由[startkey,endkey)表示，不同的region会被Master分配给相应的RegionServer进行管理</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515031843096.png" alt=""></p>
+<blockquote>
+<p>HBase中有两张特殊的Table，-ROOT-和.META.</p>
+<p>.META.：记录了用户表的Region信息，.META.可以有多个regoin</p>
+<p>-ROOT-：记录了.META.表的Region信息，-ROOT-只有一个region</p>
+<p>Zookeeper中记录了-ROOT-表的location</p>
+</blockquote>
+<h2 id="MapReduce-on-HBase"><a href="#MapReduce-on-HBase" class="headerlink" title=" MapReduce on HBase "></a><font color="green"> MapReduce on HBase </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515032000264.png" alt=""></p>
+<blockquote>
+<p>在HBase系统上运行批处理运算，最方便和实用的模型依然是MapReduce，如图所示，HBase Table和Region的关系，比较类似HDFS File和Block的关系，HBase提供了配套的TableInputFormat和TableOutputFormat API，可以方便的将HBase Table作为Hadoop MapReduce的Source和Sink，对于MapReduce Job应用开发人员来说，基本不需要关注HBase系统自身的细节。</p>
+</blockquote>
+<h1 id="HBase系统架构"><a href="#HBase系统架构" class="headerlink" title=" HBase系统架构 "></a><font color="#5CACEE"> HBase系统架构 </font></h1><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515032454254.png" alt=""></p>
+<h2 id="Client"><a href="#Client" class="headerlink" title=" Client "></a><font color="green"> Client </font></h2><blockquote>
+<p>HBase Client使用HBase的RPC（Remote Procedure Call – 远程过程调用）机制与HMaster和HRegionServer进行通信，对于管理类操作，Client与HMaster进行RPC；对于数据读写类操作，Client与HRegionServer进行RPC</p>
+</blockquote>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title=" Zookeeper "></a><font color="green"> Zookeeper </font></h2><blockquote>
+<p>Zookeeper Quorum中除了存储了-ROOT-表的地址和HMaster的地址，HRegionServer也会把自己以Ephemeral方式注册到 Zookeeper中，使得HMaster可以随时感知到各个HRegionServer的健康状态。此外，Zookeeper也避免了HMaster的 单点问题</p>
+</blockquote>
+<h2 id="HMaster"><a href="#HMaster" class="headerlink" title=" HMaster "></a><font color="green"> HMaster </font></h2><blockquote>
+<p>HMaster没有单点问题，HBase中可以启动多个HMaster，通过Zookeeper的Master Election机制保证总有一个Master运行，HMaster在功能上主要负责Table和Region的管理工作：</p>
+</blockquote>
+<pre><code>1.管理用户对Table的增、删、改、查操作
+
+2.管理HRegionServer的负载均衡，调整Region分布
+
+3.在Region Split后，负责新Region的分配
+
+4.在HRegionServer停机后，负责失效HRegionServer 上的Regions迁移
+</code></pre><h2 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title=" HRegionServer "></a><font color="green"> HRegionServer </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515033447893.png" alt=""></p>
+<blockquote>
+<p>HRegionServer主要负责响应用户I/O请求，向HDFS文件系统中读写数据，是HBase中最核心的模块。</p>
+<p>如图，HRegionServer内部管理了一系列HRegion对象，每个HRegion对应了Table中的一个Region，HRegion中由多个HStore组成。每个HStore对应了Table中的一个Column Family的存储，可以看出每个Column Family其实就是一个集中的存储单元</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515048287534.png" alt=""></p>
+<blockquote>
+<p>HStore存储是HBase存储的核心,由两部分组成，一部分是MemStore，一部分是StoreFiles，MemStore是 Sorted Memory Buffer，用户写入的数据首先会放入MemStore，当MemStore满了以后会Flush成一个StoreFile（底层实现是HFile）， 当StoreFile文件数量增长到一定阈值，会触发Compact合并操作，将多个StoreFiles合并成一个StoreFile，合并过程中会进 行版本合并和数据删除，因此可以看出HBase其实只有增加数据，所有的更新和删除操作都是在后续的compact过程中进行的，这使得用户的写操作只要 进入内存中就可以立即返回，保证了HBase I/O的高性能。当StoreFiles Compact后，会逐步形成越来越大的StoreFile，当单个StoreFile大小超过一定阈值后，会触发Split操作，同时把当前 Region Split成2个Region，父Region会下线，新Split出的2个孩子Region会被HMaster分配到相应的HRegionServer 上，使得原先1个Region的压力得以分流到2个Region上。</p>
+<p>在理解了上述HStore的基本原理后，还必须了解一下HLog的功能，因为上述的HStore在系统正常工作的前提下是没有问题的，但是在分布式 系统环境中，无法避免系统出错或者宕机，因此一旦HRegionServer意外退出，MemStore中的内存数据将会丢失，这就需要引入HLog了。 每个HRegionServer中都有一个HLog对象，HLog是一个实现Write Ahead Log的类，在每次用户操作写入MemStore的同时，也会写一份数据到HLog文件中（HLog文件格式见后续），HLog文件定期会滚动出新的，并 删除旧的文件（已持久化到StoreFile中的数据）。当HRegionServer意外终止后，HMaster会通过Zookeeper感知 到，HMaster首先会处理遗留的 HLog文件，将其中不同Region的Log数据进行拆分，分别放到相应region的目录下，然后再将失效的region重新分配，领取 到这些region的HRegionServer在Load Region的过程中，会发现有历史HLog需要处理，因此会Replay HLog中的数据到MemStore中，然后flush到StoreFiles，完成数据恢复。</p>
+</blockquote>
+<h2 id="HBase存储格式"><a href="#HBase存储格式" class="headerlink" title=" HBase存储格式 "></a><font color="green"> HBase存储格式 </font></h2><blockquote>
+<p>HBase中的所有数据文件都存储在Hadoop HDFS文件系统上，主要包括上述提出的两种文件类型：</p>
+</blockquote>
+<pre><code>1.HFile， HBase中KeyValue数据的存储格式，HFile是Hadoop的二进制格式文件，实际上StoreFile就是对HFile做了轻量级包装，即StoreFile底层就是HFile
+
+2.HLog File，HBase中WAL（Write Ahead Log） 的存储格式，物理上是Hadoop的Sequence File
+</code></pre><h3 id="HFile"><a href="#HFile" class="headerlink" title=" HFile "></a><font color="red"> HFile </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515048543469.png" alt=""></p>
+<blockquote>
+<p>如图HFile的存储格式，首先HFile是不定长的，长度固定的只有其中两块:Trailer和Fileinfo。</p>
+</blockquote>
+<pre><code>Trailer中有指针指向其他数据块的起始点；
+Fileinfo则记录了文件的部分meta信息，如AVG_KEY_LEN, AVG_VALUE_LEN, LAST_KEY, COMPARATOR, MAX_SEQ_ID_KEY等;
+Data Index和Meta Index块记录了每个Data块和Meta块的起始点。
+</code></pre><blockquote>
+<p>Data Block是HBase I/O的基本单元，为了提高效率，HRegionServer中有基于LRU的Block Cache机制。每个Data块的大小可以在创建一个Table的时候通过参数指定，大号的Block有利于顺序Scan，小号Block利于随机查询。 每个Data块除了开头的Magic以外就是一个个KeyValue对拼接而成, Magic内容就是一些随机数字，目的是防止数据损坏。后面会详细介绍每个KeyValue对的内部构造。</p>
+</blockquote>
+<pre><code>LRU:Least Recently Used ,内存管理的一种页面置换算法，对于在内存中但又不用的数据块（内存块）叫做LRU，操作系统会根据哪些数据属于LRU而将其移出内存而腾出空间来加载另外的数据。
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515049020714.png" alt=""></p>
+<blockquote>
+<p>HFile里面的每个KeyValue对就是一个简单的byte数组。但是这个byte数组里面包含了很多项，并且有固定的结构。具体结构如图:开始时两个固定长度的数值，分别表示key的长度和value的长度，紧接着是key，开始是固定长度的数值，表示rowkey的长度，紧接着是rowkey，然后是固定长度的数值，表示Family的长度，然后是Family，接着是Qualifier，然后是两个固定长度的数值，表示Time Stamp和Key Type（Put/Delete）。Value部分没有这么复杂的结构，就是纯粹的二进制数据。</p>
+</blockquote>
+<h3 id="HLogFile"><a href="#HLogFile" class="headerlink" title=" HLogFile "></a><font color="red"> HLogFile </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515063082942.png" alt=""></p>
+<blockquote>
+<p>如图是HLog文件的结构，其实HLog文件就是一个普通的Hadoop Sequence File，Sequence File 的Key是HLogKey对象，HLogKey中记录了写入数据的归属信息，除了table和region名字外，同时还包括 sequence number和timestamp，timestamp是“写入时间”，sequence number的起始值为0，或者是最近一次存入文件系统中sequence number。</p>
+<p>HLog Sequece File的Value是HBase的KeyValue对象，即对应HFile中的KeyValue</p>
+</blockquote>
+<h1 id="HBase的高并发和实时处理数据"><a href="#HBase的高并发和实时处理数据" class="headerlink" title="HBase的高并发和实时处理数据"></a><font color="#5CACEE">HBase的高并发和实时处理数据</font></h1><blockquote>
+<p>Hadoop是一个高容错、高延时的分布式文件系统和高并发的批处理系统，不适用于提供实时计算；HBase是可以提供实时计算的分布式数据库，数据被保存在HDFS分布式文件系统上，由HDFS保证其高容错性。</p>
+<p>在生产环境中，HBase是如何基于hadoop提供实时性呢？</p>
+<p> HBase上的数据是以StoreFile(HFile)二进制流的形式存储在HDFS上block块儿中；但是HDFS并不知道的HBase存的是什么，它只把存储文件视为二进制文件，也就是说，HBase的存储数据对于HDFS文件系统是透明的。</p>
+<p> 从根本上说，HBase能提供实时计算服务主要原因是由其架构和底层的数据结构决定的，即由LSM-Tree + HTable(region分区) + Cache决定——客户端可以直接定位到要查数据所在的HRegion server服务器，然后直接在服务器的一个region上查找要匹配的数据，并且这些数据部分是经过cache缓存的。</p>
+<p> 具体数据访问流程如下：</p>
+<pre><code>1. Client会通过内部缓存的相关的-ROOT-中的信息和.META.中的信息直接连接与请求数据匹配的HRegion server；
+2. 然后直接定位到该服务器上与客户请求对应的Region，客户请求首先会查询该Region在内存中的缓存——Memstore(Memstore是一个按key排序的树形结构的缓冲区)；
+3. 如果在Memstore中查到结果则直接将结果返回给Client；
+4. 在Memstore中没有查到匹配的数据，接下来会读已持久化的StoreFile文件中的数据，StoreFile也是按 key排序的树形结构的文件——并且是特别为范围查询或block查询优化过的，HBase读取磁盘文件是按其基本I/O单元(即 HBase Block)读数据的。
+</code></pre></blockquote>
+<p>hbase的具体配置使用跟hadoop，spark有密切关系，后面会有专门的博客来介绍openstack和hadoop，包括原理和配置，那里面会包含hbase的安装配置使用方法，这个坑交给后面的文章来填，就这么愉快得决定了！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Database/" rel="tag"># Database</a>
+          
+            <a href="/tags/Original/" rel="tag"># Original</a>
+          
+            <a href="/tags/Part-transported/" rel="tag"># Part-transported</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/03/Google三大论文/" rel="next" title="Google三大论文">
+                <i class="fa fa-chevron-left"></i> Google三大论文
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/16/Leanote/" rel="prev" title="Leanote">
+                Leanote <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
+                alt="chaos" />
+            
+              <p class="site-author-name" itemprop="name">chaos</p>
+              <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/uxtuo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hbase是什么"><span class="nav-number">2.</span> <span class="nav-text"> Hbase是什么 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何访问Hbase"><span class="nav-number">3.</span> <span class="nav-text"> 如何访问Hbase </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hbase数据模型"><span class="nav-number">4.</span> <span class="nav-text"> Hbase数据模型 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase的特点"><span class="nav-number">4.1.</span> <span class="nav-text"> HBase的特点 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Table-amp-Column-Family"><span class="nav-number">4.2.</span> <span class="nav-text"> Table & Column Family </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Table-amp-Region"><span class="nav-number">4.3.</span> <span class="nav-text"> Table & Region </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce-on-HBase"><span class="nav-number">4.4.</span> <span class="nav-text"> MapReduce on HBase </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase系统架构"><span class="nav-number">5.</span> <span class="nav-text"> HBase系统架构 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Client"><span class="nav-number">5.1.</span> <span class="nav-text"> Client </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-number">5.2.</span> <span class="nav-text"> Zookeeper </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HMaster"><span class="nav-number">5.3.</span> <span class="nav-text"> HMaster </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HRegionServer"><span class="nav-number">5.4.</span> <span class="nav-text"> HRegionServer </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase存储格式"><span class="nav-number">5.5.</span> <span class="nav-text"> HBase存储格式 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HFile"><span class="nav-number">5.5.1.</span> <span class="nav-text"> HFile </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HLogFile"><span class="nav-number">5.5.2.</span> <span class="nav-text"> HLogFile </span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase的高并发和实时处理数据"><span class="nav-number">6.</span> <span class="nav-text">HBase的高并发和实时处理数据</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chaos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

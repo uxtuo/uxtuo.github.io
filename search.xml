@@ -3,6 +3,125 @@
   
     
     <entry>
+      <title><![CDATA[NoSQL简介]]></title>
+      <url>/2018/01/23/NoSQL/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>本文主要参考<a href="http://www.runoob.com/mongodb/nosql.html" target="_blank" rel="external"><font color="#AAAAAA">菜鸟教程</font></a>，原博文清晰明了，可以自行前往，写在这里是以手连心加深印象，同时把这些信息抓回来作为以博客为载体的个人技能图的重要组成部分。</p>
+<p>NoSQL(NoSQL = Not Only SQL )，意即”不仅仅是SQL”。</p>
+<p>现代计算系统上每天网络上都会产生庞大的数据量，这些数据很大一部分是由关系数据库RDBMS处理，实践证明关系模型非常适合于客户端服务器编程，是结构化数据存储在网络和商务应用的主导技术。</p>
+<p>NoSQL是另一种数据组织形式，早期提出至09年趋势高涨，NoSQL相关的非关系型数据库在存储处理当前互联网快速产生，日益庞大，形式多样的数据方面有巨大优势，发展迅速。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="NoSQL简史"><a href="#NoSQL简史" class="headerlink" title=" NoSQL简史 "></a><font color="#5CACEE"> NoSQL简史 </font></h1><p>NoSQL一词最早出现在1998年，是Carlo Strozzi开发的一个轻量，开源，不提供SQL功能的关系数据库；</p>
+<p>2009年，有一次关于分布式开源数据库的讨论，有人再次提出了NoSQL的概念，主要指非关系型，分布式，不提供ACID的数据库设计模式；</p>
+<p>2009年，亚特兰大举行的”no:sql(east)”讨论会是一个里程碑，其口号”select fun, profit from real_world where relational = false”，因此对NoSQL最普遍的解释是”非关系型的”，强调key-values stores和文档数据库的优点，而不是单纯的反对RDBMS。</p>
+<p>时至今日，各种NoSQL数据库已经是大数据领域各种数据分布式存储的基石。</p>
+<h1 id="NoSQL数据库分类"><a href="#NoSQL数据库分类" class="headerlink" title=" NoSQL数据库分类 "></a><font color="#5CACEE"> NoSQL数据库分类 </font></h1><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>代表数据库</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列存储</td>
+<td>Hbase/Cassandra/Hypertable</td>
+<td>按列存储，方便存储结构化和半结构化数据，方便做数据压缩，在某一列或者某几列的查询中有巨大的IO优势</td>
+</tr>
+<tr>
+<td>文档存储</td>
+<td>MongoDB/CouchDB</td>
+<td>用类似json的格式存储文档，可以对某些字段建立索引，实现关系数据库的某些功能</td>
+</tr>
+<tr>
+<td>key-value存储</td>
+<td>Redis/MemcacheDB</td>
+<td>存储的是key-value对，不管value的格式，可以通过key快速查询value</td>
+</tr>
+<tr>
+<td>图存储</td>
+<td>Neo4J/FlockDB</td>
+<td>图形关系的最佳存储方案</td>
+</tr>
+<tr>
+<td>对象存储</td>
+<td>db4o/Versant</td>
+<td>通过对象的方式存储数据，用类似面向对象语言的语法操作数据库</td>
+</tr>
+<tr>
+<td>xml数据库</td>
+<td>BaseX/Berkeley XML DB</td>
+<td>高效存储XML数据，支持XML内部查询语法，比如XQuery，Xpath</td>
+</tr>
+</tbody>
+</table>
+<h1 id="RDBMS和NoSQL的规则"><a href="#RDBMS和NoSQL的规则" class="headerlink" title=" RDBMS和NoSQL的规则 "></a><font color="#5CACEE"> RDBMS和NoSQL的规则 </font></h1><h2 id="ACID"><a href="#ACID" class="headerlink" title=" ACID "></a><font color="green"> ACID </font></h2><p>关系型数据库有一个很重要的概念:事务(transaction)，类似现实中的交易，遵循ACID:</p>
+<h3 id="A-Atomicity-原子性"><a href="#A-Atomicity-原子性" class="headerlink" title=" A-Atomicity 原子性 "></a><font color="red"> A-Atomicity 原子性 </font></h3><p>事务要么不做，要么做完，事务成功的条件是事务里所有操作均成功完成，只要有一个操作失败，整个事务便失败回滚。<br>比如银行转账，A账户转B账号，分为两个步骤:<br>1.从A账号取出100元<br>2.往B账号转入100元<br>银行的数据库处理该事务，要么两步一起完成，事务提交，任何一步出问题事务都会回滚，如果第一步未完成那么事务失败，第二步未完成，B没收到钱但A少了100元，事务会回滚到未转账状态。</p>
+<h3 id="C-Consistency-一致性"><a href="#C-Consistency-一致性" class="headerlink" title=" C-Consistency 一致性 "></a><font color="red"> C-Consistency 一致性 </font></h3><p>数据库一直处于一致的状态，事务的运行不会改变原本的一致性约束。<br>例如某表上有完整性约束”a + b = 10”，如果一个事务改变了a，那么b必定会发生改变，使得事务结束后依然满足该约束，否则事务失败</p>
+<h3 id="I-Isolation-独立性"><a href="#I-Isolation-独立性" class="headerlink" title=" I-Isolation 独立性 "></a><font color="red"> I-Isolation 独立性 </font></h3><p>并发的事务之间不会互相影响，如果A事务访问的数据正在被B事务修改，只要B事务未提交，A访问的数据就不会受到影响</p>
+<h3 id="D-Durability-持久性"><a href="#D-Durability-持久性" class="headerlink" title=" D-Durability 持久性 "></a><font color="red"> D-Durability 持久性 </font></h3><p>一旦事务提交，所有的修改将会永久保存在数据库上，即使宕机也不会丢失，除非进行数据库恢复</p>
+<h2 id="BASE"><a href="#BASE" class="headerlink" title=" BASE "></a><font color="green"> BASE </font></h2><p>Basically Available, Soft-state, Eventually Consistent</p>
+<p>Basically Availble –基本可用</p>
+<p>Soft-state –软状态/柔性事务。 “Soft state” 可以理解为”无连接”的, 而 “Hard state” 是”面向连接”的</p>
+<p>Eventual Consistency –最终一致性 最终一致性， 也是是 ACID 的最终目的。</p>
+<h2 id="CAP"><a href="#CAP" class="headerlink" title=" CAP "></a><font color="green"> CAP </font></h2><p>计算机科学中，<a href="http://blog.csdn.net/chen77716/article/details/30635543" target="_blank" rel="external"><font color="#AAAAAA"> CAP定理 </font></a>揭示了分布式系统的本质，并给出了设计准则，它指出任何分布式计算系统不能同时满足<br>一致性(Consistency) - 所有节点在同一时间具有相同的数据<br>可用性(Availability) - 保证每个请求都有响应，无论响应成功还是失败<br>分区容错性(Partition tolerance) - 系统中任意信息的丢失或失败不会影响系统的继续运作</p>
+<p>CA without P,如果不要求P(分区)，那么CA(强一致性和可用性)是可以保证的，但分区是始终存在的问题，因此CA系统更多的是允许分区后各子系统依然保证CA。</p>
+<p>CP without A，如果不要求A，相当于每个请求都需要server之间强一致，而P会导致时间无限延长，因此CP也是可以保证的，很多传统的数据库分布式事务都属于这种模式</p>
+<p>AP without C，要高可用并允许分区，则需放弃一致性，一旦分区发生，节点间可能失去联系，为了高可用，每个节点只能用本地数据提供服务，而这会导致全局数据的不一致性，众多NoSQL数据库都属于此类</p>
+<p>因此，根据CAP原理将数据库分成满足CA,CP,AP的三大类:</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516593700888.png" alt=""></p>
+<h1 id="为什么用NoSQL"><a href="#为什么用NoSQL" class="headerlink" title=" 为什么用NoSQL "></a><font color="#5CACEE"> 为什么用NoSQL </font></h1><h2 id="RDBMS"><a href="#RDBMS" class="headerlink" title=" RDBMS "></a><font color="green"> RDBMS </font></h2><ul>
+<li>高度组织化结构化数据 </li>
+<li>结构化查询语言（SQL） (SQL) </li>
+<li>数据和关系都存储在单独的表中。 </li>
+<li>数据操纵语言，数据定义语言 </li>
+<li>严格的一致性</li>
+<li>基础事务</li>
+</ul>
+<h2 id="NoSQL"><a href="#NoSQL" class="headerlink" title=" NoSQL "></a><font color="green"> NoSQL </font></h2><ul>
+<li>代表着不仅仅是SQL</li>
+<li>没有声明性查询语言</li>
+<li>没有预定义的模式</li>
+<li>键 - 值对存储，列存储，文档存储，图形数据库</li>
+<li>最终一致性，而非ACID属性</li>
+<li>非结构化和不可预知的数据</li>
+<li>CAP定理 </li>
+<li>高性能，高可用性和可伸缩性</li>
+</ul>
+<p>优点:</p>
+<p>1.高可扩展性</p>
+<p>2.分布式计算</p>
+<p>3.低成本</p>
+<p>4.架构灵活，可以处理半结构化/非结构化数据</p>
+<p>5.不用处理复杂的关系模型</p>
+<p>缺点:</p>
+<p>1.没有关系型数据库发展得那么成熟</p>
+<p>2.查询功能有限</p>
+<p>3.是一种最终一致性的系统，它们为了高的可用性牺牲了一部分的一致性</p>
+<p>可以通过第三方平台（如：Google,Facebook等）可以很容易的访问和抓取数据。用户的个人信息，社交网络，地理位置，用户生成的数据和用户操作日志已经成倍的增加。我们如果要对这些用户数据进行挖掘，那SQL数据库已经不适合这些应用了, NoSQL数据库的发展也却能很好的处理这些大的数据。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516691622785.png" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> NoSQL </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Database </tag>
+            
+            <tag> Theory </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Mongodb]]></title>
       <url>/2018/01/18/Mongodb/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
@@ -341,6 +460,151 @@ find $BASEDIR -mtime +14 -exec rm -rf {} \;
             <tag> blog </tag>
             
             <tag> community </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[HBase入门]]></title>
+      <url>/2018/01/10/HBbase%E5%85%A5%E9%97%A8/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价 PC Server 上搭建起大规模结构化存储集群。</p>
+<p>面向可扩展性的<strong>分布式数据库</strong>，如<code>hbase</code>，与面向高性能并发读写的<strong>key-value</strong>数据库，如<code>Redis</code>，面向海量数据访问的<strong>文档数据库</strong>，如<code>MongoDB</code>共同构成的应用场景，是用于解决在当前互联网发展阶段产生的巨量数据分布式处理，大量非结构化数据处理，各种社交平台日常生活中产生的的文本信息处理的重要解决方案。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="Hbase是什么"><a href="#Hbase是什么" class="headerlink" title=" Hbase是什么 "></a><font color="#5CACEE"> Hbase是什么 </font></h1><p>HBase 是 Google Bigtable 的开源实现，类似 Google Bigtable 利用 GFS  作为其文件存储系统，HBase 利用 Hadoop HDFS 作为其文件存储系统；Google运行 MapReduce 来处理 Bigtable 中的海量数据，HBase 利用 Hadoop MapReduce 来处理 HBase 中的海量数据；Google Bigtable 利用 Chubby 作为协同服务，HBase 利用 ookeeper 作为对应。</p>
+<p>HBase 是一个分布式的、面向列的开源数据库,是 Apache 的 Hadoop 项目的子项目。HBase 不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库,另一个不同是 HBase 基于列而不是基于行的模式。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515029250857.png" alt=""></p>
+<p>如图,HBase 位于结构化存储层，Hadoop HDFS 为 HBase  提供了高可靠性的底层存储支持，Hadoop MapReduc 为 HBase 提供了高性能的计算能力，Zookeeper 为 HBase 提供了稳定服务和 failover 机制。</p>
+<p>Pig 和 Hive 还为 HBase 提供了高层语言支持，使得在 HBase 上进行数据统计处理变的非常简单。 Sqoop 则为 HBase 提供了方便的 RDBMS 数据导入功能，使得传统数据库数据向 HBase 中迁移变的非常方便。</p>
+<p><strong>spark的构成</strong></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516938659693.png" alt=""></p>
+<h1 id="如何访问Hbase"><a href="#如何访问Hbase" class="headerlink" title=" 如何访问Hbase "></a><font color="#5CACEE"> 如何访问Hbase </font></h1><pre><code>1. Native Java API，最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据
+2. HBase Shell，HBase的命令行工具，最简单的接口，适合HBase管理使用
+3. Thrift Gateway，利用Thrift序列化技术，支持C++，PHP，Python等多种语言，适合其他异构系统在线访问HBase表数据
+4. REST Gateway，支持REST 风格的Http API访问HBase, 解除了语言限制
+5. Pig，可以使用Pig Latin流式编程语言来操作HBase中的数据，和Hive类似，本质最终也是编译成MapReduce Job来处理HBase表数据，适合做数据统计
+6. Hive，当前Hive的Release版本尚没有加入对HBase的支持，但在下一个版本Hive 0.7.0中将会支持HBase，可以使用类似SQL语言来访问HBase
+</code></pre><h1 id="Hbase数据模型"><a href="#Hbase数据模型" class="headerlink" title=" Hbase数据模型 "></a><font color="#5CACEE"> Hbase数据模型 </font></h1><h2 id="HBase的特点"><a href="#HBase的特点" class="headerlink" title=" HBase的特点 "></a><font color="green"> HBase的特点 </font></h2><blockquote>
+<ol>
+<li>大：一个表可以有上亿行，上百万列。</li>
+<li>面向列：面向列表（簇）的存储和权限控制，列（簇）独立检索。</li>
+<li>稀疏：对于为空（NULL）的列，并不占用存储空间，因此，表可以设计的非常稀疏。</li>
+<li>无模式：每一行都有一个可以排序的主键和任意多的列，列可以根据需要动态增加，同一张表中不同的行可以有截然不同的列。</li>
+<li>数据多版本：每个单元中的数据可以有多个版本，默认情况下，版本号自动分配，版本号就是单元格插入时的时间戳。</li>
+<li>数据类型单一：HBase中的数据都是字符串，没有类型。</li>
+</ol>
+</blockquote>
+<h2 id="Table-amp-Column-Family"><a href="#Table-amp-Column-Family" class="headerlink" title=" Table &amp; Column Family "></a><font color="green"> Table &amp; Column Family </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515137523563.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515031598634.png" alt=""></p>
+<blockquote>
+<p>Row Key: 行键，Table的主键，Table中的记录按照Row Key排序<br>访问 HBase table 中的行，只有三种方式：</p>
+</blockquote>
+<p>1)通过单个 Row Key 访问。</p>
+<p>2)通过 Row Key 的 range 全表扫描。</p>
+<p>3)Row Key 可以使任意字符串（最大长度是64KB，实际应用中长度一般为 10 ~ 100bytes），在HBase 内部，Row Key 保存为字节数组。</p>
+<blockquote>
+<p>Timestamp: 时间戳，每次数据操作对应的时间戳，可以看作是数据的version number</p>
+<p>Column Family：列簇，Table在水平方向有一个或者多个Column Family组成，一个Column Family中可以由任意多个Column组成，即Column Family支持动态扩展，无需预先定义Column的数量以及类型，所有Column均以二进制格式存储，用户需要自行进行类型转换。</p>
+<p>逻辑数据模型中空白cell在物理上是不存储的，因为根本没有必要存储，因此若一个请求为要获取t8时间的contents:html，他的结果就是空。相似的，若请求为获取t9时间的anchor:my.look.ca，结果也是空。但是，如果不指明时间，将会返回最新时间的行，每个最新的都会返回</p>
+</blockquote>
+<h2 id="Table-amp-Region"><a href="#Table-amp-Region" class="headerlink" title=" Table &amp; Region "></a><font color="green"> Table &amp; Region </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515031712437.png" alt=""></p>
+<blockquote>
+<p>当Table随着记录数不断增加而变大后，会逐渐分裂成多份splits，成为regions，一个region由[startkey,endkey)表示，不同的region会被Master分配给相应的RegionServer进行管理</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515031843096.png" alt=""></p>
+<blockquote>
+<p>HBase中有两张特殊的Table，-ROOT-和.META.</p>
+<p>.META.：记录了用户表的Region信息，.META.可以有多个regoin</p>
+<p>-ROOT-：记录了.META.表的Region信息，-ROOT-只有一个region</p>
+<p>Zookeeper中记录了-ROOT-表的location</p>
+</blockquote>
+<h2 id="MapReduce-on-HBase"><a href="#MapReduce-on-HBase" class="headerlink" title=" MapReduce on HBase "></a><font color="green"> MapReduce on HBase </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515032000264.png" alt=""></p>
+<blockquote>
+<p>在HBase系统上运行批处理运算，最方便和实用的模型依然是MapReduce，如图所示，HBase Table和Region的关系，比较类似HDFS File和Block的关系，HBase提供了配套的TableInputFormat和TableOutputFormat API，可以方便的将HBase Table作为Hadoop MapReduce的Source和Sink，对于MapReduce Job应用开发人员来说，基本不需要关注HBase系统自身的细节。</p>
+</blockquote>
+<h1 id="HBase系统架构"><a href="#HBase系统架构" class="headerlink" title=" HBase系统架构 "></a><font color="#5CACEE"> HBase系统架构 </font></h1><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515032454254.png" alt=""></p>
+<h2 id="Client"><a href="#Client" class="headerlink" title=" Client "></a><font color="green"> Client </font></h2><blockquote>
+<p>HBase Client使用HBase的RPC（Remote Procedure Call – 远程过程调用）机制与HMaster和HRegionServer进行通信，对于管理类操作，Client与HMaster进行RPC；对于数据读写类操作，Client与HRegionServer进行RPC</p>
+</blockquote>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title=" Zookeeper "></a><font color="green"> Zookeeper </font></h2><blockquote>
+<p>Zookeeper Quorum中除了存储了-ROOT-表的地址和HMaster的地址，HRegionServer也会把自己以Ephemeral方式注册到 Zookeeper中，使得HMaster可以随时感知到各个HRegionServer的健康状态。此外，Zookeeper也避免了HMaster的 单点问题</p>
+</blockquote>
+<h2 id="HMaster"><a href="#HMaster" class="headerlink" title=" HMaster "></a><font color="green"> HMaster </font></h2><blockquote>
+<p>HMaster没有单点问题，HBase中可以启动多个HMaster，通过Zookeeper的Master Election机制保证总有一个Master运行，HMaster在功能上主要负责Table和Region的管理工作：</p>
+</blockquote>
+<pre><code>1.管理用户对Table的增、删、改、查操作
+
+2.管理HRegionServer的负载均衡，调整Region分布
+
+3.在Region Split后，负责新Region的分配
+
+4.在HRegionServer停机后，负责失效HRegionServer 上的Regions迁移
+</code></pre><h2 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title=" HRegionServer "></a><font color="green"> HRegionServer </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515033447893.png" alt=""></p>
+<blockquote>
+<p>HRegionServer主要负责响应用户I/O请求，向HDFS文件系统中读写数据，是HBase中最核心的模块。</p>
+<p>如图，HRegionServer内部管理了一系列HRegion对象，每个HRegion对应了Table中的一个Region，HRegion中由多个HStore组成。每个HStore对应了Table中的一个Column Family的存储，可以看出每个Column Family其实就是一个集中的存储单元</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1515048287534.png" alt=""></p>
+<blockquote>
+<p>HStore存储是HBase存储的核心,由两部分组成，一部分是MemStore，一部分是StoreFiles，MemStore是 Sorted Memory Buffer，用户写入的数据首先会放入MemStore，当MemStore满了以后会Flush成一个StoreFile（底层实现是HFile）， 当StoreFile文件数量增长到一定阈值，会触发Compact合并操作，将多个StoreFiles合并成一个StoreFile，合并过程中会进 行版本合并和数据删除，因此可以看出HBase其实只有增加数据，所有的更新和删除操作都是在后续的compact过程中进行的，这使得用户的写操作只要 进入内存中就可以立即返回，保证了HBase I/O的高性能。当StoreFiles Compact后，会逐步形成越来越大的StoreFile，当单个StoreFile大小超过一定阈值后，会触发Split操作，同时把当前 Region Split成2个Region，父Region会下线，新Split出的2个孩子Region会被HMaster分配到相应的HRegionServer 上，使得原先1个Region的压力得以分流到2个Region上。</p>
+<p>在理解了上述HStore的基本原理后，还必须了解一下HLog的功能，因为上述的HStore在系统正常工作的前提下是没有问题的，但是在分布式 系统环境中，无法避免系统出错或者宕机，因此一旦HRegionServer意外退出，MemStore中的内存数据将会丢失，这就需要引入HLog了。 每个HRegionServer中都有一个HLog对象，HLog是一个实现Write Ahead Log的类，在每次用户操作写入MemStore的同时，也会写一份数据到HLog文件中（HLog文件格式见后续），HLog文件定期会滚动出新的，并 删除旧的文件（已持久化到StoreFile中的数据）。当HRegionServer意外终止后，HMaster会通过Zookeeper感知 到，HMaster首先会处理遗留的 HLog文件，将其中不同Region的Log数据进行拆分，分别放到相应region的目录下，然后再将失效的region重新分配，领取 到这些region的HRegionServer在Load Region的过程中，会发现有历史HLog需要处理，因此会Replay HLog中的数据到MemStore中，然后flush到StoreFiles，完成数据恢复。</p>
+</blockquote>
+<h2 id="HBase存储格式"><a href="#HBase存储格式" class="headerlink" title=" HBase存储格式 "></a><font color="green"> HBase存储格式 </font></h2><blockquote>
+<p>HBase中的所有数据文件都存储在Hadoop HDFS文件系统上，主要包括上述提出的两种文件类型：</p>
+</blockquote>
+<pre><code>1.HFile， HBase中KeyValue数据的存储格式，HFile是Hadoop的二进制格式文件，实际上StoreFile就是对HFile做了轻量级包装，即StoreFile底层就是HFile
+
+2.HLog File，HBase中WAL（Write Ahead Log） 的存储格式，物理上是Hadoop的Sequence File
+</code></pre><h3 id="HFile"><a href="#HFile" class="headerlink" title=" HFile "></a><font color="red"> HFile </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515048543469.png" alt=""></p>
+<blockquote>
+<p>如图HFile的存储格式，首先HFile是不定长的，长度固定的只有其中两块:Trailer和Fileinfo。</p>
+</blockquote>
+<pre><code>Trailer中有指针指向其他数据块的起始点；
+Fileinfo则记录了文件的部分meta信息，如AVG_KEY_LEN, AVG_VALUE_LEN, LAST_KEY, COMPARATOR, MAX_SEQ_ID_KEY等;
+Data Index和Meta Index块记录了每个Data块和Meta块的起始点。
+</code></pre><blockquote>
+<p>Data Block是HBase I/O的基本单元，为了提高效率，HRegionServer中有基于LRU的Block Cache机制。每个Data块的大小可以在创建一个Table的时候通过参数指定，大号的Block有利于顺序Scan，小号Block利于随机查询。 每个Data块除了开头的Magic以外就是一个个KeyValue对拼接而成, Magic内容就是一些随机数字，目的是防止数据损坏。后面会详细介绍每个KeyValue对的内部构造。</p>
+</blockquote>
+<pre><code>LRU:Least Recently Used ,内存管理的一种页面置换算法，对于在内存中但又不用的数据块（内存块）叫做LRU，操作系统会根据哪些数据属于LRU而将其移出内存而腾出空间来加载另外的数据。
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515049020714.png" alt=""></p>
+<blockquote>
+<p>HFile里面的每个KeyValue对就是一个简单的byte数组。但是这个byte数组里面包含了很多项，并且有固定的结构。具体结构如图:开始时两个固定长度的数值，分别表示key的长度和value的长度，紧接着是key，开始是固定长度的数值，表示rowkey的长度，紧接着是rowkey，然后是固定长度的数值，表示Family的长度，然后是Family，接着是Qualifier，然后是两个固定长度的数值，表示Time Stamp和Key Type（Put/Delete）。Value部分没有这么复杂的结构，就是纯粹的二进制数据。</p>
+</blockquote>
+<h3 id="HLogFile"><a href="#HLogFile" class="headerlink" title=" HLogFile "></a><font color="red"> HLogFile </font></h3><p><img src="http://p09u6sy9g.bkt.clouddn.com/1515063082942.png" alt=""></p>
+<blockquote>
+<p>如图是HLog文件的结构，其实HLog文件就是一个普通的Hadoop Sequence File，Sequence File 的Key是HLogKey对象，HLogKey中记录了写入数据的归属信息，除了table和region名字外，同时还包括 sequence number和timestamp，timestamp是“写入时间”，sequence number的起始值为0，或者是最近一次存入文件系统中sequence number。</p>
+<p>HLog Sequece File的Value是HBase的KeyValue对象，即对应HFile中的KeyValue</p>
+</blockquote>
+<h1 id="HBase的高并发和实时处理数据"><a href="#HBase的高并发和实时处理数据" class="headerlink" title="HBase的高并发和实时处理数据"></a><font color="#5CACEE">HBase的高并发和实时处理数据</font></h1><blockquote>
+<p>Hadoop是一个高容错、高延时的分布式文件系统和高并发的批处理系统，不适用于提供实时计算；HBase是可以提供实时计算的分布式数据库，数据被保存在HDFS分布式文件系统上，由HDFS保证其高容错性。</p>
+<p>在生产环境中，HBase是如何基于hadoop提供实时性呢？</p>
+<p> HBase上的数据是以StoreFile(HFile)二进制流的形式存储在HDFS上block块儿中；但是HDFS并不知道的HBase存的是什么，它只把存储文件视为二进制文件，也就是说，HBase的存储数据对于HDFS文件系统是透明的。</p>
+<p> 从根本上说，HBase能提供实时计算服务主要原因是由其架构和底层的数据结构决定的，即由LSM-Tree + HTable(region分区) + Cache决定——客户端可以直接定位到要查数据所在的HRegion server服务器，然后直接在服务器的一个region上查找要匹配的数据，并且这些数据部分是经过cache缓存的。</p>
+<p> 具体数据访问流程如下：</p>
+<pre><code>1. Client会通过内部缓存的相关的-ROOT-中的信息和.META.中的信息直接连接与请求数据匹配的HRegion server；
+2. 然后直接定位到该服务器上与客户请求对应的Region，客户请求首先会查询该Region在内存中的缓存——Memstore(Memstore是一个按key排序的树形结构的缓冲区)；
+3. 如果在Memstore中查到结果则直接将结果返回给Client；
+4. 在Memstore中没有查到匹配的数据，接下来会读已持久化的StoreFile文件中的数据，StoreFile也是按 key排序的树形结构的文件——并且是特别为范围查询或block查询优化过的，HBase读取磁盘文件是按其基本I/O单元(即 HBase Block)读数据的。
+</code></pre></blockquote>
+<p>hbase的具体配置使用跟hadoop，spark有密切关系，后面会有专门的博客来介绍openstack和hadoop，包括原理和配置，那里面会包含hbase的安装配置使用方法，这个坑交给后面的文章来填，就这么愉快得决定了！</p>
+]]></content>
+      
+        <categories>
+            
+            <category> HBase </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Database </tag>
+            
+            <tag> Original </tag>
+            
+            <tag> Part-transported </tag>
             
         </tags>
         
@@ -850,9 +1114,9 @@ v$archive_processes #归档相关的后台进程信息
         
         <tags>
             
-            <tag> Theory </tag>
-            
             <tag> Database </tag>
+            
+            <tag> Theory </tag>
             
         </tags>
         
