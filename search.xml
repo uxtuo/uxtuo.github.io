@@ -3,6 +3,236 @@
   
     
     <entry>
+      <title><![CDATA[Spark实践]]></title>
+      <url>/2018/02/02/Spark%E5%AE%9E%E8%B7%B5/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><p>Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎,一个用来实现快速而通用的集群计算的平台,扩展了广泛使用的MapReduce计算模型，能高效支持更多的计算模式，包括交互式查询和流处理。在处理大规模数据集的时候有优势，Spark的一个重要特点就是能够在内存中计算，因而比MapReduce更快，即使在磁盘上进行的复杂计算，Spark依然更加高效。</p>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jdk-7u25-linux-x64.tar.gz</td>
+<td><a href="https://pan.baidu.com/s/1brjjLaZ" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>hadoop-2.7.2.tar.gz</td>
+<td><a href="https://pan.baidu.com/s/1dGssSkLX" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>scala-2.11.7.tgz</td>
+<td><a href="https://pan.baidu.com/s/1dGf8lS" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>spark-2.2.0-bin-hadoop2.7.tgz</td>
+<td><a href="https://pan.baidu.com/s/1eTDpAqm" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>hadoop-native-64-2.7.0.tar</td>
+<td><a href="https://pan.baidu.com/s/1daOeqM" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>节点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.4.50</td>
+<td>SparkMaster</td>
+</tr>
+<tr>
+<td>192.168.3.237</td>
+<td>SparkWorker1</td>
+</tr>
+<tr>
+<td>192.168.3.238</td>
+<td>SparkWorker2</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title=" Hadoop "></a><font color="#5CACEE"> Hadoop </font></h1><h2 id="运行环境配置"><a href="#运行环境配置" class="headerlink" title=" 运行环境配置 "></a><font color="green"> 运行环境配置 </font></h2><p>请务必关闭<strong>防火墙</strong>，包括<code>iptables</code>及<code>selinux</code></p>
+<h3 id="java"><a href="#java" class="headerlink" title=" java "></a><font color="red"> java </font></h3><p>三台虚拟机均需配置java环境</p>
+<pre><code>$tar xvf jdk-7u25-linux-x64.tar.gz -C /usr/local/ 
+$ vi /root/.bash_profile
+$ source /root/.bash_profile
+</code></pre><blockquote>
+<pre><code>export PATH
+export JAVA_HOME=/usr/local/jdk1.7.0_25
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$JAVA_HOME/bin:/usr/local/hadoop-2.7.2/bin:/usr/local/hadoop-2.7.2/sbin:$PATH
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;
+</code></pre></blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517569085783.png" alt=""></p>
+<h3 id="ssh"><a href="#ssh" class="headerlink" title=" ssh "></a><font color="red"> ssh </font></h3><p>在三台虚拟机上执行命令生成密钥</p>
+<pre><code># ssh-keygen 
+</code></pre><p>ssh将各个机器的密钥拿来238上面合成authorized_keys，然后分发到各个节点</p>
+<pre><code>$ ssh root@192.168.4.237 cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys
+
+$ ssh root@192.168.4.50 cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys
+
+$ scp authorized_keys root@192.168.4.237:/root/.ssh/
+
+$ scp authorized_keys root@192.168.4.50:/root/.ssh/
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1517569689927.png" alt=""></p>
+<h3 id="主机名称"><a href="#主机名称" class="headerlink" title=" 主机名称 "></a><font color="red"> 主机名称 </font></h3><p>三个节点均要更改<br><img src="http://p09u6sy9g.bkt.clouddn.com/1517570098385.png" alt=""></p>
+<h3 id="hadoop软件"><a href="#hadoop软件" class="headerlink" title=" hadoop软件 "></a><font color="red"> hadoop软件 </font></h3><p>三个节点都要更改</p>
+<pre><code>$ tar xvf hadoop-2.7.2.tar.gz -C /usr/local/
+
+$ vi /usr/local/hadoop-2.7.2/etc/hadoop/hadoop-env.sh
+</code></pre><blockquote>
+<pre><code>将 export JAVA_HOME=${JAVA_HOME}
+
+改成 export JAVA_HOME=/usr/local/jdk1.7.0_25
+</code></pre></blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517570493755.png" alt=""></p>
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title=" 修改配置文件 "></a><font color="green"> 修改配置文件 </font></h2><p>文件夹需要在三个虚拟机都创建，配置文件可以在一台机器修改，然后rsync同步到其余两台机器</p>
+<pre><code>mkdir -p {tmp,hdfs/{data,name}}
+</code></pre><blockquote>
+<p>tmp用来存储临时生成的文件</p>
+<p>hdfs用来存储集群数据</p>
+<p>hdfs/data用来存储真正的数据</p>
+<p>hdfs/name用来存储文件系统元数据</p>
+</blockquote>
+<p>下列文件绝对路径:<code>/usr/local/hadoop-2.7.2/etc/hadoop</code></p>
+<h3 id="core-site-xml"><a href="#core-site-xml" class="headerlink" title=" core-site.xml "></a><font color="red"> core-site.xml </font></h3><pre><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;fs.defaultFS&lt;/name&gt;
+        &lt;value&gt;hdfs://SparkMaster:9000&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
+        &lt;value&gt;file:/usr/local/hadoop-2.7.2/tmp&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;io.file.buffer.size&lt;/name&gt;
+        &lt;value&gt;131072&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="marpred-site-xml"><a href="#marpred-site-xml" class="headerlink" title=" marpred-site.xml "></a><font color="red"> marpred-site.xml </font></h3><pre><code>$ cp marpred-site.xml.template marpred-site.xml
+
+&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+        &lt;value&gt;yarn&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;
+        &lt;value&gt;SparkMaster:10020&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;
+        &lt;value&gt;SparkMaster:19888&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title=" hdfs-site.xml "></a><font color="red"> hdfs-site.xml </font></h3><pre><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;
+        &lt;value&gt;file:/usr/local/hadoop-2.7.2/hdfs/name&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;
+        &lt;value&gt;file:/usr/local/hadoop-2.7.2/hdfs/data&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.replication&lt;/name&gt;
+        &lt;value&gt;2&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;
+        &lt;value&gt;SparkMaster:9001&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+    &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="yarn-site-xml"><a href="#yarn-site-xml" class="headerlink" title=" yarn-site.xml "></a><font color="red"> yarn-site.xml </font></h3><pre><code>&lt;configuration&gt;
+        &lt;property&gt;
+               &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+               &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+               &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;
+               &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8032&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8030&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8031&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8033&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8088&lt;/value&gt;
+       &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="slaves"><a href="#slaves" class="headerlink" title=" slaves "></a><font color="red"> slaves </font></h3><pre><code>SparkWorker1
+SparkWorker2
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1517571580623.png" alt=""></p>
+<p>以上配置文件三个节点都需要更改，我们在一个节点更改后利用rsync同步到其他节点</p>
+<pre><code>$ rsync -av /usr/local/hadoop-2.7.2/etc/ SparkWorker1:/usr/local/hadoop-2.7.2/etc/
+
+$ rsync -av /usr/local/hadoop-2.7.2/etc/ SparkWorker2:/usr/local/hadoop-2.7.2/etc/
+</code></pre><h2 id="启动并验证服务"><a href="#启动并验证服务" class="headerlink" title=" 启动并验证服务 "></a><font color="green"> 启动并验证服务 </font></h2><pre><code>hadoop namenode -format  格式化
+
+start-all.sh   主节点启动即可，因为在slaves配置文件里指定了从节点   
+
+jps  查看各个节点进程状态
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1517572052398.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517572134526.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517572152235.png" alt=""></p>
+<p>hadoop集群已经正常<strong>启动</strong>。</p>
+<h1 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title=" 遇到的坑 "></a><font color="#5CACEE"> 遇到的坑 </font></h1><p>1.请务必关闭防火墙，包括iptables和selinux，否则会导致集群无法通信，页面无法访问等问题</p>
+<p>2.启动后有警告<code>Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</code>，是因为Apache提供的hadoop本地库是32位的，而在64位的服务器上就会有问题，因此需要自己编译64位的版本，解决方案是 找个包，解压到目录，修改环境变量，操作后问题解决，原作者环境跟我的环境不一样，不确定是不是所有人都会碰到这个问题</p>
+<pre><code>$tar -xvf hadoop-native-64-2.7.0.tar -C /~hadoop-2.7.2/lib/native 
+
+$ tar -xvf hadoop-native-64-2.7.0.tar -C ~/hadoop-2.7.2/lib
+</code></pre><p>3.第一次启动后进程都正常，页面无法访问，查看监听状态发现监听到了ipv6的端口，hadoop的配置文件明明标注的是监听到ipv4的端口，解决方案如下。</p>
+<pre><code>vi /etc/sysctl.conf
+添加以下内容并执行stop-all.sh和start-all.sh重启hadoop服务
+#disable ipv6
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+</code></pre><h1 id="Scala"><a href="#Scala" class="headerlink" title=" Scala "></a><font color="#5CACEE"> Scala </font></h1><h1 id="Spark"><a href="#Spark" class="headerlink" title=" Spark "></a><font color="#5CACEE"> Spark </font></h1>]]></content>
+      
+        <categories>
+            
+            <category> Bigdata </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Framework </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[NoSQL简介]]></title>
       <url>/2018/01/23/NoSQL/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
@@ -113,9 +343,9 @@
         
         <tags>
             
-            <tag> Theory </tag>
-            
             <tag> Database </tag>
+            
+            <tag> Theory </tag>
             
         </tags>
         
@@ -350,9 +580,9 @@ WriteResult({ &quot;nInserted&quot; : 1 })
         
         <tags>
             
-            <tag> Theory </tag>
-            
             <tag> Database </tag>
+            
+            <tag> Theory </tag>
             
         </tags>
         
@@ -692,9 +922,9 @@ find $BASEDIR -mtime +14 -exec rm -rf {} \;
         
         <tags>
             
-            <tag> service </tag>
-            
             <tag> blog </tag>
+            
+            <tag> service </tag>
             
             <tag> community </tag>
             
@@ -1351,9 +1581,9 @@ v$archive_processes #归档相关的后台进程信息
         
         <tags>
             
-            <tag> Theory </tag>
-            
             <tag> Database </tag>
+            
+            <tag> Theory </tag>
             
         </tags>
         

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Framework," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎,一个用来实现快速而通用的集群计算的平台,扩展了广泛使用的MapReduce计算模型，能高效支持更多的计算模式，包括交互式查询和流处理。在处理大规模数据集的时候有优势，Spark的一个重要特点就是能够在内存中计算，因而比MapReduce更快，即使在磁盘上进行的复杂计算，Spark依然更加高效。">
+<meta name="keywords" content="Framework">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark实践">
+<meta property="og:url" content="sargeras.tk/2018/02/02/Spark实践/index.html">
+<meta property="og:site_name" content="理想国">
+<meta property="og:description" content="简介Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎,一个用来实现快速而通用的集群计算的平台,扩展了广泛使用的MapReduce计算模型，能高效支持更多的计算模式，包括交互式查询和流处理。在处理大规模数据集的时候有优势，Spark的一个重要特点就是能够在内存中计算，因而比MapReduce更快，即使在磁盘上进行的复杂计算，Spark依然更加高效。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517569085783.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517569689927.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517570098385.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517570493755.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517571580623.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517572052398.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517572134526.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1517572152235.png">
+<meta property="og:updated_time" content="2018-02-02T12:01:08.818Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark实践">
+<meta name="twitter:description" content="简介Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎,一个用来实现快速而通用的集群计算的平台,扩展了广泛使用的MapReduce计算模型，能高效支持更多的计算模式，包括交互式查询和流处理。在处理大规模数据集的时候有优势，Spark的一个重要特点就是能够在内存中计算，因而比MapReduce更快，即使在磁盘上进行的复杂计算，Spark依然更加高效。">
+<meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1517569085783.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="sargeras.tk/2018/02/02/Spark实践/"/>
+
+
+
+
+
+  <title>Spark实践 | 理想国</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">理想国</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="sargeras.tk/2018/02/02/Spark实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chaos">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="理想国">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T18:25:43-05:00">
+                2018-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><p>Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎,一个用来实现快速而通用的集群计算的平台,扩展了广泛使用的MapReduce计算模型，能高效支持更多的计算模式，包括交互式查询和流处理。在处理大规模数据集的时候有优势，Spark的一个重要特点就是能够在内存中计算，因而比MapReduce更快，即使在磁盘上进行的复杂计算，Spark依然更加高效。</p>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jdk-7u25-linux-x64.tar.gz</td>
+<td><a href="https://pan.baidu.com/s/1brjjLaZ" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>hadoop-2.7.2.tar.gz</td>
+<td><a href="https://pan.baidu.com/s/1dGssSkLX" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>scala-2.11.7.tgz</td>
+<td><a href="https://pan.baidu.com/s/1dGf8lS" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>spark-2.2.0-bin-hadoop2.7.tgz</td>
+<td><a href="https://pan.baidu.com/s/1eTDpAqm" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>hadoop-native-64-2.7.0.tar</td>
+<td><a href="https://pan.baidu.com/s/1daOeqM" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>节点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.4.50</td>
+<td>SparkMaster</td>
+</tr>
+<tr>
+<td>192.168.3.237</td>
+<td>SparkWorker1</td>
+</tr>
+<tr>
+<td>192.168.3.238</td>
+<td>SparkWorker2</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title=" Hadoop "></a><font color="#5CACEE"> Hadoop </font></h1><h2 id="运行环境配置"><a href="#运行环境配置" class="headerlink" title=" 运行环境配置 "></a><font color="green"> 运行环境配置 </font></h2><p>请务必关闭<strong>防火墙</strong>，包括<code>iptables</code>及<code>selinux</code></p>
+<h3 id="java"><a href="#java" class="headerlink" title=" java "></a><font color="red"> java </font></h3><p>三台虚拟机均需配置java环境</p>
+<pre><code>$tar xvf jdk-7u25-linux-x64.tar.gz -C /usr/local/ 
+$ vi /root/.bash_profile
+$ source /root/.bash_profile
+</code></pre><blockquote>
+<pre><code>export PATH
+export JAVA_HOME=/usr/local/jdk1.7.0_25
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$JAVA_HOME/bin:/usr/local/hadoop-2.7.2/bin:/usr/local/hadoop-2.7.2/sbin:$PATH
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;
+</code></pre></blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517569085783.png" alt=""></p>
+<h3 id="ssh"><a href="#ssh" class="headerlink" title=" ssh "></a><font color="red"> ssh </font></h3><p>在三台虚拟机上执行命令生成密钥</p>
+<pre><code># ssh-keygen 
+</code></pre><p>ssh将各个机器的密钥拿来238上面合成authorized_keys，然后分发到各个节点</p>
+<pre><code>$ ssh root@192.168.4.237 cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys
+
+$ ssh root@192.168.4.50 cat /root/.ssh/id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys
+
+$ scp authorized_keys root@192.168.4.237:/root/.ssh/
+
+$ scp authorized_keys root@192.168.4.50:/root/.ssh/
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1517569689927.png" alt=""></p>
+<h3 id="主机名称"><a href="#主机名称" class="headerlink" title=" 主机名称 "></a><font color="red"> 主机名称 </font></h3><p>三个节点均要更改<br><img src="http://p09u6sy9g.bkt.clouddn.com/1517570098385.png" alt=""></p>
+<h3 id="hadoop软件"><a href="#hadoop软件" class="headerlink" title=" hadoop软件 "></a><font color="red"> hadoop软件 </font></h3><p>三个节点都要更改</p>
+<pre><code>$ tar xvf hadoop-2.7.2.tar.gz -C /usr/local/
+
+$ vi /usr/local/hadoop-2.7.2/etc/hadoop/hadoop-env.sh
+</code></pre><blockquote>
+<pre><code>将 export JAVA_HOME=${JAVA_HOME}
+
+改成 export JAVA_HOME=/usr/local/jdk1.7.0_25
+</code></pre></blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517570493755.png" alt=""></p>
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title=" 修改配置文件 "></a><font color="green"> 修改配置文件 </font></h2><p>文件夹需要在三个虚拟机都创建，配置文件可以在一台机器修改，然后rsync同步到其余两台机器</p>
+<pre><code>mkdir -p {tmp,hdfs/{data,name}}
+</code></pre><blockquote>
+<p>tmp用来存储临时生成的文件</p>
+<p>hdfs用来存储集群数据</p>
+<p>hdfs/data用来存储真正的数据</p>
+<p>hdfs/name用来存储文件系统元数据</p>
+</blockquote>
+<p>下列文件绝对路径:<code>/usr/local/hadoop-2.7.2/etc/hadoop</code></p>
+<h3 id="core-site-xml"><a href="#core-site-xml" class="headerlink" title=" core-site.xml "></a><font color="red"> core-site.xml </font></h3><pre><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;fs.defaultFS&lt;/name&gt;
+        &lt;value&gt;hdfs://SparkMaster:9000&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
+        &lt;value&gt;file:/usr/local/hadoop-2.7.2/tmp&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;io.file.buffer.size&lt;/name&gt;
+        &lt;value&gt;131072&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="marpred-site-xml"><a href="#marpred-site-xml" class="headerlink" title=" marpred-site.xml "></a><font color="red"> marpred-site.xml </font></h3><pre><code>$ cp marpred-site.xml.template marpred-site.xml
+
+&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+        &lt;value&gt;yarn&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;
+        &lt;value&gt;SparkMaster:10020&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;
+        &lt;value&gt;SparkMaster:19888&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title=" hdfs-site.xml "></a><font color="red"> hdfs-site.xml </font></h3><pre><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;
+        &lt;value&gt;file:/usr/local/hadoop-2.7.2/hdfs/name&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;
+        &lt;value&gt;file:/usr/local/hadoop-2.7.2/hdfs/data&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.replication&lt;/name&gt;
+        &lt;value&gt;2&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;
+        &lt;value&gt;SparkMaster:9001&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+    &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="yarn-site-xml"><a href="#yarn-site-xml" class="headerlink" title=" yarn-site.xml "></a><font color="red"> yarn-site.xml </font></h3><pre><code>&lt;configuration&gt;
+        &lt;property&gt;
+               &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+               &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+               &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;
+               &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8032&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8030&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8031&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8033&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property&gt;
+               &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;
+               &lt;value&gt;SparkMaster:8088&lt;/value&gt;
+       &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><h3 id="slaves"><a href="#slaves" class="headerlink" title=" slaves "></a><font color="red"> slaves </font></h3><pre><code>SparkWorker1
+SparkWorker2
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1517571580623.png" alt=""></p>
+<p>以上配置文件三个节点都需要更改，我们在一个节点更改后利用rsync同步到其他节点</p>
+<pre><code>$ rsync -av /usr/local/hadoop-2.7.2/etc/ SparkWorker1:/usr/local/hadoop-2.7.2/etc/
+
+$ rsync -av /usr/local/hadoop-2.7.2/etc/ SparkWorker2:/usr/local/hadoop-2.7.2/etc/
+</code></pre><h2 id="启动并验证服务"><a href="#启动并验证服务" class="headerlink" title=" 启动并验证服务 "></a><font color="green"> 启动并验证服务 </font></h2><pre><code>hadoop namenode -format  格式化
+
+start-all.sh   主节点启动即可，因为在slaves配置文件里指定了从节点   
+
+jps  查看各个节点进程状态
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1517572052398.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517572134526.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1517572152235.png" alt=""></p>
+<p>hadoop集群已经正常<strong>启动</strong>。</p>
+<h1 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title=" 遇到的坑 "></a><font color="#5CACEE"> 遇到的坑 </font></h1><p>1.请务必关闭防火墙，包括iptables和selinux，否则会导致集群无法通信，页面无法访问等问题</p>
+<p>2.启动后有警告<code>Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</code>，是因为Apache提供的hadoop本地库是32位的，而在64位的服务器上就会有问题，因此需要自己编译64位的版本，解决方案是 找个包，解压到目录，修改环境变量，操作后问题解决，原作者环境跟我的环境不一样，不确定是不是所有人都会碰到这个问题</p>
+<pre><code>$tar -xvf hadoop-native-64-2.7.0.tar -C /~hadoop-2.7.2/lib/native 
+
+$ tar -xvf hadoop-native-64-2.7.0.tar -C ~/hadoop-2.7.2/lib
+</code></pre><p>3.第一次启动后进程都正常，页面无法访问，查看监听状态发现监听到了ipv6的端口，hadoop的配置文件明明标注的是监听到ipv4的端口，解决方案如下。</p>
+<pre><code>vi /etc/sysctl.conf
+添加以下内容并执行stop-all.sh和start-all.sh重启hadoop服务
+#disable ipv6
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+</code></pre><h1 id="Scala"><a href="#Scala" class="headerlink" title=" Scala "></a><font color="#5CACEE"> Scala </font></h1><h1 id="Spark"><a href="#Spark" class="headerlink" title=" Spark "></a><font color="#5CACEE"> Spark </font></h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Framework/" rel="tag"># Framework</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/23/NoSQL/" rel="next" title="NoSQL简介">
+                <i class="fa fa-chevron-left"></i> NoSQL简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
+                alt="chaos" />
+            
+              <p class="site-author-name" itemprop="name">chaos</p>
+              <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/uxtuo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop"><span class="nav-number">2.</span> <span class="nav-text"> Hadoop </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行环境配置"><span class="nav-number">2.1.</span> <span class="nav-text"> 运行环境配置 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java"><span class="nav-number">2.1.1.</span> <span class="nav-text"> java </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh"><span class="nav-number">2.1.2.</span> <span class="nav-text"> ssh </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主机名称"><span class="nav-number">2.1.3.</span> <span class="nav-text"> 主机名称 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hadoop软件"><span class="nav-number">2.1.4.</span> <span class="nav-text"> hadoop软件 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改配置文件"><span class="nav-number">2.2.</span> <span class="nav-text"> 修改配置文件 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#core-site-xml"><span class="nav-number">2.2.1.</span> <span class="nav-text"> core-site.xml </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#marpred-site-xml"><span class="nav-number">2.2.2.</span> <span class="nav-text"> marpred-site.xml </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hdfs-site-xml"><span class="nav-number">2.2.3.</span> <span class="nav-text"> hdfs-site.xml </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yarn-site-xml"><span class="nav-number">2.2.4.</span> <span class="nav-text"> yarn-site.xml </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slaves"><span class="nav-number">2.2.5.</span> <span class="nav-text"> slaves </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动并验证服务"><span class="nav-number">2.3.</span> <span class="nav-text"> 启动并验证服务 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的坑"><span class="nav-number">3.</span> <span class="nav-text"> 遇到的坑 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala"><span class="nav-number">4.</span> <span class="nav-text"> Scala </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark"><span class="nav-number">5.</span> <span class="nav-text"> Spark </span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chaos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
