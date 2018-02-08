@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="理想国">
 <meta property="og:description" content="简介 Spark是一个解决大规模数据集运算分析的计算引擎，知其然更要知其所以然，深入了解编程模型，RDD原理，解析spark内核，能够让我们在一个更高的角度看程序运行，数据流动，而且现在对批处理有了其他的需求，比如sturcture stream实现的流处理，MLib实现的机器学习的分类聚类算法，对这种更高层次的spark应用的学习有助于更好的发挥spark的潜力，安装配置不值一提，具体应用才是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-05T03:56:12.976Z">
+<meta property="og:image" content="http://www.hinote.ga/uploads/2018/hadoop/bj61238a65f4mfl8.png">
+<meta property="og:updated_time" content="2018-02-08T01:31:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark深入">
 <meta name="twitter:description" content="简介 Spark是一个解决大规模数据集运算分析的计算引擎，知其然更要知其所以然，深入了解编程模型，RDD原理，解析spark内核，能够让我们在一个更高的角度看程序运行，数据流动，而且现在对批处理有了其他的需求，比如sturcture stream实现的流处理，MLib实现的机器学习的分类聚类算法，对这种更高层次的spark应用的学习有助于更好的发挥spark的潜力，安装配置不值一提，具体应用才是">
+<meta name="twitter:image" content="http://www.hinote.ga/uploads/2018/hadoop/bj61238a65f4mfl8.png">
 
 
 
@@ -332,13 +334,34 @@
 
       
       
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="http://www.hinote.ga/uploads/2018/hadoop/bj61238a65f4mfl8.png" rel="gallery_cjddt156g0008bgpvhsdiioad"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="http://www.hinote.ga/uploads/2018/hadoop/bj61238a65f4mfl8.png" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
 
       
         <h1 id="简介"><a href="#简介" class="headerlink" title=" 简介 "></a><font color="#5CACEE"> 简介 </font></h1><p>Spark是一个解决大规模数据集运算分析的计算引擎，知其然更要知其所以然，深入了解编程模型，RDD原理，解析spark内核，能够让我们在一个更高的角度看程序运行，数据流动，而且现在对批处理有了其他的需求，比如sturcture stream实现的流处理，MLib实现的机器学习的分类聚类算法，对这种更高层次的spark应用的学习有助于更好的发挥spark的潜力，安装配置不值一提，具体应用才是画龙点睛。</p>
 <p><a href="https://www.bilibili.com/video/av13765160/index_7.html?t=495" target="_blank" rel="external"><font color="#AAAAAA"> spark 教程 </font></a>讲的很透彻，已经刷了两遍，跟着做了一些实际操作，每一遍都有新的理解，学得越多越觉得自己懂得太少，奋斗吧少年！</p>
 <a id="more"></a>
 <p>深坑待填，关键是理论性东西写起来真的墨迹啊</p>
-<h1 id="scala基础与实践"><a href="#scala基础与实践" class="headerlink" title=" scala基础与实践 "></a><font color="#5CACEE"> scala基础与实践 </font></h1><h1 id="spark编程模型"><a href="#spark编程模型" class="headerlink" title=" spark编程模型 "></a><font color="#5CACEE"> spark编程模型 </font></h1><h1 id="深入spark内核"><a href="#深入spark内核" class="headerlink" title=" 深入spark内核 "></a><font color="#5CACEE"> 深入spark内核 </font></h1><h1 id="spark-streaming"><a href="#spark-streaming" class="headerlink" title=" spark streaming "></a><font color="#5CACEE"> spark streaming </font></h1><h1 id="spark上运行机器学习，算法实现"><a href="#spark上运行机器学习，算法实现" class="headerlink" title=" spark上运行机器学习，算法实现 "></a><font color="#5CACEE"> spark上运行机器学习，算法实现 </font></h1><h1 id="shark多语言编程"><a href="#shark多语言编程" class="headerlink" title=" shark多语言编程 "></a><font color="#5CACEE"> shark多语言编程 </font></h1>
+<h1 id="scala基础与实践"><a href="#scala基础与实践" class="headerlink" title=" scala基础与实践 "></a><font color="#5CACEE"> scala基础与实践 </font></h1><blockquote>
+<p>scala是一门多范式的编程语言，设计初衷是要集成面向对象编程和函数式编程的各种特性。<br>scala用java开发，运行在java虚拟机上并兼容java程序，spark就是用scala开发的，用scala写spark的程序极为合适，其次是python和java。</p>
+<p>不去学具体的使用技巧，不了解程序的内部原理，那么spark就只是一个软件，深入研究并自己写程序去测试spark的性能，它才会成为数据操控者手中的利剑，剑锋所指，一切真相无所遁形！额(⊙﹏⊙)，说人话就是:”用熟了之后做数据挖掘效率能手脚麻利一点”，<code>hiahiahia~~~</code></p>
+</blockquote>
+<h1 id="scala"><a href="#scala" class="headerlink" title=" scala "></a><font color="#5CACEE"> scala </font></h1><h1 id="spark编程模型"><a href="#spark编程模型" class="headerlink" title=" spark编程模型 "></a><font color="#5CACEE"> spark编程模型 </font></h1><h1 id="深入spark内核"><a href="#深入spark内核" class="headerlink" title=" 深入spark内核 "></a><font color="#5CACEE"> 深入spark内核 </font></h1><h1 id="spark-streaming"><a href="#spark-streaming" class="headerlink" title=" spark streaming "></a><font color="#5CACEE"> spark streaming </font></h1><h1 id="spark上运行机器学习，算法实现"><a href="#spark上运行机器学习，算法实现" class="headerlink" title=" spark上运行机器学习，算法实现 "></a><font color="#5CACEE"> spark上运行机器学习，算法实现 </font></h1><h1 id="shark多语言编程"><a href="#shark多语言编程" class="headerlink" title=" shark多语言编程 "></a><font color="#5CACEE"> shark多语言编程 </font></h1><p>rsync -avz -e “ssh -p 8050” root@138.128.198.223:/tmp/testi.docx </p>
+
       
     </div>
     
@@ -379,6 +402,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/08/module/" rel="prev" title="module">
+                module <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -459,7 +486,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -470,7 +497,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -481,7 +508,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -524,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala基础与实践"><span class="nav-number">2.</span> <span class="nav-text"> scala基础与实践 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark编程模型"><span class="nav-number">3.</span> <span class="nav-text"> spark编程模型 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入spark内核"><span class="nav-number">4.</span> <span class="nav-text"> 深入spark内核 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark-streaming"><span class="nav-number">5.</span> <span class="nav-text"> spark streaming </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark上运行机器学习，算法实现"><span class="nav-number">6.</span> <span class="nav-text"> spark上运行机器学习，算法实现 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shark多语言编程"><span class="nav-number">7.</span> <span class="nav-text"> shark多语言编程 </span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala基础与实践"><span class="nav-number">2.</span> <span class="nav-text"> scala基础与实践 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala"><span class="nav-number">3.</span> <span class="nav-text"> scala </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark编程模型"><span class="nav-number">4.</span> <span class="nav-text"> spark编程模型 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入spark内核"><span class="nav-number">5.</span> <span class="nav-text"> 深入spark内核 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark-streaming"><span class="nav-number">6.</span> <span class="nav-text"> spark streaming </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark上运行机器学习，算法实现"><span class="nav-number">7.</span> <span class="nav-text"> spark上运行机器学习，算法实现 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shark多语言编程"><span class="nav-number">8.</span> <span class="nav-text"> shark多语言编程 </span></a></li></ol></div>
             
 
           </div>

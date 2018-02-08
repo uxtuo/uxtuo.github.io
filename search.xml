@@ -3,13 +3,118 @@
   
     
     <entry>
+      <title><![CDATA[Msys2]]></title>
+      <url>/2018/02/08/Msys/</url>
+      <content type="html"><![CDATA[<p>rsync -avz -e “ssh -p 8050” root@138.128.198.223:/tmp/tesstrsync .</p>
+<p>rsync -avz -e “ssh -p 8050” Msys.md root@138.128.198.223:/myblog/source/_posts/</p>
+<p>rsync -avz -e “ssh -p 8050” * root@138.128.198.223/myblog/source/_posts/</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Linux </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Tools </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[module]]></title>
+      <url>/2018/02/08/module/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title=" 简介 "></a><font color="#5CACEE"> 简介 </font></h1><blockquote>
+<p>Oracle Database，又名Oracle RDBMS，或简称Oracle。是甲骨文公司的一款关系数据库管理系统。它是在数据库领域一直处于领先地位的产品。可以说Oracle数据库系统是目前世界上流行的关系数据库管理系统，系统可移植性好、使用方便、功能强，适用于各类大、中、小、微机环境。它是一种高效率、可靠性好的 适应高吞吐量的数据库解决方案。</p>
+</blockquote>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google云计算三大论文英文版</td>
+<td><a href="https://pan.baidu.com/s/1dFOyXOX" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>Google-File-System中文版</td>
+<td><a href="https://pan.baidu.com/s/1eShdCKa" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>Google-MapReduce中文版</td>
+<td><a href="https://pan.baidu.com/s/1jIOoRaA" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>Google-Bigtable中文版</td>
+<td><a href="https://pan.baidu.com/s/1geX8jLL" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="一级目录"><a href="#一级目录" class="headerlink" title=" 一级目录 "></a><font color="#5CACEE"> 一级目录 </font></h1><h2 id="二级目录"><a href="#二级目录" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h3 id="三级目录"><a href="#三级目录" class="headerlink" title=" 三级目录 "></a><font color="red"> 三级目录 </font></h3><h4 id="四级目录"><a href="#四级目录" class="headerlink" title="四级目录"></a>四级目录</h4><table>
+<thead>
+<tr>
+<th>软件</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google云计算三大论文英文版</td>
+<td><a href="https://pan.baidu.com/s/1dFOyXOX" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<font face="黑体">我是黑体字</font>
+
+<font face="微软雅黑">我是微软雅黑</font>
+
+<font face="STCAIYUN">我是华文彩云</font>
+
+<font color="#0099ff" size="7" face="黑体">color=#0099ff size=72<br>face=”黑体”</font>
+
+<font color="#00ffff" size="72">color=#00ffff</font>
+
+<font color="red">color=gray</font>
+
+<p><font color="#5CACEE">What is Hexo?</font></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Oracle </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Database </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Spark深入]]></title>
       <url>/2018/02/04/Spark%E6%B7%B1%E5%85%A5/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title=" 简介 "></a><font color="#5CACEE"> 简介 </font></h1><p>Spark是一个解决大规模数据集运算分析的计算引擎，知其然更要知其所以然，深入了解编程模型，RDD原理，解析spark内核，能够让我们在一个更高的角度看程序运行，数据流动，而且现在对批处理有了其他的需求，比如sturcture stream实现的流处理，MLib实现的机器学习的分类聚类算法，对这种更高层次的spark应用的学习有助于更好的发挥spark的潜力，安装配置不值一提，具体应用才是画龙点睛。</p>
 <p><a href="https://www.bilibili.com/video/av13765160/index_7.html?t=495" target="_blank" rel="external"><font color="#AAAAAA"> spark 教程 </font></a>讲的很透彻，已经刷了两遍，跟着做了一些实际操作，每一遍都有新的理解，学得越多越觉得自己懂得太少，奋斗吧少年！</p>
 <a id="more"></a>
 <p>深坑待填，关键是理论性东西写起来真的墨迹啊</p>
-<h1 id="scala基础与实践"><a href="#scala基础与实践" class="headerlink" title=" scala基础与实践 "></a><font color="#5CACEE"> scala基础与实践 </font></h1><h1 id="spark编程模型"><a href="#spark编程模型" class="headerlink" title=" spark编程模型 "></a><font color="#5CACEE"> spark编程模型 </font></h1><h1 id="深入spark内核"><a href="#深入spark内核" class="headerlink" title=" 深入spark内核 "></a><font color="#5CACEE"> 深入spark内核 </font></h1><h1 id="spark-streaming"><a href="#spark-streaming" class="headerlink" title=" spark streaming "></a><font color="#5CACEE"> spark streaming </font></h1><h1 id="spark上运行机器学习，算法实现"><a href="#spark上运行机器学习，算法实现" class="headerlink" title=" spark上运行机器学习，算法实现 "></a><font color="#5CACEE"> spark上运行机器学习，算法实现 </font></h1><h1 id="shark多语言编程"><a href="#shark多语言编程" class="headerlink" title=" shark多语言编程 "></a><font color="#5CACEE"> shark多语言编程 </font></h1>]]></content>
+<h1 id="scala基础与实践"><a href="#scala基础与实践" class="headerlink" title=" scala基础与实践 "></a><font color="#5CACEE"> scala基础与实践 </font></h1><blockquote>
+<p>scala是一门多范式的编程语言，设计初衷是要集成面向对象编程和函数式编程的各种特性。<br>scala用java开发，运行在java虚拟机上并兼容java程序，spark就是用scala开发的，用scala写spark的程序极为合适，其次是python和java。</p>
+<p>不去学具体的使用技巧，不了解程序的内部原理，那么spark就只是一个软件，深入研究并自己写程序去测试spark的性能，它才会成为数据操控者手中的利剑，剑锋所指，一切真相无所遁形！额(⊙﹏⊙)，说人话就是:”用熟了之后做数据挖掘效率能手脚麻利一点”，<code>hiahiahia~~~</code></p>
+</blockquote>
+<h1 id="scala"><a href="#scala" class="headerlink" title=" scala "></a><font color="#5CACEE"> scala </font></h1><h1 id="spark编程模型"><a href="#spark编程模型" class="headerlink" title=" spark编程模型 "></a><font color="#5CACEE"> spark编程模型 </font></h1><h1 id="深入spark内核"><a href="#深入spark内核" class="headerlink" title=" 深入spark内核 "></a><font color="#5CACEE"> 深入spark内核 </font></h1><h1 id="spark-streaming"><a href="#spark-streaming" class="headerlink" title=" spark streaming "></a><font color="#5CACEE"> spark streaming </font></h1><h1 id="spark上运行机器学习，算法实现"><a href="#spark上运行机器学习，算法实现" class="headerlink" title=" spark上运行机器学习，算法实现 "></a><font color="#5CACEE"> spark上运行机器学习，算法实现 </font></h1><h1 id="shark多语言编程"><a href="#shark多语言编程" class="headerlink" title=" shark多语言编程 "></a><font color="#5CACEE"> shark多语言编程 </font></h1><p>rsync -avz -e “ssh -p 8050” root@138.128.198.223:/tmp/testi.docx </p>
+]]></content>
       
         <categories>
             
@@ -1037,7 +1142,7 @@ find $BASEDIR -mtime +14 -exec rm -rf {} \;
 <p>最后，编辑。登陆成功就可以为所欲为了，具体功能看本文中间段落<strong>效果演示</strong>。所有编写的文章和markdown（后缀为.md的博客文件）保存在我的服务器上，每天备份，保留两周的备份集，所以就可劲作吧。</p>
 <p>最最后，可以写什么？</p>
 <p>什么都可以写，在线写的文章和博客如果不发布，没有任何人可以看到，包括管理员，所有文章加密后保存在数据库；<br>可以发布出去，比如<a href="http://lovepanda.tk:9000/blog/post/alxinfff/Leanote" target="_blank" rel="external"><font color="#AAAAAA">这样</font></a>，发布的内容所有人都可以通过网络访问。</p>
-<p>你可以写一些技术文档分类保存不发布，当作一个在线笔记存储，可以写一些游戏攻略经验发不出去装逼，可以写一些抒情的文章然后发布，把链接给别人看（说真的，这个有点骚包，我绝逼干不出来这种事），具体功能我也刚开始用，你自己开发，enjoy it！！！</p>
+<p>你可以写一些技术文档分类保存不发布，当作一个在线笔记存储，可以写一些游戏攻略经验发布出去装逼，可以写一些抒情的文章然后把链接给别人看（说真的，这个有点骚包，我绝逼干不出来这种事），基本功能就是这些，具体的骚操作自己开发，enjoy it！！！</p>
 </blockquote>
 <h3 id="2-深度用户高级攻略"><a href="#2-深度用户高级攻略" class="headerlink" title="2.深度用户高级攻略"></a><font color="red">2.深度用户高级攻略</font></h3>]]></content>
       
@@ -1062,7 +1167,7 @@ find $BASEDIR -mtime +14 -exec rm -rf {} \;
     
     <entry>
       <title><![CDATA[HBase入门]]></title>
-      <url>/2018/01/10/HBbase%E5%85%A5%E9%97%A8/</url>
+      <url>/2018/01/10/HBase%E5%85%A5%E9%97%A8/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
 <p>HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价 PC Server 上搭建起大规模结构化存储集群。</p>
 <p>面向可扩展性的<strong>分布式数据库</strong>，如<code>hbase</code>，与面向高性能并发读写的<strong>key-value</strong>数据库，如<code>Redis</code>，面向海量数据访问的<strong>文档数据库</strong>，如<code>MongoDB</code>共同构成的应用场景，是用于解决在当前互联网发展阶段产生的巨量数据分布式处理，大量非结构化数据处理，各种社交平台日常生活中产生的的文本信息处理的重要解决方案。</p>
@@ -1295,10 +1400,46 @@ Data Index和Meta Index块记录了每个Data块和Meta块的起始点。
     </entry>
     
     <entry>
+      <title><![CDATA[安装配置]]></title>
+      <url>/2018/01/02/Oracle%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>Oralce体系结构主要可以分为三个部分，对其分别进行深入理解可以很好得帮助理解oracle软件的运行和结构</p>
+<ul>
+<li>内存结构</li>
+<li>进程结构</li>
+<li>物理存储结构</li>
+</ul>
+</blockquote>
+<a id="more"></a>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+<h2 id="一级目录"><a href="#一级目录" class="headerlink" title="一级目录"></a><font color="green">一级目录</font></h2><p>###<font color="red">二级目录</font>###</p>
+<h4 id="三级目录"><a href="#三级目录" class="headerlink" title="三级目录"></a>三级目录</h4>]]></content>
+      
+        <categories>
+            
+            <category> Oracle </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Database </tag>
+            
+            <tag> Original </tag>
+            
+            <tag> Part-transported </tag>
+            
+            <tag> Operate </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[oracle大纲]]></title>
       <url>/2017/12/29/Oracle%E5%A4%A7%E7%BA%B2/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
-<p>Oracle Database，又名Oracle RDBMS，或简称Oracle。是甲骨文公司的一款关系数据库管理系统。它是在数据库领域一直处于领先地位的产品。可以说Oracle数据库系统是目前世界上流行的关系数据库管理系统，系统可移植性好、使用方便、功能强，适用于各类大、中、小、微机环境。它是一种高效率、可靠性好、适应高吞吐量的数据库解决方案。</p>
+<p>Oracle Database，又名Oracle RDBMS，或简称Oracle。是甲骨文公司的一款关系数据库管理系统。它是在数据库领域一直处于领先地位的产品。可以说Oracle数据库系统是目前世界上流行的关系数据库管理系统，系统可移植性好、使用方便、功能强，适用于各类大、中、小、微机环境。它是一种高效率、可靠性好的 适应高吞吐量的数据库解决方案。</p>
 </blockquote>
 <a id="more"></a>
 <h1 id="oracle的起源"><a href="#oracle的起源" class="headerlink" title="oracle的起源"></a><font color="#5CACEE">oracle的起源</font></h1><p>oracle是<a href="https://baike.baidu.com/item/%E7%94%B2%E9%AA%A8%E6%96%87%E5%85%AC%E5%8F%B8/430115?fr=aladdin" target="_blank" rel="external"><font color="#AAAAAA">甲骨文公司</font></a>的拳头产品，是一个功能完善，商业应用程度极高的关系型数据库软件，是计算机行业发展的阶段性产物。</p>
@@ -1365,9 +1506,13 @@ Data Index和Meta Index块记录了每个Data块和Meta块的起始点。
         
         <tags>
             
+            <tag> Framework </tag>
+            
             <tag> Database </tag>
             
-            <tag> Framework </tag>
+            <tag> Original </tag>
+            
+            <tag> Part-transported </tag>
             
             <tag> theory </tag>
             
@@ -1377,7 +1522,7 @@ Data Index和Meta Index块记录了每个Data块和Meta块的起始点。
     
     <entry>
       <title><![CDATA[体系结构]]></title>
-      <url>/2017/12/28/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</url>
+      <url>/2017/12/28/Oracle%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</url>
       <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h2><blockquote>
 <p>Oralce体系结构主要可以分为三个部分，对其分别进行深入理解可以很好得帮助理解oracle软件的运行和结构</p>
 <ul>
@@ -1698,7 +1843,24 @@ v$archive_dest  #归档路径及状态
 v$log_history   #控制文件中日志的历史信息
 
 v$archive_processes #归档相关的后台进程信息
-</code></pre>]]></content>
+</code></pre><h2 id="rac起停操作"><a href="#rac起停操作" class="headerlink" title="rac起停操作"></a>rac起停操作</h2><h3 id="进程正常"><a href="#进程正常" class="headerlink" title="进程正常"></a>进程正常</h3><p>如图，双节点RAC进程正常，端口监听正常，可以对外提供服务<br><img src="http://p09u6sy9g.bkt.clouddn.com/1516161797321.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516161937018.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516161963701.png" alt=""></p>
+<h3 id="停止HAS-High-Availability-Services"><a href="#停止HAS-High-Availability-Services" class="headerlink" title="停止HAS(High Availability Services)"></a>停止HAS(High Availability Services)</h3><p>必须以root用户操作，每个rac节点都得执行，在执行过程中vip会不断漂移到正常节点，直到所有节点服务都被关闭，执行完成后所有节点1521端口不再监听，所有相关进程全部清除，集群无法被访问</p>
+<pre><code># cd /u01/app/11.2/grid/bin
+
+# ./crsctl stop has -f
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516162462783.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516164898940.png" alt=""></p>
+<h3 id="启动HAS"><a href="#启动HAS" class="headerlink" title="启动HAS"></a>启动HAS</h3><p>root在每个rac节点执行起has的命令，可以在单一节点启动集群数据库</p>
+<pre><code># crsctl start has 
+
+$ srvctl status database -d racdb   oracle用户
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516165599493.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516165626017.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516165664331.png" alt=""></p>
+<p>可以看到所有的rac相关进程都已经启动，可以通过sqlplus本地登陆，用开发工具访问vip也正常，这是一次完整的rac起停过程</p>
+]]></content>
       
         <categories>
             
@@ -1712,6 +1874,10 @@ v$archive_processes #归档相关的后台进程信息
             <tag> Theory </tag>
             
             <tag> Database </tag>
+            
+            <tag> Original </tag>
+            
+            <tag> Part-transported </tag>
             
         </tags>
         
