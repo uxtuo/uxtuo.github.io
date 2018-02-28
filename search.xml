@@ -3,8 +3,8 @@
   
     
     <entry>
-      <title><![CDATA[Msys2]]></title>
-      <url>/2018/02/08/Msys/</url>
+      <title><![CDATA[MySQL学习之路]]></title>
+      <url>/2018/02/18/Msys/</url>
       <content type="html"><![CDATA[<p>rsync -avz -e “ssh -p 8050” root@138.128.198.223:/tmp/tesstrsync .</p>
 <p>rsync -avz -e “ssh -p 8050” Msys.md root@138.128.198.223:/myblog/source/_posts/</p>
 <p>rsync -avz -e “ssh -p 8050” * root@138.128.198.223/myblog/source/_posts/</p>
@@ -12,14 +12,14 @@
       
         <categories>
             
-            <category> Linux </category>
+            <category> MySQL </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> Tools </tag>
+            <tag> mysql </tag>
             
         </tags>
         

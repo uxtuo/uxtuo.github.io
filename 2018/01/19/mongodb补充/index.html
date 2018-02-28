@@ -5,6 +5,10 @@
   
 
 
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
@@ -14,6 +18,24 @@
 
 
 
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-atom.min.css?v=1.0.2" rel="stylesheet">
+
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
 
 
 
@@ -83,7 +105,7 @@
 <meta name="keywords" content="Theory,Database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mongodb补充">
-<meta property="og:url" content="sargeras.tk/2018/01/19/mongodb补充/index.html">
+<meta property="og:url" content="http://www.lovepanda.tk/2018/01/19/mongodb补充/index.html">
 <meta property="og:site_name" content="理想国">
 <meta property="og:description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。">
 <meta property="og:locale" content="zh-Hans">
@@ -136,7 +158,7 @@
 
 
 
-  <link rel="canonical" href="sargeras.tk/2018/01/19/mongodb补充/"/>
+  <link rel="canonical" href="http://www.lovepanda.tk/2018/01/19/mongodb补充/"/>
 
 
 
@@ -163,6 +185,9 @@
 
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
+
+    <a href="https://github.com/uxtuo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
@@ -261,10 +286,10 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="sargeras.tk/2018/01/19/mongodb补充/">
+    <link itemprop="mainEntityOfPage" href="http://www.lovepanda.tk/2018/01/19/mongodb补充/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chaos">
+      <meta itemprop="name" content="Chaos">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
     </span>
@@ -333,6 +358,37 @@
 
           
 
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,344
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
           
 
           
@@ -574,6 +630,12 @@ WriteResult({ &quot;nInserted&quot; : 1 })
 
     
 
+    <div>
+      
+        
+      
+    </div>
+
     
 
     
@@ -582,9 +644,9 @@ WriteResult({ &quot;nInserted&quot; : 1 })
       
         <div class="post-tags">
           
-            <a href="/tags/Theory/" rel="tag"># Theory</a>
+            <a href="/tags/Theory/" rel="tag"><i class="fa fa-tag"></i> Theory</a>
           
-            <a href="/tags/Database/" rel="tag"># Database</a>
+            <a href="/tags/Database/" rel="tag"><i class="fa fa-tag"></i> Database</a>
           
         </div>
       
@@ -627,6 +689,32 @@ WriteResult({ &quot;nInserted&quot; : 1 })
 
 
     <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
       
     </div>
   </div>
@@ -677,9 +765,9 @@ WriteResult({ &quot;nInserted&quot; : 1 })
             
               <img class="site-author-image" itemprop="image"
                 src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
-                alt="chaos" />
+                alt="Chaos" />
             
-              <p class="site-author-name" itemprop="name">chaos</p>
+              <p class="site-author-name" itemprop="name">Chaos</p>
               <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
           </div>
 
@@ -701,7 +789,7 @@ WriteResult({ &quot;nInserted&quot; : 1 })
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -712,7 +800,7 @@ WriteResult({ &quot;nInserted&quot; : 1 })
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -775,18 +863,30 @@ WriteResult({ &quot;nInserted&quot; : 1 })
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">chaos</span>
+  <span class="author" itemprop="copyrightHolder">Chaos</span>
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">33.4k</span>
   
 </div>
 
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
-
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
 
 
   <span class="post-meta-divider">|</span>
@@ -797,6 +897,11 @@ WriteResult({ &quot;nInserted&quot; : 1 })
 
 
 
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共33.4k字</span>
+</div>
 
         
 
@@ -840,6 +945,8 @@ WriteResult({ &quot;nInserted&quot; : 1 })
   
 
 
+  
+
 
 
 
@@ -878,6 +985,11 @@ WriteResult({ &quot;nInserted&quot; : 1 })
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
