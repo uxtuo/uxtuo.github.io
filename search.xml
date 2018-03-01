@@ -3,23 +3,30 @@
   
     
     <entry>
-      <title><![CDATA[MySQL学习之路]]></title>
-      <url>/2018/02/18/Msys/</url>
-      <content type="html"><![CDATA[<p>rsync -avz -e “ssh -p 8050” root@138.128.198.223:/tmp/tesstrsync .</p>
-<p>rsync -avz -e “ssh -p 8050” Msys.md root@138.128.198.223:/myblog/source/_posts/</p>
-<p>rsync -avz -e “ssh -p 8050” * root@138.128.198.223/myblog/source/_posts/</p>
+      <title><![CDATA[Book Summary系列写作计划]]></title>
+      <url>/2018/03/01/Book-Summary%E5%86%99%E4%BD%9C%E8%AE%A1%E5%88%92/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title=" 简介 "></a><font color="#5CACEE"> 简介 </font></h1><blockquote>
+<p>“Book Summary”-书的概述，预期是写成一个系列，主要内容有研究生课程学习的课本，对我的思想有重大启发的纪录片和文章书籍，包括不限于历史，宇宙，文化，才艺等等，工作中自学或用到的技术书籍，当前买了很多实体书，oracle/mysql/python/SQL/Spark/网络，还有”多看”上的电子书，没有人督促来读，也没有指标，进度很慢，准备在通读之后把书的内容整理出来，一是记录，二是分享。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="规划"><a href="#规划" class="headerlink" title=" 规划 "></a><font color="#5CACEE"> 规划 </font></h1><p>信息社会，知识已经不像以前那么宝贵，茫茫多的免费资料，各个机构分享出来的技术资料俯拾皆是，<strong>学习能力</strong>反而成了个人提升的瓶颈，就比如欧洲黑暗中世纪和我国的封建时代，皇权和神权不约而同奉行愚民政策，封锁知识流动，将社会极大部分人的知识层次和眼光局限在较低层次对社会和权力的稳定有奇效，然而近代科技爆炸，知识和信息在全社会无障碍流通，假设有一个人有无上限的学习能力和精力，那么就跟电影<code>《永无止境》</code>里一样，很容易就能突破一切局限，乐器，搏击，商业，政治，社交，任何方面都能极快地获得超凡成就。然而很遗憾，人力有穷，现实中的我们困在百十来斤的肉体中，困了要睡，伤了会痛，饿了要吃，高兴会笑伤心会哭，肉体的吃喝拉撒和情绪的喜怒哀乐这种本能的存在是生活多姿多彩的因素，是人类欲望的根源，是不可缺少的部分。</p>
+<p>但对个人的自我学习来说，极为不利，当前我的解决方案是持<a href="https://baike.baidu.com/item/%E4%B8%AD%E5%BA%B8%E4%B9%8B%E9%81%93/873892" target="_blank" rel="external"><font color="#AAAAAA">中庸之道</font></a>，乐而不淫，哀而不伤，形成稳定的人生观和世界观，冷静的处理生活，工作和生活节奏，同时<code>&quot;stay hungry,stay curious&quot;</code>,保持旺盛的好奇心和学习的心态，做一个<strong>终身学习者</strong>。结果上来说，能让人生轨迹的弧线往上翘的几率大那么一丢丢，而且过程中的压力，动力，成就，痛苦，不都是让人生更充实的资粮么，学习的过程本就是一种享受啊！</p>
+<p>原书作者在写书的时候付出了大量的时间和脑力劳动，出版商负责印刷，排版，出版发行，最后根据销量收入来调整书的发行数量和再版次数，付出不菲，然而大部分市面上的技术书籍价格跟价值比起来简直就是<strong>白菜价</strong>，如果销量还是一片惨淡，那可能负反馈太强烈以至于作者觉得写了书没人看，出版社赚不到钱不发行，结果就是好书越来越少，所以我建议手头不是仓促到下一顿饭不知道在哪的朋友尽量买正版书支持一下，让作者有动力写更多更优质的内容出来，这样就能学到更多干货吖\^o^/，当然也可以自己去网上找资源，pdf和免费资源多得是，只要认真看从中学到东西了，作者应该也会高兴地，不用有看盗版的心理负担，没关系的。</p>
+<p>笔者主要阅读途径有三：实体书，”多看阅读”，bilibili纪录片。比如让我兴起写这个读书笔记系列念头的《Spark最佳实践》就是在“多看阅读”上趁着折扣30块钱买的，实体书阅读体验好但会稍贵，大概40-50，京东淘宝亚马逊等平台都有售，而一些python，oracle，爬虫等实体书大部分是在亚马逊买的，bilibili的纪录片资源很多，各个方面层次都有，比如清华的大数据课程，小象集团的spark课程，宇宙如何运行等等琳琅满目，免费无广告摆放整齐，力荐！</p>
+<p>总之，有条件就支持下作者，免费看了书专门去买书支持一把作者这种事我也干过不少，量力而行吧诸君^(*￣(oo)￣)^</p>
+<p>愿前进的途中，光照在你我的身上，早日实现生命的<strong>大和谐</strong>~~</p>
 ]]></content>
       
         <categories>
             
-            <category> MySQL </category>
+            <category> 写作计划 </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> mysql </tag>
+            <tag> Book Summary </tag>
             
         </tags>
         
@@ -27,7 +34,7 @@
     
     <entry>
       <title><![CDATA[module]]></title>
-      <url>/2018/02/08/module/</url>
+      <url>/2018/03/01/%E6%A0%BC%E5%BC%8F/</url>
       <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title=" 简介 "></a><font color="#5CACEE"> 简介 </font></h1><blockquote>
 <p>Oracle Database，又名Oracle RDBMS，或简称Oracle。是甲骨文公司的一款关系数据库管理系统。它是在数据库领域一直处于领先地位的产品。可以说Oracle数据库系统是目前世界上流行的关系数据库管理系统，系统可移植性好、使用方便、功能强，适用于各类大、中、小、微机环境。它是一种高效率、可靠性好的 适应高吞吐量的数据库解决方案。</p>
 </blockquote>
@@ -58,7 +65,7 @@
 </tr>
 </tbody>
 </table>
-<h1 id="一级目录"><a href="#一级目录" class="headerlink" title=" 一级目录 "></a><font color="#5CACEE"> 一级目录 </font></h1><h2 id="二级目录"><a href="#二级目录" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h3 id="三级目录"><a href="#三级目录" class="headerlink" title=" 三级目录 "></a><font color="red"> 三级目录 </font></h3><h4 id="四级目录"><a href="#四级目录" class="headerlink" title="四级目录"></a>四级目录</h4><table>
+<h1 id="一级目录"><a href="#一级目录" class="headerlink" title=" 一级目录 "></a><font color="#5CACEE"> 一级目录 </font></h1><h2 id="二级目录"><a href="#二级目录" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h3 id="三级目录"><a href="#三级目录" class="headerlink" title=" 三级目录 "></a><font color="purple"> 三级目录 </font></h3><h4 id="四级目录"><a href="#四级目录" class="headerlink" title="四级目录"></a>四级目录</h4><table>
 <thead>
 <tr>
 <th>软件</th>
@@ -89,14 +96,37 @@
       
         <categories>
             
-            <category> Oracle </category>
+            <category> Database </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> Database </tag>
+            <tag> Oracle </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Spark最佳实践]]></title>
+      <url>/2018/02/28/Book-Spark%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</url>
+      <content type="html"><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title=" 简介 "></a><font color="#5CACEE"> 简介 </font></h1><a id="more"></a>
+<h1 id="书籍介绍"><a href="#书籍介绍" class="headerlink" title=" 书籍介绍 "></a><font color="#5CACEE"> 书籍介绍 </font></h1><h2 id="基本"><a href="#基本" class="headerlink" title=" 基本 "></a><font color="green"> 基本 </font></h2><h2 id="二级目录"><a href="#二级目录" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h2 id="二级目录-1"><a href="#二级目录-1" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h1 id="一级目录"><a href="#一级目录" class="headerlink" title=" 一级目录 "></a><font color="#5CACEE"> 一级目录 </font></h1><h1 id="一级目录-1"><a href="#一级目录-1" class="headerlink" title=" 一级目录 "></a><font color="#5CACEE"> 一级目录 </font></h1><h2 id="二级目录-2"><a href="#二级目录-2" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h3 id="三级目录"><a href="#三级目录" class="headerlink" title=" 三级目录 "></a><font color="purple"> 三级目录 </font></h3>]]></content>
+      
+        <categories>
+            
+            <category> 技术 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Spark </tag>
+            
+            <tag> Book Summary </tag>
             
         </tags>
         
@@ -111,10 +141,9 @@
 <p>深坑待填，关键是理论性东西写起来真的墨迹啊</p>
 <h1 id="scala基础与实践"><a href="#scala基础与实践" class="headerlink" title=" scala基础与实践 "></a><font color="#5CACEE"> scala基础与实践 </font></h1><blockquote>
 <p>scala是一门多范式的编程语言，设计初衷是要集成面向对象编程和函数式编程的各种特性。<br>scala用java开发，运行在java虚拟机上并兼容java程序，spark就是用scala开发的，用scala写spark的程序极为合适，其次是python和java。</p>
-<p>不去学具体的使用技巧，不了解程序的内部原理，那么spark就只是一个软件，深入研究并自己写程序去测试spark的性能，它才会成为数据操控者手中的利剑，剑锋所指，一切真相无所遁形！额(⊙﹏⊙)，说人话就是:”用熟了之后做数据挖掘效率能手脚麻利一点”，<code>hiahiahia~~~</code></p>
+<p>不去学具体的使用技巧，不了解程序的内部原理，那么spark就只是一个软件，深入研究并自己写程序去测试spark的性能，它才会成为数据操控者手中的利剑，剑锋所指，一切真相无所遁形！额(⊙﹏⊙)，说人话就是:”用熟了之后做数据挖掘能手脚麻利一点”，<code>hiahiahia~~~</code></p>
 </blockquote>
-<h1 id="scala"><a href="#scala" class="headerlink" title=" scala "></a><font color="#5CACEE"> scala </font></h1><h1 id="spark编程模型"><a href="#spark编程模型" class="headerlink" title=" spark编程模型 "></a><font color="#5CACEE"> spark编程模型 </font></h1><h1 id="深入spark内核"><a href="#深入spark内核" class="headerlink" title=" 深入spark内核 "></a><font color="#5CACEE"> 深入spark内核 </font></h1><h1 id="spark-streaming"><a href="#spark-streaming" class="headerlink" title=" spark streaming "></a><font color="#5CACEE"> spark streaming </font></h1><h1 id="spark上运行机器学习，算法实现"><a href="#spark上运行机器学习，算法实现" class="headerlink" title=" spark上运行机器学习，算法实现 "></a><font color="#5CACEE"> spark上运行机器学习，算法实现 </font></h1><h1 id="shark多语言编程"><a href="#shark多语言编程" class="headerlink" title=" shark多语言编程 "></a><font color="#5CACEE"> shark多语言编程 </font></h1><p>rsync -avz -e “ssh -p 8050” root@138.128.198.223:/tmp/testi.docx </p>
-]]></content>
+<h2 id="二级目录"><a href="#二级目录" class="headerlink" title=" 二级目录 "></a><font color="green"> 二级目录 </font></h2><h3 id="三级目录"><a href="#三级目录" class="headerlink" title=" 三级目录 "></a><font color="purple"> 三级目录 </font></h3><h1 id="spark编程模型"><a href="#spark编程模型" class="headerlink" title=" spark编程模型 "></a><font color="#5CACEE"> spark编程模型 </font></h1><h1 id="深入spark内核"><a href="#深入spark内核" class="headerlink" title=" 深入spark内核 "></a><font color="#5CACEE"> 深入spark内核 </font></h1><h1 id="spark-streaming"><a href="#spark-streaming" class="headerlink" title=" spark streaming "></a><font color="#5CACEE"> spark streaming </font></h1><h1 id="spark上运行机器学习，算法实现"><a href="#spark上运行机器学习，算法实现" class="headerlink" title=" spark上运行机器学习，算法实现 "></a><font color="#5CACEE"> spark上运行机器学习，算法实现 </font></h1><h1 id="shark多语言编程"><a href="#shark多语言编程" class="headerlink" title=" shark多语言编程 "></a><font color="#5CACEE"> shark多语言编程 </font></h1>]]></content>
       
         <categories>
             
