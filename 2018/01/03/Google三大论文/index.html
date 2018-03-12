@@ -1,7 +1,1278 @@
-<!DOCTYPE html><script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><html class="theme-next gemini use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-center-atom.min.css?v=1.0.2" rel="stylesheet"><script></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="Theory,Paper,Google,Transported,"><meta name="description" content="简介 Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！     软件 下载地址     Google云计算三大论文英文版 点击下载   Google-File-System中文版 点击下载   Google-MapReduce"><meta name="keywords" content="Theory,Paper,Google,Transported"><meta property="og:type" content="article"><meta property="og:title" content="Google三大论文"><meta property="og:url" content="http://www.lovepanda.tk/2018/01/03/Google三大论文/index.html"><meta property="og:site_name" content="理想国"><meta property="og:description" content="简介 Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！     软件 下载地址     Google云计算三大论文英文版 点击下载   Google-File-System中文版 点击下载   Google-MapReduce"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950151670.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950324076.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950356709.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950769173.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950224224.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514959732808.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514959759871.png"><meta property="og:updated_time" content="2018-01-03T07:25:56.000Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Google三大论文"><meta name="twitter:description" content="简介 Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！     软件 下载地址     Google云计算三大论文英文版 点击下载   Google-File-System中文版 点击下载   Google-MapReduce"><meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950151670.png"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="http://www.lovepanda.tk/2018/01/03/Google三大论文/"><title>Google三大论文 | 理想国</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/uxtuo"><img style="position:absolute;top:0;right:0;border:0" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">理想国</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle"></p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"> <a href="/" rel="section">首页</a></li><li class="menu-item menu-item-tags"> <a href="/tags" rel="section">标签</a></li><li class="menu-item menu-item-categories"> <a href="/categories" rel="section">分类</a></li><li class="menu-item menu-item-archives"> <a href="/archives" rel="section">归档</a></li></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="http://www.lovepanda.tk/2018/01/03/Google三大论文/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Chaos"><meta itemprop="description" content=""><meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="理想国"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Google三大论文</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T14:27:51-05:00">2018-01-03</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Bigdata/" itemprop="url" rel="index"><span itemprop="name">Bigdata</span></a></span></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">2,287</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">8</span></div></div></header><div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote><p>Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！</p></blockquote><table><thead><tr><th>软件</th><th>下载地址</th></tr></thead><tbody><tr><td>Google云计算三大论文英文版</td><td><a href="https://pan.baidu.com/s/1dFOyXOX" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td></tr><tr><td>Google-File-System中文版</td><td><a href="https://pan.baidu.com/s/1eShdCKa" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td></tr><tr><td>Google-MapReduce中文版</td><td><a href="https://pan.baidu.com/s/1jIOoRaA" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td></tr><tr><td>Google-Bigtable中文版</td><td><a href="https://pan.baidu.com/s/1geX8jLL" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td></tr></tbody></table><a id="more"></a><h2 id="那些年google发过的论文"><a href="#那些年google发过的论文" class="headerlink" title=" 那些年google发过的论文 "></a> <font color="green">那些年google发过的论文</font></h2><blockquote><p>1.按时间算第一篇的论文应该2003年公布的 <strong>Google File System</strong>，这是一个可扩展的分布式文件系统，用于大型的、分布式的、对大量数据进行访问的应用。文件被分割成很多块，使用冗余的方式储存于商用机器集群上(基本上Google每篇论文都是关于“商用机型”)。</p><p>2.2004年发布的的 <strong>MapReduce</strong>现在基本上可以代表大数据。主要思想是将任务分解然后在多台处理能力较弱的计算节点中同时处理，将结果合并从而完成大数据处理，传说中Google使用它计算他们的搜索索引。Mikio L. Braun(柏林工业大学机器学习学博士后，TWIMPACT联合创始人兼首席数据科学家)认为其工作模式应该是：Google把所有抓取的页面都放置于他们的集群上，并且每天都使用MapReduce来重算。</p><p>3.<strong>Bigtable</strong>发布于2006年，启发了无数的NoSQL数据库，比如：Cassandra、HBase等等。Cassandra架构中有一半是模仿Bigtable，包括了数据模型、SSTables以及提前写日志（另一半是模仿Amazon的Dynamo数据库，使用点对点集群模式）。</p><p>Google并没有止步于MapReduce，事实上，随着Internet的指数增长，从零开始重算所有搜索索引变得不切实际,他们在MapReduce不适用的地方开发新方法,对于大数据领域来说这是个福音。MapReduce不是万能的。当然，你可以更深入一步，比如说将磁盘数据移入内存，然而同样还存在一些任务的内部结构并不是MapReduce可以扩展的。</p><p>2010年发表的 <strong>Percolator</strong>的论文中，Google展示了其网络搜索是如何保持着与时俱进。Percolator建立于已存类似Bigtable的技术，但是加入了事务以及行和表上的锁和表变化的通知。这些通知之后会被用于触发不同阶段的计算。通过这样的方式，个体的更新就可以“渗透”整个数据库。</p><p>在2010年，Google还公布了 <strong>Dremel</strong>论文。一个为结构化数据设计，并拥有类SQL语言的交互式数据库。然而取代SQL数据库使用字段填补的表格，Dremel中使用的是类JSON格式数据（更准确的说，使用Google Protocol buffer格式，这将加强对允许字段的限制）。内部，数据被使用特殊格式储存，可以让数据扫描工作来的更高效。查询被送往服务器，而优秀的格式可以最大性能的输出结果</p><p>Google还需要挖掘图数据，比如在线社交网络的社交图谱；所以他们开发了 <strong>Pregel</strong>，并在2010年公布其论文。论文陈述了许多算法的实现，比如Google的PageRank、最短路径、二分图匹配等。Mikio L. Braun认为，对比MapReduce或SPF，Pregel需要更多实现的再思考。</p><p>Google在2009年提出了Spanner远景计划，并在2012年对外公布<strong>Spanner–全球分布式数据库</strong>论文。Spanner的公布可以说是Google向大数据技术中添的又一把火，Spanner具有高扩展性、多版本、全球级分布以及同步复制等特性，跨数据中心的高扩展性及全球分布会对一致性保障提出苛刻的需求,读写的外部一致性和基于时间戳的全局读一致性。为了保障这一点，Google引入了TrueTime API。TureTime API可以同步全球的时间，拥有一个TT.now（）的方法，将获得一个绝对时间，同时还能得到时间误差。为了保证万无一失，TrueTime API具有GPS和原子钟双保险。也只有这样的机制才能让全球范围内的并发处理得到保障。</p><p>在Google思路以及论文的启发下，同样涌现出一些开源项目，比如：Apache Drill、Apache Giraph、斯坦福GPS等等。</p><p>Google近年来每篇论文都有着深远的影响，同时大数据领域内有很多人必然在翘首以盼Google的下一篇论文。</p></blockquote><h2 id="Google-File-System-2003年"><a href="#Google-File-System-2003年" class="headerlink" title=" Google-File-System(2003年) "></a> <font color="green">Google-File-System(2003年)</font></h2><pre><code>文件被分割成很多块，使用冗余的方式储存于商用机器集群上
-</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950151670.png" alt=""></p><h2 id="Google-MapReduce-2004年"><a href="#Google-MapReduce-2004年" class="headerlink" title=" Google-MapReduce (2004年)"></a> <font color="green">Google-MapReduce (2004年)</font></h2><pre><code>Mapreduce是针对分布式并行计算的一套编程模型
-</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950324076.png" alt=""><br><img src="http://p09u6sy9g.bkt.clouddn.com/1514950356709.png" alt=""></p><h2 id="Google-Bigtable-2006年"><a href="#Google-Bigtable-2006年" class="headerlink" title=" Google-Bigtable(2006年)"></a> <font color="green">Google-Bigtable(2006年)</font></h2><pre><code>Bigtable发布于2006年，启发了无数的NoSQL数据库，比如：Cassandra、HBase等等
-</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950769173.png" alt=""></p><pre><code>为了管理巨大的Table，把Table根据行分割，这些分割后的数据统称为：Tablets。每个Tablets大概有 100-200 MB，每个机器存储100个左右的 Tablets。底层的架构是：GFS。
+<!DOCTYPE html>
+
+
+
+  
+
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-atom.min.css?v=1.0.2" rel="stylesheet">
+
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Theory,Paper,Google,Transported," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介 Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！     软件 下载地址     Google云计算三大论文英文版 点击下载   Google-File-System中文版 点击下载   Google-MapReduce">
+<meta name="keywords" content="Theory,Paper,Google,Transported">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google三大论文">
+<meta property="og:url" content="http://www.lovepanda.tk/2018/01/03/Google三大论文/index.html">
+<meta property="og:site_name" content="理想国">
+<meta property="og:description" content="简介 Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！     软件 下载地址     Google云计算三大论文英文版 点击下载   Google-File-System中文版 点击下载   Google-MapReduce">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950151670.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950324076.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950356709.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950769173.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950224224.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514959732808.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1514959759871.png">
+<meta property="og:updated_time" content="2018-01-03T07:25:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Google三大论文">
+<meta name="twitter:description" content="简介 Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！     软件 下载地址     Google云计算三大论文英文版 点击下载   Google-File-System中文版 点击下载   Google-MapReduce">
+<meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1514950151670.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lovepanda.tk/2018/01/03/Google三大论文/"/>
+
+
+
+
+
+  <title>Google三大论文 | 理想国</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/uxtuo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">理想国</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lovepanda.tk/2018/01/03/Google三大论文/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chaos">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="理想国">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Google三大论文</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T14:27:51-05:00">
+                2018-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Bigdata/" itemprop="url" rel="index">
+                    <span itemprop="name">Bigdata</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,287
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><blockquote>
+<p>Google File System、MapReuce以及Bigtable三驾马车可以说是大数据算法的起源，虽然Google没有公布这三个产品的源码，但是他发布了这三个产品的详细设计论文，奠定了风靡全球的大数据算法的基础！</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google云计算三大论文英文版</td>
+<td><a href="https://pan.baidu.com/s/1dFOyXOX" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>Google-File-System中文版</td>
+<td><a href="https://pan.baidu.com/s/1eShdCKa" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>Google-MapReduce中文版</td>
+<td><a href="https://pan.baidu.com/s/1jIOoRaA" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+<tr>
+<td>Google-Bigtable中文版</td>
+<td><a href="https://pan.baidu.com/s/1geX8jLL" target="_blank" rel="external"><font color="#AAAAAA">点击下载</font></a></td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h2 id="那些年google发过的论文"><a href="#那些年google发过的论文" class="headerlink" title=" 那些年google发过的论文 "></a><font color="green"> 那些年google发过的论文 </font></h2><blockquote>
+<p>1.按时间算第一篇的论文应该2003年公布的<strong> Google File System</strong>，这是一个可扩展的分布式文件系统，用于大型的、分布式的、对大量数据进行访问的应用。文件被分割成很多块，使用冗余的方式储存于商用机器集群上(基本上Google每篇论文都是关于“商用机型”)。</p>
+<p>2.2004年发布的的<strong> MapReduce</strong>现在基本上可以代表大数据。主要思想是将任务分解然后在多台处理能力较弱的计算节点中同时处理，将结果合并从而完成大数据处理，传说中Google使用它计算他们的搜索索引。Mikio L. Braun(柏林工业大学机器学习学博士后，TWIMPACT联合创始人兼首席数据科学家)认为其工作模式应该是：Google把所有抓取的页面都放置于他们的集群上，并且每天都使用MapReduce来重算。</p>
+<p>3.<strong>Bigtable</strong>发布于2006年，启发了无数的NoSQL数据库，比如：Cassandra、HBase等等。Cassandra架构中有一半是模仿Bigtable，包括了数据模型、SSTables以及提前写日志（另一半是模仿Amazon的Dynamo数据库，使用点对点集群模式）。</p>
+<p>Google并没有止步于MapReduce，事实上，随着Internet的指数增长，从零开始重算所有搜索索引变得不切实际,他们在MapReduce不适用的地方开发新方法,对于大数据领域来说这是个福音。MapReduce不是万能的。当然，你可以更深入一步，比如说将磁盘数据移入内存，然而同样还存在一些任务的内部结构并不是MapReduce可以扩展的。</p>
+<p>2010年发表的 <strong>Percolator</strong>的论文中，Google展示了其网络搜索是如何保持着与时俱进。Percolator建立于已存类似Bigtable的技术，但是加入了事务以及行和表上的锁和表变化的通知。这些通知之后会被用于触发不同阶段的计算。通过这样的方式，个体的更新就可以“渗透”整个数据库。</p>
+<p>在2010年，Google还公布了 <strong>Dremel</strong>论文。一个为结构化数据设计，并拥有类SQL语言的交互式数据库。然而取代SQL数据库使用字段填补的表格，Dremel中使用的是类JSON格式数据（更准确的说，使用Google Protocol buffer格式，这将加强对允许字段的限制）。内部，数据被使用特殊格式储存，可以让数据扫描工作来的更高效。查询被送往服务器，而优秀的格式可以最大性能的输出结果</p>
+<p>Google还需要挖掘图数据，比如在线社交网络的社交图谱；所以他们开发了 <strong>Pregel</strong>，并在2010年公布其论文。论文陈述了许多算法的实现，比如Google的PageRank、最短路径、二分图匹配等。Mikio L. Braun认为，对比MapReduce或SPF，Pregel需要更多实现的再思考。</p>
+<p>Google在2009年提出了Spanner远景计划，并在2012年对外公布<strong>Spanner–全球分布式数据库</strong>论文。Spanner的公布可以说是Google向大数据技术中添的又一把火，Spanner具有高扩展性、多版本、全球级分布以及同步复制等特性，跨数据中心的高扩展性及全球分布会对一致性保障提出苛刻的需求,读写的外部一致性和基于时间戳的全局读一致性。为了保障这一点，Google引入了TrueTime API。TureTime API可以同步全球的时间，拥有一个TT.now（）的方法，将获得一个绝对时间，同时还能得到时间误差。为了保证万无一失，TrueTime API具有GPS和原子钟双保险。也只有这样的机制才能让全球范围内的并发处理得到保障。</p>
+<p>在Google思路以及论文的启发下，同样涌现出一些开源项目，比如：Apache Drill、Apache Giraph、斯坦福GPS等等。</p>
+<p>Google近年来每篇论文都有着深远的影响，同时大数据领域内有很多人必然在翘首以盼Google的下一篇论文。</p>
+</blockquote>
+<h2 id="Google-File-System-2003年"><a href="#Google-File-System-2003年" class="headerlink" title=" Google-File-System(2003年) "></a><font color="green"> Google-File-System(2003年) </font></h2><pre><code>文件被分割成很多块，使用冗余的方式储存于商用机器集群上
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950151670.png" alt=""></p>
+<h2 id="Google-MapReduce-2004年"><a href="#Google-MapReduce-2004年" class="headerlink" title=" Google-MapReduce (2004年)"></a><font color="green"> Google-MapReduce (2004年)</font></h2><pre><code>Mapreduce是针对分布式并行计算的一套编程模型
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950324076.png" alt=""><br><img src="http://p09u6sy9g.bkt.clouddn.com/1514950356709.png" alt=""></p>
+<h2 id="Google-Bigtable-2006年"><a href="#Google-Bigtable-2006年" class="headerlink" title=" Google-Bigtable(2006年)"></a><font color="green"> Google-Bigtable(2006年)</font></h2><pre><code>Bigtable发布于2006年，启发了无数的NoSQL数据库，比如：Cassandra、HBase等等
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950769173.png" alt=""></p>
+<pre><code>为了管理巨大的Table，把Table根据行分割，这些分割后的数据统称为：Tablets。每个Tablets大概有 100-200 MB，每个机器存储100个左右的 Tablets。底层的架构是：GFS。
 
 由于GFS是一种分布式的文件系统，采用Tablets的机制后，可以获得很好的负载均衡。比如：可以把经常响应的表移动到其他空闲机器上，然后快速重建。
-</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title=" 总结 "></a> <font color="green">总结</font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950224224.png" alt=""></p><p><strong><em>MapReduce 和 BigTable都是以GFS为基础，三大基础核心技术构建出了完整的分布式运算架构。</em></strong></p><p>大数据的出现是互联网技术发展的<strong>大势所趋</strong>，随着越来越多的智能化数字化应用，社交媒体信息爆炸，超级大公司的业务数据不断膨胀，需要从海量数据中挖掘发现有价值的信息来进行商务决策，企业管理，产品调整，支撑各种互联网＋的公司，传统的高性能服务器加oracle等结构化数据库方案已经不足以满足需求。</p><p>谷歌本身就是一个体量巨大的全球性科技公司，旗下youtube，twitch，twitter，搜索业务，承载着互联网数据总量相当比重的<strong>处理压力</strong>，主动或者被动都要面对这个问题，从无到有地建立了一套技术体系之后，没有依靠技术垄断获取更大的利益，而是<strong>拿出了一整套解决方案的理论基础</strong>，可以说当前的这些分布式系统，框架，非结构化数据库，大部分都基于此，谷歌为互联网进入下个时代做出了极大的贡献，再次膜拜。</p><p>这是基于当前可观测事实的合理推测，事实上谷歌作为资本控制下的科技公司，做出这种大公无私的事可能性有但很小，大概率有自己的<strong>目的</strong>在里面，比如已经有了其他的解决方案，或许是另一个技术方向，用这些论文误导业界的发展方向，结果发现业界依然如火如荼┑(￣Д ￣)┍；比如是技术上又有了突破，把淘汰下来的技术拿出去给你们这些战五渣用(╯‵□′)╯︵┻━┻;又或者是有什么别的考量，遇上了瓶颈，把这些拿出来准备接受业界的反哺啦，跟某些团体有什么不可描述的py交易啦。这些都无所谓，论迹不论心，论心世上无完人，不管当时抱着什么目的，客观上确实极大地促进了大数据这个领域的发展，我宁愿相信谷歌出于公心出于科技界一员的责任感出于促进人类科技发展，主动自愿地发起了推动大数据领域前进的一系列行为，<em>科技宅天下第一！！！</em></p><p>最后说一句，估计有巨多的人都听说过谷歌的三篇传奇论文推进一个领域的故事，但是看过论文并仔细研究过的没多少，毕竟术业有专攻，该领域的从业人员限定就能划掉大部分人，领域内分工不同，也不是人人都需要看这些，又划掉一部分，比如我就没看过，写这篇博客是因为最近又开始玩hbase和mongo，查资料越查越深，决定单独把这三篇奠基性的论文拿出来过一遍，顺便mark一下。</p><p>最最后说一句，论文是最为精确信息量最大的，但这种专业度极高的文献看起来超级麻烦，所以我推荐b站的一个教学视频<a href="https://www.bilibili.com/video/av9787020/" target="_blank" rel="external"><font color="#AAAAAA">【大数据系统基础】.MOOC.清华大学</font></a>，可以说把GFS和MapReduce讲的相当透彻。</p><blockquote><p>PS:b站超良心的，up主把视频搬过来排版调好放在那没有广告免费观看，还可以选择2倍速，资源贼多，真真的“我在b站看纪录片”。</p></blockquote><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514959732808.png" alt=""></p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514959759871.png" alt=""></p></div><div></div><footer class="post-footer"><div class="post-tags"><a href="/tags/Theory/" rel="tag"><i class="fa fa-tag"></i> Theory</a><a href="/tags/Paper/" rel="tag"><i class="fa fa-tag"></i> Paper</a><a href="/tags/Google/" rel="tag"><i class="fa fa-tag"></i> Google</a><a href="/tags/Transported/" rel="tag"><i class="fa fa-tag"></i> Transported</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/01/02/Oracle安装配置/" rel="next" title="安装配置"><i class="fa fa-chevron-left"></i> 安装配置</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/01/10/HBase入门/" rel="prev" title="HBase入门">HBase入门<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"><div class="jiathis_style"> <span class="jiathis_txt">分享到：</span> <a class="jiathis_button_fav">收藏夹</a> <a class="jiathis_button_copy">复制网址</a> <a class="jiathis_button_email">邮件</a> <a class="jiathis_button_weixin">微信</a> <a class="jiathis_button_qzone">QQ空间</a> <a class="jiathis_button_tqq">腾讯微博</a> <a class="jiathis_button_douban">豆瓣</a> <a class="jiathis_button_share">一键分享</a> <a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a><a class="jiathis_counter_style"></a></div><script type="text/javascript">var jiathis_config={data_track_clickback:!0,summary:"",shortUrl:!1,hideMore:!1}</script><script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script></div></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg" alt="Chaos"><p class="site-author-name" itemprop="name">Chaos</p><p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives"><span class="site-state-item-count">16</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <span class="site-state-item-count">13</span> <span class="site-state-item-name">分类</span></div><div class="site-state-item site-state-tags"> <span class="site-state-item-count">22</span> <span class="site-state-item-name">标签</span></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/uxtuo" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#那些年google发过的论文"><span class="nav-number">1.1.</span> <span class="nav-text">那些年google发过的论文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-File-System-2003年"><span class="nav-number">1.2.</span> <span class="nav-text">Google-File-System(2003年)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-MapReduce-2004年"><span class="nav-number">1.3.</span> <span class="nav-text">Google-MapReduce (2004年)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Bigtable-2006年"><span class="nav-number">1.4.</span> <span class="nav-text">Google-Bigtable(2006年)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">Chaos</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">31.3k</span></div><div class="powered-by"><i class="fa fa-user-md"></i> <span id="busuanzi_container_site_uv">本站访客数:<span id="busuanzi_value_site_uv"></span></span></div> <span class="post-meta-divider">|</span><div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div><div class="theme-info"><div class="powered-by"></div> <span class="post-count">博客全站共31.3k字</span></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine/dist/Valine.min.js"></script></body></html>
+</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title=" 总结 "></a><font color="green"> 总结 </font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1514950224224.png" alt=""></p>
+<p><strong><em>MapReduce 和 BigTable都是以GFS为基础，三大基础核心技术构建出了完整的分布式运算架构。</em></strong></p>
+<p>大数据的出现是互联网技术发展的<strong>大势所趋</strong>，随着越来越多的智能化数字化应用，社交媒体信息爆炸，超级大公司的业务数据不断膨胀，需要从海量数据中挖掘发现有价值的信息来进行商务决策，企业管理，产品调整，支撑各种互联网＋的公司，传统的高性能服务器加oracle等结构化数据库方案已经不足以满足需求。</p>
+<p>谷歌本身就是一个体量巨大的全球性科技公司，旗下youtube，twitch，twitter，搜索业务，承载着互联网数据总量相当比重的<strong>处理压力</strong>，主动或者被动都要面对这个问题，从无到有地建立了一套技术体系之后，没有依靠技术垄断获取更大的利益，而是<strong>拿出了一整套解决方案的理论基础</strong>，可以说当前的这些分布式系统，框架，非结构化数据库，大部分都基于此，谷歌为互联网进入下个时代做出了极大的贡献，再次膜拜。</p>
+<p>这是基于当前可观测事实的合理推测，事实上谷歌作为资本控制下的科技公司，做出这种大公无私的事可能性有但很小，大概率有自己的<strong>目的</strong>在里面，比如已经有了其他的解决方案，或许是另一个技术方向，用这些论文误导业界的发展方向，结果发现业界依然如火如荼┑(￣Д ￣)┍；比如是技术上又有了突破，把淘汰下来的技术拿出去给你们这些战五渣用(╯‵□′)╯︵┻━┻;又或者是有什么别的考量，遇上了瓶颈，把这些拿出来准备接受业界的反哺啦，跟某些团体有什么不可描述的py交易啦。这些都无所谓，论迹不论心，论心世上无完人，不管当时抱着什么目的，客观上确实极大地促进了大数据这个领域的发展，我宁愿相信谷歌出于公心出于科技界一员的责任感出于促进人类科技发展，主动自愿地发起了推动大数据领域前进的一系列行为，<em>科技宅天下第一！！！</em></p>
+<p>最后说一句，估计有巨多的人都听说过谷歌的三篇传奇论文推进一个领域的故事，但是看过论文并仔细研究过的没多少，毕竟术业有专攻，该领域的从业人员限定就能划掉大部分人，领域内分工不同，也不是人人都需要看这些，又划掉一部分，比如我就没看过，写这篇博客是因为最近又开始玩hbase和mongo，查资料越查越深，决定单独把这三篇奠基性的论文拿出来过一遍，顺便mark一下。</p>
+<p>最最后说一句，论文是最为精确信息量最大的，但这种专业度极高的文献看起来超级麻烦，所以我推荐b站的一个教学视频<a href="https://www.bilibili.com/video/av9787020/" target="_blank" rel="external"><font color="#AAAAAA">【大数据系统基础】.MOOC.清华大学</font></a>，可以说把GFS和MapReduce讲的相当透彻。</p>
+<blockquote>
+<p>PS:b站超良心的，up主把视频搬过来排版调好放在那没有广告免费观看，还可以选择2倍速，资源贼多，真真的“我在b站看纪录片”。</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1514959732808.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1514959759871.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    <div>
+      
+        
+      
+    </div>
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Theory/" rel="tag"><i class="fa fa-tag"></i> Theory</a>
+          
+            <a href="/tags/Paper/" rel="tag"><i class="fa fa-tag"></i> Paper</a>
+          
+            <a href="/tags/Google/" rel="tag"><i class="fa fa-tag"></i> Google</a>
+          
+            <a href="/tags/Transported/" rel="tag"><i class="fa fa-tag"></i> Transported</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/02/Oracle安装配置/" rel="next" title="安装配置">
+                <i class="fa fa-chevron-left"></i> 安装配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/10/HBase入门/" rel="prev" title="HBase入门">
+                HBase入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
+                alt="Chaos" />
+            
+              <p class="site-author-name" itemprop="name">Chaos</p>
+              <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/uxtuo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#那些年google发过的论文"><span class="nav-number">1.1.</span> <span class="nav-text"> 那些年google发过的论文 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-File-System-2003年"><span class="nav-number">1.2.</span> <span class="nav-text"> Google-File-System(2003年) </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-MapReduce-2004年"><span class="nav-number">1.3.</span> <span class="nav-text"> Google-MapReduce (2004年)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Bigtable-2006年"><span class="nav-number">1.4.</span> <span class="nav-text"> Google-Bigtable(2006年)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text"> 总结 </span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chaos</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">35.2k</span>
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共35.2k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

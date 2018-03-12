@@ -1,19 +1,497 @@
-<!DOCTYPE html><script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><html class="theme-next gemini use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-center-atom.min.css?v=1.0.2" rel="stylesheet"><script></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="Theory,Database,"><meta name="description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。"><meta name="keywords" content="Theory,Database"><meta property="og:type" content="article"><meta property="og:title" content="Mongodb补充"><meta property="og:url" content="http://www.lovepanda.tk/2018/01/19/mongodb补充/index.html"><meta property="og:site_name" content="理想国"><meta property="og:description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516698348837.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516700750023.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516701675326.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516759167493.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516760767229.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516761696689.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516761711577.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516762205709.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516762230222.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516763021610.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516763044775.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516777869529.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516778681686.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516778713479.png"><meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516787466812.png"><meta property="og:updated_time" content="2018-01-26T04:08:08.473Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Mongodb补充"><meta name="twitter:description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。"><meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1516698348837.png"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="http://www.lovepanda.tk/2018/01/19/mongodb补充/"><title>Mongodb补充 | 理想国</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/uxtuo"><img style="position:absolute;top:0;right:0;border:0" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">理想国</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle"></p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"> <a href="/" rel="section">首页</a></li><li class="menu-item menu-item-tags"> <a href="/tags" rel="section">标签</a></li><li class="menu-item menu-item-categories"> <a href="/categories" rel="section">分类</a></li><li class="menu-item menu-item-archives"> <a href="/archives" rel="section">归档</a></li></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="http://www.lovepanda.tk/2018/01/19/mongodb补充/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Chaos"><meta itemprop="description" content=""><meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="理想国"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Mongodb补充</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T11:18:08-05:00">2018-01-19</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mongodb/" itemprop="url" rel="index"><span itemprop="name">mongodb</span></a></span></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">4,344</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">16</span></div></div></header><div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><p>MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。</p><a id="more"></a><h1 id="P1（基础阶段）"><a href="#P1（基础阶段）" class="headerlink" title=" P1（基础阶段） "></a> <font color="#5CACEE">P1（基础阶段）</font></h1><h2 id="增"><a href="#增" class="headerlink" title=" 增 "></a> <font color="green">增</font></h2><blockquote><p>db.COLLECTION_NAME.insert(document)</p><p>例:</p><pre><code>db.col.insert({title: &apos;MongoDB 教程&apos;, 
+<!DOCTYPE html>
+
+
+
+  
+
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-atom.min.css?v=1.0.2" rel="stylesheet">
+
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Theory,Database," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。">
+<meta name="keywords" content="Theory,Database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mongodb补充">
+<meta property="og:url" content="http://www.lovepanda.tk/2018/01/19/mongodb补充/index.html">
+<meta property="og:site_name" content="理想国">
+<meta property="og:description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516698348837.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516700750023.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516701675326.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516759167493.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516760767229.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516761696689.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516761711577.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516762205709.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516762230222.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516763021610.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516763044775.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516777869529.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516778681686.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516778713479.png">
+<meta property="og:image" content="http://p09u6sy9g.bkt.clouddn.com/1516787466812.png">
+<meta property="og:updated_time" content="2018-01-26T04:08:08.473Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mongodb补充">
+<meta name="twitter:description" content="简介MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。">
+<meta name="twitter:image" content="http://p09u6sy9g.bkt.clouddn.com/1516698348837.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lovepanda.tk/2018/01/19/mongodb补充/"/>
+
+
+
+
+
+  <title>Mongodb补充 | 理想国</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/uxtuo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">理想国</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lovepanda.tk/2018/01/19/mongodb补充/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chaos">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="理想国">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mongodb补充</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T11:18:08-05:00">
+                2018-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mongodb/" itemprop="url" rel="index">
+                    <span itemprop="name">mongodb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,344
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a><font color="#5CACEE">简介</font></h1><p>MongoDB 是一个由 C++ 语言编写的基于分布式文件存储的数据库，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案，这里简要介绍一下基本操作和存储原理，勉强能够应付日常工作。如果主要工作环境和业务都是mongo，那么就需要深入研究了，本文是远远不够的。</p>
+<a id="more"></a>
+<h1 id="P1（基础阶段）"><a href="#P1（基础阶段）" class="headerlink" title=" P1（基础阶段） "></a><font color="#5CACEE"> P1（基础阶段） </font></h1><h2 id="增"><a href="#增" class="headerlink" title=" 增 "></a><font color="green"> 增 </font></h2><blockquote>
+<p>db.COLLECTION_NAME.insert(document)</p>
+<p>例:</p>
+<pre><code>db.col.insert({title: &apos;MongoDB 教程&apos;, 
     description: &apos;MongoDB 是一个 Nosql 数据库&apos;,
     by: &apos;菜鸟教程&apos;,
     url: &apos;http://www.runoob.com&apos;,
     tags: [&apos;mongodb&apos;, &apos;database&apos;, &apos;NoSQL&apos;],
     likes: 100
 })
-</code></pre></blockquote><h2 id="删"><a href="#删" class="headerlink" title=" 删 "></a> <font color="green">删</font></h2><p>db.collection.remove(<br>query,<br>justOne<br>)</p><pre><code>db.col.remove({&apos;title&apos;:&apos;MongoDB 教程&apos;})
+</code></pre></blockquote>
+<h2 id="删"><a href="#删" class="headerlink" title=" 删 "></a><font color="green"> 删 </font></h2><p>db.collection.remove(<br>query,<br>justOne<br>)</p>
+<pre><code>db.col.remove({&apos;title&apos;:&apos;MongoDB 教程&apos;})
 
 db.col.remove({})
 
 db.col.find()
-</code></pre><h2 id="改"><a href="#改" class="headerlink" title=" 改 "></a> <font color="green">改</font></h2><blockquote><p>db.collection.update(<br><query>,<br><update>,<br> {<br> upsert:<boolean>,<br> multi:<boolean>,<br> writeConcern:<document><br> }<br>)</document></boolean></boolean></update></query></p><p>例:</p><p>db.col.update({‘title’:’MongoDB 教程’},{$set:{‘title’:’MongoDB’}})</p><p>db.col.update({‘title’:’MongoDB 教程’},{$set:{‘title’:’MongoDB’}},{multi:true})</p><p>db.col.save({<br> “_id” : ObjectId(“56064f89ade2f21f36b03136”),<br> “title” : “MongoDB”,<br> “description” : “MongoDB 是一个 Nosql 数据库”,<br> “by” : “Runoob”,<br> “url” : “<a href="http://www.runoob.com" target="_blank" rel="external">http://www.runoob.com</a>“,<br> “tags” : [<br> “mongodb”,<br> “NoSQL”<br> ],<br> “likes” : 110<br>})</p></blockquote><h2 id="查"><a href="#查" class="headerlink" title=" 查 "></a> <font color="green">查</font></h2><blockquote><p>MongoDB 查询文档使用 find() 方法,以非结构化的方式来显示所有文档。</p><p>db.collection.find(query, projection)</p><p>可以使用where，大于等于小于，与或非等条件进行查询，具体语句自行查找</p></blockquote><h2 id="排序"><a href="#排序" class="headerlink" title=" 排序 "></a> <font color="green">排序</font></h2><blockquote><p>db.COLLECTION_NAME.find().sort({KEY:1})</p></blockquote><pre><code>db.col.find({},{&quot;title&quot;:1,_id:0}).sort({&quot;likes&quot;:-1})
-</code></pre><h2 id="索引"><a href="#索引" class="headerlink" title=" 索引 "></a> <font color="green">索引</font></h2><blockquote><p>db.COLLECTION_NAME.ensureIndex({KEY:1})</p></blockquote><pre><code>db.col.ensureIndex({&quot;title&quot;:1})
-</code></pre><h2 id="聚合"><a href="#聚合" class="headerlink" title=" 聚合 "></a> <font color="green">聚合</font></h2><blockquote><p>MongoDB中聚合(aggregate)主要用于处理数据(诸如统计平均值,求和等)，并返回计算后的数据结果。有点类似sql语句中的 count(*)。</p><p>db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)</p></blockquote><pre><code>db.mycol.aggregate([{$group : {_id : &quot;$by_user&quot;, num_tutorial : {$sum : 1}}}])
-</code></pre><h2 id="mongo集群搭建"><a href="#mongo集群搭建" class="headerlink" title=" mongo集群搭建 "></a> <font color="green">mongo集群搭建</font></h2><blockquote><p>大概就是副本集，主从，sharding，目的是将数据同步到多个服务器，复制提供数据的冗余备份，从而提高了数据的可用性， 并保证数据的安全性，主节点记录在其上的所有操作oplog，从节点定期轮询主节点获取这些操作，然后对自己的数据副本执行这些操作，从而保证从节点的数据与主节点一致。</p></blockquote><h2 id="mongo备份恢复"><a href="#mongo备份恢复" class="headerlink" title=" mongo备份恢复 "></a> <font color="green">mongo备份恢复</font></h2><blockquote><p>在另一篇博客里有应用场景的命令格式，大概就是用mongodump和mongorestor两个命令实现数据导出到备份集和导入</p></blockquote><h2 id="mongo监控"><a href="#mongo监控" class="headerlink" title=" mongo监控 "></a> <font color="green">mongo监控</font></h2><p>mongostat命令是mongo自带的状态检测工具，可以间隔固定时间获取并输出mongodb的当前运行状态，数据库变慢或者有异常的首选操作</p><h1 id="P2-稍高一点"><a href="#P2-稍高一点" class="headerlink" title=" P2(稍高一点) "></a> <font color="#5CACEE">P2(稍高一点)</font></h1><h2 id="mongodb-map-reduce"><a href="#mongodb-map-reduce" class="headerlink" title=" mongodb map reduce "></a> <font color="green">mongodb map reduce</font></h2><p>Map-Reduce是一种计算模型，简单的说就是将大批量的工作（数据）分解（MAP）执行，然后再将结果合并成最终结果（REDUCE），MongoDB提供的Map-Reduce非常灵活，对于大规模数据分析也相当实用</p><p>以下是MapReduce的基本语法：</p><pre><code>&gt;db.collection.mapReduce(
+</code></pre><h2 id="改"><a href="#改" class="headerlink" title=" 改 "></a><font color="green"> 改 </font></h2><blockquote>
+<p>db.collection.update(<br>   <query>,<br>   <update>,<br>   {<br>     upsert: <boolean>,<br>     multi: <boolean>,<br>     writeConcern: <document><br>   }<br>)</document></boolean></boolean></update></query></p>
+<p>例:</p>
+<p>db.col.update({‘title’:’MongoDB 教程’},{$set:{‘title’:’MongoDB’}})</p>
+<p>db.col.update({‘title’:’MongoDB 教程’},{$set:{‘title’:’MongoDB’}},{multi:true})</p>
+<p>db.col.save({<br>    “_id” : ObjectId(“56064f89ade2f21f36b03136”),<br>    “title” : “MongoDB”,<br>    “description” : “MongoDB 是一个 Nosql 数据库”,<br>    “by” : “Runoob”,<br>    “url” : “<a href="http://www.runoob.com" target="_blank" rel="external">http://www.runoob.com</a>“,<br>    “tags” : [<br>            “mongodb”,<br>            “NoSQL”<br>    ],<br>    “likes” : 110<br>})</p>
+</blockquote>
+<h2 id="查"><a href="#查" class="headerlink" title=" 查 "></a><font color="green"> 查 </font></h2><blockquote>
+<p>MongoDB 查询文档使用 find() 方法,以非结构化的方式来显示所有文档。</p>
+<p>db.collection.find(query, projection)</p>
+<p>可以使用where，大于等于小于，与或非等条件进行查询，具体语句自行查找</p>
+</blockquote>
+<h2 id="排序"><a href="#排序" class="headerlink" title=" 排序 "></a><font color="green"> 排序 </font></h2><blockquote>
+<p>db.COLLECTION_NAME.find().sort({KEY:1})</p>
+</blockquote>
+<pre><code>db.col.find({},{&quot;title&quot;:1,_id:0}).sort({&quot;likes&quot;:-1})
+</code></pre><h2 id="索引"><a href="#索引" class="headerlink" title=" 索引 "></a><font color="green"> 索引 </font></h2><blockquote>
+<p>db.COLLECTION_NAME.ensureIndex({KEY:1})</p>
+</blockquote>
+<pre><code>db.col.ensureIndex({&quot;title&quot;:1})
+</code></pre><h2 id="聚合"><a href="#聚合" class="headerlink" title=" 聚合 "></a><font color="green"> 聚合 </font></h2><blockquote>
+<p>MongoDB中聚合(aggregate)主要用于处理数据(诸如统计平均值,求和等)，并返回计算后的数据结果。有点类似sql语句中的 count(*)。</p>
+<p>db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)</p>
+</blockquote>
+<pre><code>db.mycol.aggregate([{$group : {_id : &quot;$by_user&quot;, num_tutorial : {$sum : 1}}}])
+</code></pre><h2 id="mongo集群搭建"><a href="#mongo集群搭建" class="headerlink" title=" mongo集群搭建 "></a><font color="green"> mongo集群搭建 </font></h2><blockquote>
+<p>大概就是副本集，主从，sharding，目的是将数据同步到多个服务器，复制提供数据的冗余备份，从而提高了数据的可用性， 并保证数据的安全性，主节点记录在其上的所有操作oplog，从节点定期轮询主节点获取这些操作，然后对自己的数据副本执行这些操作，从而保证从节点的数据与主节点一致。</p>
+</blockquote>
+<h2 id="mongo备份恢复"><a href="#mongo备份恢复" class="headerlink" title=" mongo备份恢复 "></a><font color="green"> mongo备份恢复 </font></h2><blockquote>
+<p>在另一篇博客里有应用场景的命令格式，大概就是用mongodump和mongorestor两个命令实现数据导出到备份集和导入</p>
+</blockquote>
+<h2 id="mongo监控"><a href="#mongo监控" class="headerlink" title=" mongo监控 "></a><font color="green"> mongo监控 </font></h2><p>mongostat命令是mongo自带的状态检测工具，可以间隔固定时间获取并输出mongodb的当前运行状态，数据库变慢或者有异常的首选操作</p>
+<h1 id="P2-稍高一点"><a href="#P2-稍高一点" class="headerlink" title=" P2(稍高一点) "></a><font color="#5CACEE"> P2(稍高一点) </font></h1><h2 id="mongodb-map-reduce"><a href="#mongodb-map-reduce" class="headerlink" title=" mongodb map reduce "></a><font color="green"> mongodb map reduce </font></h2><p>Map-Reduce是一种计算模型，简单的说就是将大批量的工作（数据）分解（MAP）执行，然后再将结果合并成最终结果（REDUCE），MongoDB提供的Map-Reduce非常灵活，对于大规模数据分析也相当实用</p>
+<p>以下是MapReduce的基本语法：</p>
+<pre><code>&gt;db.collection.mapReduce(
    function() {emit(key,value);},  //map 函数
    function(key,values) {return reduceFunction},   //reduce 函数
    {
@@ -23,7 +501,22 @@ db.col.find()
   limit: number
    }
 )
-</code></pre><p>使用 MapReduce 要实现两个函数 Map 函数和 Reduce 函数,Map 函数调用 emit(key, value), 遍历 collection 中所有的记录, 将 key 与 value 传递给 Reduce 函数进行处理。</p><p>Map 函数必须调用 emit(key, value) 返回键值对。</p><p>参数说明:</p><ul><li>map ：映射函数 (生成键值对序列,作为 reduce 函数参数)。</li><li>reduce 统计函数，reduce函数的任务就是将key-values变成key-value，也就是把values数组变成一个单一的值value。。</li><li>out 统计结果存放集合 (不指定则使用临时集合,在客户端断开后自动删除)。</li><li>query 一个筛选条件，只有满足条件的文档才会调用map函数。（query。limit，sort可以随意组合）</li><li>sort 和limit结合的sort排序参数（也是在发往map函数前给文档排序），可以优化分组机制</li><li>limit 发往map函数的文档数量的上限（要是没有limit，单独使用sort的用处不大）</li></ul><p>以下实例在集合 orders 中查找 status:”A” 的数据，并根据 cust_id 来分组，并计算 amount 的总和。</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516698348837.png" alt=""></p><p>操作实例</p><p>准备数据集</p><pre><code>db.posts.insert({
+</code></pre><p>使用 MapReduce 要实现两个函数 Map 函数和 Reduce 函数,Map 函数调用 emit(key, value), 遍历 collection 中所有的记录, 将 key 与 value 传递给 Reduce 函数进行处理。</p>
+<p>Map 函数必须调用 emit(key, value) 返回键值对。</p>
+<p>参数说明:</p>
+<ul>
+<li>map ：映射函数 (生成键值对序列,作为 reduce 函数参数)。</li>
+<li>reduce 统计函数，reduce函数的任务就是将key-values变成key-value，也就是把values数组变成一个单一的值value。。</li>
+<li>out 统计结果存放集合 (不指定则使用临时集合,在客户端断开后自动删除)。</li>
+<li>query 一个筛选条件，只有满足条件的文档才会调用map函数。（query。limit，sort可以随意组合）</li>
+<li>sort 和limit结合的sort排序参数（也是在发往map函数前给文档排序），可以优化分组机制</li>
+<li>limit 发往map函数的文档数量的上限（要是没有limit，单独使用sort的用处不大）</li>
+</ul>
+<p>以下实例在集合 orders 中查找 status:”A” 的数据，并根据 cust_id 来分组，并计算 amount 的总和。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516698348837.png" alt=""></p>
+<p>操作实例</p>
+<p>准备数据集</p>
+<pre><code>db.posts.insert({
    &quot;post_text&quot;: &quot;菜鸟教程，最全的技术文档。&quot;,
    &quot;user_name&quot;: &quot;mark&quot;,
    &quot;status&quot;:&quot;active&quot;
@@ -71,7 +564,8 @@ db.posts.insert({
    &quot;status&quot;:&quot;active&quot;
 })
 WriteResult({ &quot;nInserted&quot; : 1 })
-</code></pre><p>在 posts 集合中使用 mapReduce 函数来选取已发布的文章(status:”active”)，并通过user_name分组，计算每个用户的文章数</p><pre><code>db.posts.mapReduce( 
+</code></pre><p>在 posts 集合中使用 mapReduce 函数来选取已发布的文章(status:”active”)，并通过user_name分组，计算每个用户的文章数</p>
+<pre><code>db.posts.mapReduce( 
    function() { emit(this.user_name,1); }, 
    function(key, values) {return Array.sum(values)}, 
   {  
@@ -79,11 +573,862 @@ WriteResult({ &quot;nInserted&quot; : 1 })
  out:&quot;post_total&quot; 
   }
 )
-</code></pre><p>结果如下</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516700750023.png" alt=""></p><p>结果表明，共有 5 个符合查询条件（status:”active”）的文档， 在map函数中生成了 5 个键值对文档，最后使用reduce函数将相同的键值分为 2 组。</p><p>用类似的方式，MapReduce可以被用来构建大型复杂的聚合查询。</p><p>Map函数和Reduce函数可以使用 JavaScript 来实现，使得MapReduce的使用非常灵活和强大。</p><p>以小见大，mongo集群的存储性能，可扩展性，对mapreduce的支持，使得分布式集群搭建后运行各种数据分析挖掘算法来处理海量数据有了可靠的保证。</p><h2 id="mongodb-全文检索"><a href="#mongodb-全文检索" class="headerlink" title=" mongodb 全文检索 "></a> <font color="green">mongodb 全文检索</font></h2><p>全文检索对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。</p><p>这个过程类似于通过字典中的检索字表查字的过程。</p><p>MongoDB 从 2.4 版本开始支持全文检索，目前支持15种语言(暂时不支持中文)的全文索引。</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516701675326.png" alt=""></p><h2 id="mongodb-正则表达式"><a href="#mongodb-正则表达式" class="headerlink" title=" mongodb 正则表达式 "></a> <font color="green">mongodb 正则表达式</font></h2><p>正则表达式是使用单个字符串来描述，匹配一系列符合某个语法规则的字符串。</p><p>正则表达式在文本处理方面极为实用，很多语言都支持利用正则表达式进行字符串操作</p><p>mongodb使用$regex操作符来设置匹配字符串的正则表达式</p><p>可以设置 $options 为 $i 使正则匹配忽略大小写</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516759167493.png" alt=""></p><p>如果你的文档中字段设置了索引，那么使用索引相比于正则表达式匹配查找所有的数据查询速度更快</p><h2 id="mongodb-管理工具-Rockmongo"><a href="#mongodb-管理工具-Rockmongo" class="headerlink" title=" mongodb 管理工具: Rockmongo "></a> <font color="green">mongodb 管理工具: Rockmongo</font></h2><p><a href="https://github.com/iwind/rockmongo.git" target="_blank" rel="external"><font color="#AAAAAA">rockmongo</font></a>是php写的一个mongodb管理工具，可以用来管理服务，数据库，集合，文档，索引等，具体使用方法等用到了学就是，界面管理方法想来也是跟Plsqldeveloper和navicat那些差不多的页面版</p><h1 id="P3-再高一点点"><a href="#P3-再高一点点" class="headerlink" title=" P3(再高一点点) "></a> <font color="#5CACEE">P3(再高一点点)</font></h1><p>mongo是常用的面向文档非关系数据库，主要应用场景在微博，博客等消息存储业务，数据与金融等传统行业比起来没有那么重要，对事务要求相对不高，这时候用mongo比关系型数据库更合适，因为关系型数据库每次操作都有ACK，mongo省去了这一步，大大提高存储性能，同时设计时就考虑了廉价设备的容错和业务增长时的可扩展性。</p><p>在其他的博客内容对mongo的集群搭建有了一定的认识，这里通过一种副本集与分片混合部署的方案和数据存取，数据存储，对mongo的应用做进一步的介绍。</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516760767229.png" alt=""></p><p>副本集中每个节点存储的数据都是相同的，相当于主备方式的数据冗余，分片是为了数据拓展，按照片键进行节点划分，数据根据片键存储到对应服务器上。</p><p>mongo的集群中有三类角色:实际数据存储节点，配置文件存储节点和路由介入节点。</p><blockquote><p>ps:在另一个介绍集群搭建方案的博客里，副本集配置里除了存储节点还有一个arbiter节点，负责节点故障的时候仲裁主节点切换，实测有该节点时双节点中主节点停/起副节点会自动切主备，没有则主掉了副节点还是副节点，不会自动切换</p></blockquote><p>客户端与路由节点连接，从配置节点上查询数据，根据查询结果到实际的存储节点上查询和存储数据。</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516761696689.png" alt=""></p><blockquote><p>客户端发起写操作请求，路由节点接到请求后查询配置服务器，得到有存储空间的服务器，路由节点把写入操作转发给由副本集组成的数据存储服务器，管理过程类似hdfs中master节点对chunk server的管理</p></blockquote><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516761711577.png" alt=""></p><blockquote><p>客户端发起读操作请求，路由节点接到请求后查询配置服务器，根据存储服务器中的记录，返回目标数据的存储服务器路径大小等信息，路由节点转发读操作到存储服务器，获取信息后路由服务器将查询结果返回给客户端</p></blockquote><p>副本集内部的写操作</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516762205709.png" alt=""></p><blockquote><p>写操作只写到主节点当中，由主节点以异步的方式同步到从节点</p></blockquote><p>副本集内部的读操作</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516762230222.png" alt=""></p><blockquote><p>可以从任意节点读取数据，也可以指定具体到哪个节点</p></blockquote><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516763021610.png" alt=""></p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516763044775.png" alt=""></p><h1 id="P4-可以说相当高了"><a href="#P4-可以说相当高了" class="headerlink" title=" P4(可以说相当高了) "></a> <font color="#5CACEE">P4(可以说相当高了)</font></h1><h2 id="存储引擎-wiredTiger"><a href="#存储引擎-wiredTiger" class="headerlink" title="存储引擎:wiredTiger"></a><font color="green">存储引擎:<a href="http://www.mongoing.com/archives/2540" target="_blank" rel="external">wiredTiger</a></font></h2><p>按照Mongodb默认的配置，WiredTiger的写操作会先写入Cache，并持久化到WAL(Write ahead log)，每60s或log文件达到2GB时会做一次Checkpoint，将当前的数据持久化，产生一个新的快照。Wiredtiger连接初始化时，首先将数据恢复至最新的快照状态，然后根据WAL恢复数据，以保证存储可靠性</p><p>所有write请求都基于”文档级别”的lock，因此多个客户端可以同时更新一个collection中的不同文档，这种更细颗粒度的lock，可以支撑更高的读写负载和并发量，因为对于production环境，更多的CPU可以有效提升wiredTiger性能，因为它是多线程IO。</p><h2 id="架构模式"><a href="#架构模式" class="headerlink" title="架构模式"></a><font color="green">架构模式</font></h2><p>Replica set：复制集，mongodb的架构方式之一 ，通常是三个对等的节点构成一个“复制集”集群</p><p>Sharding cluster：分片集群，数据水平扩展的手段之一,replica set这种架构的缺点就是“集群数据容量”受限于单个节点的磁盘大小，如果数据量不断增加，对它进行扩容将时非常苦难的事情，所以我们需要采用Sharding模式来解决这个问题。将整个collection的数据将根据sharding key被sharding到多个mongod节点上，即每个节点持有collection的一部分数据，这个集群持有全部数据，原则上sharding可以支撑数TB的数据。</p><p>系统配置：</p><pre><code>- 建议mongodb部署在linux系统上，较高版本，选择合适的底层文件系统（ext4），开启合适的swap空间  
+</code></pre><p>结果如下</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516700750023.png" alt=""></p>
+<p>结果表明，共有 5 个符合查询条件（status:”active”）的文档， 在map函数中生成了 5 个键值对文档，最后使用reduce函数将相同的键值分为 2 组。</p>
+<p>用类似的方式，MapReduce可以被用来构建大型复杂的聚合查询。</p>
+<p>Map函数和Reduce函数可以使用 JavaScript 来实现，使得MapReduce的使用非常灵活和强大。</p>
+<p>以小见大，mongo集群的存储性能，可扩展性，对mapreduce的支持，使得分布式集群搭建后运行各种数据分析挖掘算法来处理海量数据有了可靠的保证。</p>
+<h2 id="mongodb-全文检索"><a href="#mongodb-全文检索" class="headerlink" title=" mongodb 全文检索 "></a><font color="green"> mongodb 全文检索 </font></h2><p>全文检索对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。</p>
+<p>这个过程类似于通过字典中的检索字表查字的过程。</p>
+<p>MongoDB 从 2.4 版本开始支持全文检索，目前支持15种语言(暂时不支持中文)的全文索引。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516701675326.png" alt=""></p>
+<h2 id="mongodb-正则表达式"><a href="#mongodb-正则表达式" class="headerlink" title=" mongodb 正则表达式 "></a><font color="green"> mongodb 正则表达式 </font></h2><p>正则表达式是使用单个字符串来描述，匹配一系列符合某个语法规则的字符串。</p>
+<p>正则表达式在文本处理方面极为实用，很多语言都支持利用正则表达式进行字符串操作</p>
+<p>mongodb使用$regex操作符来设置匹配字符串的正则表达式</p>
+<p>可以设置 $options 为 $i 使正则匹配忽略大小写</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516759167493.png" alt=""></p>
+<p>如果你的文档中字段设置了索引，那么使用索引相比于正则表达式匹配查找所有的数据查询速度更快</p>
+<h2 id="mongodb-管理工具-Rockmongo"><a href="#mongodb-管理工具-Rockmongo" class="headerlink" title=" mongodb 管理工具: Rockmongo "></a><font color="green"> mongodb 管理工具: Rockmongo </font></h2><p><a href="https://github.com/iwind/rockmongo.git" target="_blank" rel="external"><font color="#AAAAAA">rockmongo</font></a>是php写的一个mongodb管理工具，可以用来管理服务，数据库，集合，文档，索引等，具体使用方法等用到了学就是，界面管理方法想来也是跟Plsqldeveloper和navicat那些差不多的页面版</p>
+<h1 id="P3-再高一点点"><a href="#P3-再高一点点" class="headerlink" title=" P3(再高一点点) "></a><font color="#5CACEE"> P3(再高一点点) </font></h1><p>mongo是常用的面向文档非关系数据库，主要应用场景在微博，博客等消息存储业务，数据与金融等传统行业比起来没有那么重要，对事务要求相对不高，这时候用mongo比关系型数据库更合适，因为关系型数据库每次操作都有ACK，mongo省去了这一步，大大提高存储性能，同时设计时就考虑了廉价设备的容错和业务增长时的可扩展性。</p>
+<p>在其他的博客内容对mongo的集群搭建有了一定的认识，这里通过一种副本集与分片混合部署的方案和数据存取，数据存储，对mongo的应用做进一步的介绍。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516760767229.png" alt=""></p>
+<p>副本集中每个节点存储的数据都是相同的，相当于主备方式的数据冗余，分片是为了数据拓展，按照片键进行节点划分，数据根据片键存储到对应服务器上。</p>
+<p>mongo的集群中有三类角色:实际数据存储节点，配置文件存储节点和路由介入节点。</p>
+<blockquote>
+<p>ps:在另一个介绍集群搭建方案的博客里，副本集配置里除了存储节点还有一个arbiter节点，负责节点故障的时候仲裁主节点切换，实测有该节点时双节点中主节点停/起副节点会自动切主备，没有则主掉了副节点还是副节点，不会自动切换</p>
+</blockquote>
+<p>客户端与路由节点连接，从配置节点上查询数据，根据查询结果到实际的存储节点上查询和存储数据。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516761696689.png" alt=""></p>
+<blockquote>
+<p>客户端发起写操作请求，路由节点接到请求后查询配置服务器，得到有存储空间的服务器，路由节点把写入操作转发给由副本集组成的数据存储服务器，管理过程类似hdfs中master节点对chunk server的管理</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516761711577.png" alt=""></p>
+<blockquote>
+<p>客户端发起读操作请求，路由节点接到请求后查询配置服务器，根据存储服务器中的记录，返回目标数据的存储服务器路径大小等信息，路由节点转发读操作到存储服务器，获取信息后路由服务器将查询结果返回给客户端</p>
+</blockquote>
+<p>副本集内部的写操作</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516762205709.png" alt=""></p>
+<blockquote>
+<p>写操作只写到主节点当中，由主节点以异步的方式同步到从节点</p>
+</blockquote>
+<p>副本集内部的读操作</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516762230222.png" alt=""></p>
+<blockquote>
+<p>可以从任意节点读取数据，也可以指定具体到哪个节点</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516763021610.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516763044775.png" alt=""></p>
+<h1 id="P4-可以说相当高了"><a href="#P4-可以说相当高了" class="headerlink" title=" P4(可以说相当高了) "></a><font color="#5CACEE"> P4(可以说相当高了) </font></h1><h2 id="存储引擎-wiredTiger"><a href="#存储引擎-wiredTiger" class="headerlink" title="存储引擎:wiredTiger"></a><font color="green">存储引擎:<a href="http://www.mongoing.com/archives/2540" target="_blank" rel="external">wiredTiger</a></font></h2><p>按照Mongodb默认的配置，WiredTiger的写操作会先写入Cache，并持久化到WAL(Write ahead log)，每60s或log文件达到2GB时会做一次Checkpoint，将当前的数据持久化，产生一个新的快照。Wiredtiger连接初始化时，首先将数据恢复至最新的快照状态，然后根据WAL恢复数据，以保证存储可靠性</p>
+<p>所有write请求都基于”文档级别”的lock，因此多个客户端可以同时更新一个collection中的不同文档，这种更细颗粒度的lock，可以支撑更高的读写负载和并发量，因为对于production环境，更多的CPU可以有效提升wiredTiger性能，因为它是多线程IO。</p>
+<h2 id="架构模式"><a href="#架构模式" class="headerlink" title="架构模式"></a><font color="green">架构模式</font></h2><p>Replica set：复制集，mongodb的架构方式之一 ，通常是三个对等的节点构成一个“复制集”集群</p>
+<p>Sharding cluster：分片集群，数据水平扩展的手段之一,replica set这种架构的缺点就是“集群数据容量”受限于单个节点的磁盘大小，如果数据量不断增加，对它进行扩容将时非常苦难的事情，所以我们需要采用Sharding模式来解决这个问题。将整个collection的数据将根据sharding key被sharding到多个mongod节点上，即每个节点持有collection的一部分数据，这个集群持有全部数据，原则上sharding可以支撑数TB的数据。</p>
+<p>系统配置：</p>
+<pre><code>- 建议mongodb部署在linux系统上，较高版本，选择合适的底层文件系统（ext4），开启合适的swap空间  
 
 - 无论是MMAPV1或者wiredTiger引擎，较大的内存总能带来直接收益。
 
 - 对数据存储文件关闭“atime”（文件每次access都会更改这个时间值，表示文件最近被访问的时间），可以提升文件访问效率。 
 
 - ulimit参数调整，这个在基于网络IO或者磁盘IO操作的应用中，通常都会调整，上调系统允许打开的文件个数（ulimit -n 65535）
-</code></pre><h2 id="数据文件存储原理"><a href="#数据文件存储原理" class="headerlink" title="数据文件存储原理"></a><font color="green">数据文件存储原理</font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516777869529.png" alt=""></p><h3 id="Data-Files"><a href="#Data-Files" class="headerlink" title="Data Files"></a><font color="red">Data Files</font></h3><p>mongodb的数据会保存在底层文件系统中，比如”dbpath=/usr/local/mongodb/master”，创建一个database为”runoob”，collection为”col”，然后插入若干documents，可以看到如下列表</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516778681686.png" alt=""></p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516778713479.png" alt=""></p><p>可以看到数据文件所在目录”/usr/local/mongodb/master”下面生成了”runoob”文件夹，里面存放有若干collection文件，数据文件从16M开始，每次扩张一倍(16M，32M，64M，128M…)，默认情况下迟迟单个data file最大尺寸为2G，smallfile设置后限定512M，每个database最多支持16000个数据文件，约32T，smallfiles设置后单个database最大容量8T</p><p>一个database中所有的collections及索引信息会分散存储在多个数据文件中，没有像SQL数据库一样每个表的数据索引分别存储；</p><p>数据分块的单位是extent(范围，区域)，extent中可以保存collection数据或者index数据，每个extent包含多条document，大小不等，一个extent只能保存同一个collection的数据，不同collections数据分布在不同extents中，indexs也保存在各自的extent中，一个collection由一个或多个extent构成，最小size8K，最大2G，这些extent分散在多个datafile中，换句话说，一个datafile可能包含多个collection的数据，由不同collection的extent组成，但一个extent不会跨越两个datafile</p><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516787466812.png" alt=""></p><p>举个栗子（吼吼），两个数据文件my-db.1和my-db.2里存放A和B两张表的数据，AB两张表上的document和index存放在一个个小的extent里面，这些extent并不是各自集中存放，而是散布在两个数据文件里面</p><p>在每个database的namespace文件中，比如test.ns文件中，每个collection只保存了第一个extent的位置信息，并不保存所有的extents列表，但每个extent都维护者一个链表关系，即每个extent都在其header信息中记录了此extent的上一个、下一个extent的位置信息，这样当对此collection进行scan操作时（比如全表扫描），可以提供很大的便利性。</p><p>由存储机制可以很容易想到，删除document会导致磁盘碎片，有些update也会导致磁盘碎片，比如update导致文档尺寸变大，进而超过原来分配的空间；当有新的insert操作时，mongodb会检测现有的extents中是否合适的碎片空间可以被重用，如果有，则重用这些fragment，否则分配新的存储空间。磁盘碎片对write操作有一定的性能影响，而且会导致磁盘空间浪费；</p><p> 如果database已经运行一段时间，数据已经有很大的磁盘碎片（storageSize与dataSize比较），可以通过mongodump将指定database的所有数据导出，然后将原有的db删除，再通过mongorestore指令将数据重新导入</p><h3 id="Namespace文件"><a href="#Namespace文件" class="headerlink" title="Namespace文件"></a><font color="red">Namespace文件</font></h3><p>对于namespace文件，比如“test.ns”文件，默认大小为16M，此文件中主要用于保存“collection”、index的命名信息，比如collection的“属性”信息、每个索引的属性类型等，如果你的database中需要存储大量的collection（比如每一小时生成一个collection，在数据分析应用中），那么我们可以通过配置文件“nsSize”选项来指定，参见<a href="http://blog.csdn.net/sun491922556/article/details/74973191" target="_blank" rel="external">某博客</a>。</p><h3 id="journal文件"><a href="#journal文件" class="headerlink" title="journal文件"></a><font color="red">journal文件</font></h3><p>journal日志保存在dbpath下“journal”子目录中，一般会有三个journal文件，journal文件中保存了write操作的记录，每条记录中包含write操作内容之外，还包含一个“lsn”（last sequence number），表示此记录的ID</p><p> journal是一个预写事务日志，来确保数据持久性，存储引擎每隔60s(默认/可调)或者待写入数据达到2G，mongo将对journal文件提交一个checkpoint检测点，将内存中的数据变更flush到磁盘的数据文件中，并做一个标记点，表示此前的数据已经持久存储在数据文件中，检测点创建后，journal日志清空，后续数据更改存在于内存和journal日志。</p><p> 例如write操作首先被写入journal日志，然后在内存中变更数据，数据量积累或者时间间隔条件满足后触发检测点，数据flush到数据文件。即检测点之前的数据只是在journal中持久存储，并没有写入数据文件，延迟持久化可以提高磁盘效率，如果在checkpoint之前mongo异常退出，再次启动可以根据journal恢复数据。</p><p>默认情况下，“journal”特性是开启的，特别在production环境中，我们没有理由来关闭它，当然也可以关闭journal，提高了性能，但单点mongo降低了数据安全性，如果有异常则丢失checkpoint之间的数据，副本集在所有节点同时退出的情况时有影响。</p><p>如果你希望数据尽可能的不丢失，可以考虑：</p><p>1）减小commitIntervalMs的值</p><p>2）每个write指定“write concern”中指定“j”参数为true</p><p>3）最佳手段就是采用“replica set”架构模式，通过数据备份方式解决，同时还需要在“write concern”中指定“w”选项，且保障级别不低于“majority”，最终我们需要在“写入性能”和“数据一致性”两个方面权衡，即CAP理论。</p><p><strong>至此mongodb的基础内容介绍得差不多，具体实践和高级技巧等工作项目中遇到了再深入研究，理论指导实践，在实<br>践中检验和调整升华理论，然后在下一次实践中表现得更加出色，理论和实践的螺旋式上升是不变的旋律</strong>。</p></div><div></div><footer class="post-footer"><div class="post-tags"><a href="/tags/Theory/" rel="tag"><i class="fa fa-tag"></i> Theory</a><a href="/tags/Database/" rel="tag"><i class="fa fa-tag"></i> Database</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/01/18/Mongodb/" rel="next" title="Mongodb"><i class="fa fa-chevron-left"></i> Mongodb</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/01/23/NoSQL/" rel="prev" title="NoSQL简介">NoSQL简介<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"><div class="jiathis_style"> <span class="jiathis_txt">分享到：</span> <a class="jiathis_button_fav">收藏夹</a> <a class="jiathis_button_copy">复制网址</a> <a class="jiathis_button_email">邮件</a> <a class="jiathis_button_weixin">微信</a> <a class="jiathis_button_qzone">QQ空间</a> <a class="jiathis_button_tqq">腾讯微博</a> <a class="jiathis_button_douban">豆瓣</a> <a class="jiathis_button_share">一键分享</a> <a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a><a class="jiathis_counter_style"></a></div><script type="text/javascript">var jiathis_config={data_track_clickback:!0,summary:"",shortUrl:!1,hideMore:!1}</script><script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script></div></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg" alt="Chaos"><p class="site-author-name" itemprop="name">Chaos</p><p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives"><span class="site-state-item-count">16</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <span class="site-state-item-count">13</span> <span class="site-state-item-name">分类</span></div><div class="site-state-item site-state-tags"> <span class="site-state-item-count">22</span> <span class="site-state-item-name">标签</span></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/uxtuo" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P1（基础阶段）"><span class="nav-number">2.</span> <span class="nav-text">P1（基础阶段）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#增"><span class="nav-number">2.1.</span> <span class="nav-text">增</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删"><span class="nav-number">2.2.</span> <span class="nav-text">删</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改"><span class="nav-number">2.3.</span> <span class="nav-text">改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查"><span class="nav-number">2.4.</span> <span class="nav-text">查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序"><span class="nav-number">2.5.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">2.6.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合"><span class="nav-number">2.7.</span> <span class="nav-text">聚合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo集群搭建"><span class="nav-number">2.8.</span> <span class="nav-text">mongo集群搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo备份恢复"><span class="nav-number">2.9.</span> <span class="nav-text">mongo备份恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo监控"><span class="nav-number">2.10.</span> <span class="nav-text">mongo监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P2-稍高一点"><span class="nav-number">3.</span> <span class="nav-text">P2(稍高一点)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-map-reduce"><span class="nav-number">3.1.</span> <span class="nav-text">mongodb map reduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-全文检索"><span class="nav-number">3.2.</span> <span class="nav-text">mongodb 全文检索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-正则表达式"><span class="nav-number">3.3.</span> <span class="nav-text">mongodb 正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-管理工具-Rockmongo"><span class="nav-number">3.4.</span> <span class="nav-text">mongodb 管理工具: Rockmongo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P3-再高一点点"><span class="nav-number">4.</span> <span class="nav-text">P3(再高一点点)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P4-可以说相当高了"><span class="nav-number">5.</span> <span class="nav-text">P4(可以说相当高了)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储引擎-wiredTiger"><span class="nav-number">5.1.</span> <span class="nav-text">存储引擎:wiredTiger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构模式"><span class="nav-number">5.2.</span> <span class="nav-text">架构模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据文件存储原理"><span class="nav-number">5.3.</span> <span class="nav-text">数据文件存储原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Files"><span class="nav-number">5.3.1.</span> <span class="nav-text">Data Files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Namespace文件"><span class="nav-number">5.3.2.</span> <span class="nav-text">Namespace文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#journal文件"><span class="nav-number">5.3.3.</span> <span class="nav-text">journal文件</span></a></li></ol></li></ol></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">Chaos</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">31.3k</span></div><div class="powered-by"><i class="fa fa-user-md"></i> <span id="busuanzi_container_site_uv">本站访客数:<span id="busuanzi_value_site_uv"></span></span></div> <span class="post-meta-divider">|</span><div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div><div class="theme-info"><div class="powered-by"></div> <span class="post-count">博客全站共31.3k字</span></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine/dist/Valine.min.js"></script></body></html>
+</code></pre><h2 id="数据文件存储原理"><a href="#数据文件存储原理" class="headerlink" title="数据文件存储原理"></a><font color="green">数据文件存储原理</font></h2><p><img src="http://p09u6sy9g.bkt.clouddn.com/1516777869529.png" alt=""></p>
+<h3 id="Data-Files"><a href="#Data-Files" class="headerlink" title="Data Files"></a><font color="red">Data Files</font></h3><p>mongodb的数据会保存在底层文件系统中，比如”dbpath=/usr/local/mongodb/master”，创建一个database为”runoob”，collection为”col”，然后插入若干documents，可以看到如下列表</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516778681686.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516778713479.png" alt=""></p>
+<p>可以看到数据文件所在目录”/usr/local/mongodb/master”下面生成了”runoob”文件夹，里面存放有若干collection文件，数据文件从16M开始，每次扩张一倍(16M，32M，64M，128M…)，默认情况下迟迟单个data file最大尺寸为2G，smallfile设置后限定512M，每个database最多支持16000个数据文件，约32T，smallfiles设置后单个database最大容量8T</p>
+<p>一个database中所有的collections及索引信息会分散存储在多个数据文件中，没有像SQL数据库一样每个表的数据索引分别存储；</p>
+<p>数据分块的单位是extent(范围，区域)，extent中可以保存collection数据或者index数据，每个extent包含多条document，大小不等，一个extent只能保存同一个collection的数据，不同collections数据分布在不同extents中，indexs也保存在各自的extent中，一个collection由一个或多个extent构成，最小size8K，最大2G，这些extent分散在多个datafile中，换句话说，一个datafile可能包含多个collection的数据，由不同collection的extent组成，但一个extent不会跨越两个datafile</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1516787466812.png" alt=""></p>
+<p>举个栗子（吼吼），两个数据文件my-db.1和my-db.2里存放A和B两张表的数据，AB两张表上的document和index存放在一个个小的extent里面，这些extent并不是各自集中存放，而是散布在两个数据文件里面</p>
+<p>在每个database的namespace文件中，比如test.ns文件中，每个collection只保存了第一个extent的位置信息，并不保存所有的extents列表，但每个extent都维护者一个链表关系，即每个extent都在其header信息中记录了此extent的上一个、下一个extent的位置信息，这样当对此collection进行scan操作时（比如全表扫描），可以提供很大的便利性。</p>
+<p>由存储机制可以很容易想到，删除document会导致磁盘碎片，有些update也会导致磁盘碎片，比如update导致文档尺寸变大，进而超过原来分配的空间；当有新的insert操作时，mongodb会检测现有的extents中是否合适的碎片空间可以被重用，如果有，则重用这些fragment，否则分配新的存储空间。磁盘碎片对write操作有一定的性能影响，而且会导致磁盘空间浪费；</p>
+<p> 如果database已经运行一段时间，数据已经有很大的磁盘碎片（storageSize与dataSize比较），可以通过mongodump将指定database的所有数据导出，然后将原有的db删除，再通过mongorestore指令将数据重新导入</p>
+<h3 id="Namespace文件"><a href="#Namespace文件" class="headerlink" title="Namespace文件"></a><font color="red">Namespace文件</font></h3><p>对于namespace文件，比如“test.ns”文件，默认大小为16M，此文件中主要用于保存“collection”、index的命名信息，比如collection的“属性”信息、每个索引的属性类型等，如果你的database中需要存储大量的collection（比如每一小时生成一个collection，在数据分析应用中），那么我们可以通过配置文件“nsSize”选项来指定，参见<a href="http://blog.csdn.net/sun491922556/article/details/74973191" target="_blank" rel="external">某博客</a>。</p>
+<h3 id="journal文件"><a href="#journal文件" class="headerlink" title="journal文件"></a><font color="red">journal文件</font></h3><p>journal日志保存在dbpath下“journal”子目录中，一般会有三个journal文件，journal文件中保存了write操作的记录，每条记录中包含write操作内容之外，还包含一个“lsn”（last sequence number），表示此记录的ID</p>
+<p> journal是一个预写事务日志，来确保数据持久性，存储引擎每隔60s(默认/可调)或者待写入数据达到2G，mongo将对journal文件提交一个checkpoint检测点，将内存中的数据变更flush到磁盘的数据文件中，并做一个标记点，表示此前的数据已经持久存储在数据文件中，检测点创建后，journal日志清空，后续数据更改存在于内存和journal日志。</p>
+<p> 例如write操作首先被写入journal日志，然后在内存中变更数据，数据量积累或者时间间隔条件满足后触发检测点，数据flush到数据文件。即检测点之前的数据只是在journal中持久存储，并没有写入数据文件，延迟持久化可以提高磁盘效率，如果在checkpoint之前mongo异常退出，再次启动可以根据journal恢复数据。</p>
+<p>默认情况下，“journal”特性是开启的，特别在production环境中，我们没有理由来关闭它，当然也可以关闭journal，提高了性能，但单点mongo降低了数据安全性，如果有异常则丢失checkpoint之间的数据，副本集在所有节点同时退出的情况时有影响。</p>
+<p>如果你希望数据尽可能的不丢失，可以考虑：</p>
+<p>1）减小commitIntervalMs的值 </p>
+<p>2）每个write指定“write concern”中指定“j”参数为true  </p>
+<p>3）最佳手段就是采用“replica set”架构模式，通过数据备份方式解决，同时还需要在“write concern”中指定“w”选项，且保障级别不低于“majority”，最终我们需要在“写入性能”和“数据一致性”两个方面权衡，即CAP理论。</p>
+<p><strong>至此mongodb的基础内容介绍得差不多，具体实践和高级技巧等工作项目中遇到了再深入研究，理论指导实践，在实<br>践中检验和调整升华理论，然后在下一次实践中表现得更加出色，理论和实践的螺旋式上升是不变的旋律</strong>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    <div>
+      
+        
+      
+    </div>
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Theory/" rel="tag"><i class="fa fa-tag"></i> Theory</a>
+          
+            <a href="/tags/Database/" rel="tag"><i class="fa fa-tag"></i> Database</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/18/Mongodb/" rel="next" title="Mongodb">
+                <i class="fa fa-chevron-left"></i> Mongodb
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/23/NoSQL/" rel="prev" title="NoSQL简介">
+                NoSQL简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://t1.picb.cc/uploads/2017/11/09/vestN.jpg"
+                alt="Chaos" />
+            
+              <p class="site-author-name" itemprop="name">Chaos</p>
+              <p class="site-description motion-element" itemprop="description">我知这人生本如白驹过隙，然而，然而~~~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/uxtuo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P1（基础阶段）"><span class="nav-number">2.</span> <span class="nav-text"> P1（基础阶段） </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#增"><span class="nav-number">2.1.</span> <span class="nav-text"> 增 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删"><span class="nav-number">2.2.</span> <span class="nav-text"> 删 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改"><span class="nav-number">2.3.</span> <span class="nav-text"> 改 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查"><span class="nav-number">2.4.</span> <span class="nav-text"> 查 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序"><span class="nav-number">2.5.</span> <span class="nav-text"> 排序 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">2.6.</span> <span class="nav-text"> 索引 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合"><span class="nav-number">2.7.</span> <span class="nav-text"> 聚合 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo集群搭建"><span class="nav-number">2.8.</span> <span class="nav-text"> mongo集群搭建 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo备份恢复"><span class="nav-number">2.9.</span> <span class="nav-text"> mongo备份恢复 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo监控"><span class="nav-number">2.10.</span> <span class="nav-text"> mongo监控 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P2-稍高一点"><span class="nav-number">3.</span> <span class="nav-text"> P2(稍高一点) </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-map-reduce"><span class="nav-number">3.1.</span> <span class="nav-text"> mongodb map reduce </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-全文检索"><span class="nav-number">3.2.</span> <span class="nav-text"> mongodb 全文检索 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-正则表达式"><span class="nav-number">3.3.</span> <span class="nav-text"> mongodb 正则表达式 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb-管理工具-Rockmongo"><span class="nav-number">3.4.</span> <span class="nav-text"> mongodb 管理工具: Rockmongo </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P3-再高一点点"><span class="nav-number">4.</span> <span class="nav-text"> P3(再高一点点) </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P4-可以说相当高了"><span class="nav-number">5.</span> <span class="nav-text"> P4(可以说相当高了) </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储引擎-wiredTiger"><span class="nav-number">5.1.</span> <span class="nav-text">存储引擎:wiredTiger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构模式"><span class="nav-number">5.2.</span> <span class="nav-text">架构模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据文件存储原理"><span class="nav-number">5.3.</span> <span class="nav-text">数据文件存储原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Files"><span class="nav-number">5.3.1.</span> <span class="nav-text">Data Files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Namespace文件"><span class="nav-number">5.3.2.</span> <span class="nav-text">Namespace文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#journal文件"><span class="nav-number">5.3.3.</span> <span class="nav-text">journal文件</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chaos</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">35.2k</span>
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共35.2k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
