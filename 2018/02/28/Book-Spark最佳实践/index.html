@@ -110,7 +110,7 @@
 <meta property="og:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p4wi87x7l.bkt.clouddn.com/22.jpg">
-<meta property="og:updated_time" content="2018-03-12T10:26:13.000Z">
+<meta property="og:updated_time" content="2018-03-12T10:40:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark最佳实践">
 <meta name="twitter:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
@@ -387,7 +387,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,889
+                  3,886
                 </span>
               
 
@@ -427,7 +427,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjeo2s1s10000ovpvt3zlp6lv"
+                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjeo345pl0000ufpvu0so74hr"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://p4wi87x7l.bkt.clouddn.com/22.jpg" itemprop="contentUrl"/>
               </a>
@@ -472,19 +472,19 @@
 <p>如图，Hadoop框架的核心是HDFS和MapReduce，其中HDFS是分布式文件系统，MapReduce是分布式数据处理模型和执行环境。</p>
 <p>各个组件的功能互相配合使得hadoop能够完成很多场景的大数据任务，本文主角是Spark，这里不再赘述，有兴趣了解的可以<a href="http://blog.csdn.net/u010270403/article/details/51493191" target="_blank" rel="external"><font color="#AAAAAA">移步</font></a>。</p>
 <p>但MapReduce不是唯一的大数据分析范式，有一些场景是不适合使用MapReduce的，比如处理网状的数据结构时，这要求能够处理顶点和边的增加和减少操作，并在所有节点进行运算，比如进行机器学习算法需要高速多次迭代的时候因为硬盘读写瓶颈会显得效率稍低，比如不擅长实时计算，需要使用storm，s4，akka等系统。</p>
-<h2 id="为什么要用Spark"><a href="#为什么要用Spark" class="headerlink" title="  为什么要用Spark "></a><font color="green">  为什么要用Spark </font></h2><blockquote class="blockquote-center"><p>Spark应运而生说 </p>
+<h2 id="为什么要用Spark"><a href="#为什么要用Spark" class="headerlink" title="  为什么要用Spark "></a><font color="green">  为什么要用Spark </font></h2><blockquote class="blockquote-center"><p>Spark应运而生 </p>
 </blockquote>
 <p>Spark替代hadoop不太准确，如上面生态系统图，确切来说spark替代的是MapReduce，凭借自身的内存计算，RDD数据结构在批处理方面比MapReduce表现得更加出色，同时Spark本身拥有Spark SQL，streaming，MLlib，GraphX这些模块，使得诸多功能用Spark一站搞定，不用像之前那样根据需要分别使用MapReduce，hive，storm等，这让Spark在使用门槛，维护成本和性能表现上具有明显优势。</p>
 <p>机器学习算法通常需要对同一个数据集合进行多次迭代计算，而MapReduce中每次迭代都会涉及HDFS的读写，以及缺乏一个常驻的MapReduce作业，因此每次迭代需要初始化新的MapReduce任务，效率不高，基于MR的HIVE，PIG等技术也有类似问题。</p>
 <p>Spark作为一个研究项目，诞生于加州大学伯克利分校AMP实验室（Algorithms, Machines, and People Lab），为了迭代算法和交互式查询两种典型的场景，Matei Zaharia和合作伙伴开发了Spark系统的最初版本。2009年Spark论文发布，Spark项目正式诞生，在某些任务表现上，Spark相对于Hadoop MapReduce有10～20倍的性能提升。2010年3月Spark开源，且在开源社区下发展迅速。2014年5月，Spark 1.0正式发布，如今已经是Apache基金会的顶级项目了。</p>
-<p>如下图在官方博客的<a href="https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html" target="_blank" rel="external"><font color="#AAAAAA">排序大赛</font></a>可以有很清晰的对比，可以看看英文，还顺便创造了个世界纪录2333。最新的结果可以戳<a href="https://pan.baidu.com/s/1dFOyXOX" target="_blank" rel="external"><font color="#AAAAAA">http://sortbenchmark.org/</font></a>。</p>
+<p>如下图在官方博客的<a href="https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html" target="_blank" rel="external"><font color="#AAAAAA">排序大赛</font></a>可以有很清晰的对比，可以看看英文，还顺便创造了个世界纪录2333。最新的结果可以戳<a href="http://sortbenchmark.org/" target="_blank" rel="external"><font color="#AAAAAA">这里</font></a>。</p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520847824598.png" alt=""></p>
 <p>Spark一直寻求保持Spark引擎小而紧凑。Spark 0.3版本只有3900行代码，其中1300行为Scala解释器，600行为示例代码，300行为测试代码。即使在今天，Spark核心代码也只有约50 000行，因此更容易为许多开发人员所理解和供我们改变和提高。</p>
 <h2 id="Spark未来发展"><a href="#Spark未来发展" class="headerlink" title="  Spark未来发展 "></a><font color="green">  Spark未来发展 </font></h2><p>Spark在过去的5年里发展迅速，社区活跃程度一点儿不亚于Hadoop社区。</p>
 <p><a href="https://databricks.com/sparkaisummit/north-america" target="_blank" rel="external"><font color="#AAAAAA">Spark峰会</font></a>是社区分享Spark应用的重要交流会，在Spark Summit 2015上，来自Databricks、UC Berkeley AMPLab、百度、阿里巴巴、雅虎、英特尔、亚马逊、Red Hat、微软等的数十个机构共分享了近100个精彩的报告。</p>
 <p>目前Databricks、英特尔、雅虎、加州大学伯克利分校是Spark主要的贡献者。</p>
 <p>已经大规模应用在生产环境，2015年Spark最大的集群来自腾讯，一共有8000个节点，单个Job最大分别是阿里巴巴和Databricks的1 PB，国内的BAT都在用Spark，可以从<a href="http://spark.apache.org/powered-by.html" target="_blank" rel="external"><font color="#AAAAAA">这里</font></a>查看完整的用户列表，Spark作为一种优秀的大数据处理技术已经得到广泛认可，在如此多的应用场景中承担着任务，逐渐会积累庞大的用户经验和文档。</p>
-<p>道家看事物分为”道，法，术，器”四个层次，拿到大数据领域来看，大概可以这么理解，Spark是一种工具-器，掌握用Spark去解决实际的问题的方法-术，能够根据场景和需求熟练选择合适的技术，不滞于某种技术，这就是掌握了大数据领域解决问题的基本规则-法，而道，可能就是那些在十几年前就已经从计算机技术和社会发展的层次看到了数据膨胀和物理发展的冲突，那个时候就开始提出理论试图拿出解决方案的人，是那些将理论转为现实，设计出分布式存储和各种算法的人，是站在大数据发展的最前端，了解技术走向并引领潮流的人所处的层次吧，难望项背，对先行者和开拓者唯有敬意！</p>
+<p>道家看事物分为”道，法，术，器”四个层次，拿到大数据领域来看，大概可以这么理解，Spark是一种工具-器，掌握用Spark去解决实际问题的方法-术，能够根据场景和需求熟练选择合适的技术，不滞于某种技术，这就是掌握了大数据领域解决问题的基本规则-法，而道，可能就是那些在十几年前就已经从计算机技术和社会发展的层次看到了数据膨胀和物理发展的冲突，那个时候就开始提出理论试图拿出解决方案的人，是那些将理论转为现实，设计出分布式存储和各种算法的人，是站在大数据发展的最前端，了解技术走向并引领潮流的人所处的层次吧，难望项背，对先行者和开拓者唯有敬意！</p>
 <h1 id="第二章-Spark基础"><a href="#第二章-Spark基础" class="headerlink" title=" 第二章 Spark基础 "></a><font color="#5CACEE"> 第二章 Spark基础 </font></h1><p>介绍Spark部署和编程。作者首先带领读者在本地单机下体验Spark的基本操作，然后部署一个包括ZooKeeper、Hadoop、Spark的可实际应用的高可用集群。并且，这一章还介绍了笔者合作开发的一个自动化部署工具，最后介绍了Spark编程的基础知识，以及如何打包提交至集群上运行。</p>
 <h1 id="第三章-Spark工作机制"><a href="#第三章-Spark工作机制" class="headerlink" title=" 第三章 Spark工作机制 "></a><font color="#5CACEE"> 第三章 Spark工作机制 </font></h1><p>Spark底层的工作机制，包括调度管理、内存管理、容错机制、监控管理以及Spark程序配置管理，这对理解Spark程序的运行非常有帮助。</p>
 <h1 id="第四章-Spark内核讲解"><a href="#第四章-Spark内核讲解" class="headerlink" title=" 第四章 Spark内核讲解 "></a><font color="#5CACEE"> 第四章 Spark内核讲解 </font></h1><p>深入Spark内核，并结合源码，介绍了核心结构RDD、RDD对象的Transformation和Action操作是如何实现的、SparkContext对象及初始化过程、DAG调度的工作流程。了解这些内容可以帮助读者编写出高质量的Spark程序代码。</p>
