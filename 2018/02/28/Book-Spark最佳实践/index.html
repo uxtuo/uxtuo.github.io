@@ -110,7 +110,7 @@
 <meta property="og:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p4wi87x7l.bkt.clouddn.com/22.jpg">
-<meta property="og:updated_time" content="2018-03-13T11:26:44.000Z">
+<meta property="og:updated_time" content="2018-03-13T11:44:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark最佳实践">
 <meta name="twitter:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
@@ -387,7 +387,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,363
+                  6,402
                 </span>
               
 
@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  22
+                  23
                 </span>
               
             </div>
@@ -427,7 +427,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjeo3lsfe0000x8pv89rd8fn1"
+                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjepkq1l80000ajpvt9hzvdtq"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://p4wi87x7l.bkt.clouddn.com/22.jpg" itemprop="contentUrl"/>
               </a>
@@ -487,7 +487,7 @@
 <p>道家看事物分为”道，法，术，器”四个层次，拿到大数据领域来看，大概可以这么理解，Spark是一种工具-器，掌握用Spark去解决实际问题的方法-术，能够根据场景和需求熟练选择合适的技术，不滞于某种技术，这就是掌握了大数据领域解决问题的基本规则-法，而道，可能就是那些在十几年前就已经从计算机技术和社会发展的层次看到了数据膨胀和物理发展的冲突，那个时候就开始提出理论试图拿出解决方案的人，是那些将理论转为现实，设计出分布式存储和各种算法的人，是站在大数据发展的最前端，了解技术走向并引领潮流的人所处的层次吧，难望项背，对先行者和开拓者唯有敬意！</p>
 <h1 id="第二章-Spark基础"><a href="#第二章-Spark基础" class="headerlink" title=" 第二章 Spark基础 "></a><font color="#5CACEE"> 第二章 Spark基础 </font></h1><blockquote class="blockquote-center"><p>君子藏器于身，待时而动 </p>
 </blockquote>
-<p>本章介绍Spark部署和编程。作者首先带领读者在本地单机下体验Spark的基本操作，然后部署一个包括ZooKeeper、Hadoop、Spark的可实际应用的高可用集群。并且，这一章还介绍了笔者合作开发的一个自动化部署工具，最后介绍了Spark编程的基础知识，以及如何打包提交至集群上运行。</p>
+<p>本章介绍Spark部署和编程。作者首先带领读者在本地单机下体验Spark的基本操作，然后部署一个包括ZooKeeper、Hadoop、Spark的可实际应用的高可用集群。并且，这一章还介绍了作者开发的一个自动化部署工具，最后介绍了Spark编程的基础知识，以及如何打包提交至集群上运行。</p>
 <h2 id="Spark集群部署"><a href="#Spark集群部署" class="headerlink" title=" Spark集群部署 "></a><font color="green"> Spark集群部署 </font></h2><blockquote>
 <p>Spark真实的部署环境绝大部分都在Linux下，运行依赖JDK，大致思路就是在linux系统里配置JDK，将Spark的预编译包解压到指定路径即可使用。</p>
 <p>笔者之前已经琢磨过Spark的安装部署，在本博客里另一篇博文<a href="http://lovepanda.tk/2018/02/02/Spark%E5%AE%9E%E8%B7%B5/" target="_blank" rel="external"><font color="#AAAAAA">Spark实践</font></a>有详细介绍，所有搭建步骤都经过两遍以上实际操作，验证无误。本地已经有了现成的环境，如下。</p>
@@ -500,7 +500,7 @@
 <p>首先是zookeeper集群，集群机器数量为2n+1台，可以抵御n台机器宕机的风险，如果n取1，总共三台，可以抵御1台机器宕机的风险，所有节点都是相同角色，但运行中会自动选择一个作为leader，zookeeper集群担负终极仲裁者的角色，spark集群的master节点通过于zookeeper集群协商完成主备切换，hdfs文件系统的namenode及yarn中的ResourceManager也是通过ZooKeeper集群来协助完成主备切换。</p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520931669151.png" alt=""></p>
 <p>其次是Spark集群，该集群有两类节点，master和slave。</p>
-<p>master负责集群的资源管理，只要有一台正常工作即可，一般至少两台，一台主节点，当主节点异常下线时，其他节点通过zookeeper仲裁竞选成为主节点</p>
+<p>master负责集群的资源管理，只要有一台正常工作即可，一般至少两台，一台主节点，当主节点异常下线时，其他master节点通过zookeeper仲裁竞选成为主节点</p>
 <p>slave节点用于执行计算任务，机器数量可以是一台以上，几十几百或上千台。</p>
 <p>hadoop集群从2.x开始把存储和计算分离开，分成hdfs和yarn两个子集群。</p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520931701760.png" alt=""></p>
@@ -509,19 +509,19 @@
 <p>yarn为MapReduce计算提供调度服务，也可为符合yarn编程接口的集群提供调度服务，比如Spark，该集群有两类节点，ResourceManager和NodeManager，RM一主多备，NM通常与datanode部署在一起，实现最高效的数据访问。</p>
 <p>集群的设计理念就是利用普通服务器协同工作来实现大数据的计算，因此集群可以部署在任何普通服务器个人计算机甚至个人计算机的多个虚拟机上，但集群各个节点的工作性质不同，对硬件资源的消耗也不同，合理的搭配能更充分地发挥潜力。</p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520931929898.png" alt=""></p>
-<p>“移动计算而不要移动数据”，计算离数据约近移动数据的开销越小，大部分场景移动数据的开销都会大于计算的开销，所有计算节点和存储节点一般会选择混合部署。</p>
+<p>“移动计算而不要移动数据”，计算离数据约近移动数据的开销越小，大部分场景移动数据的开销都会大于计算的开销，所以计算节点和存储节点一般会选择混合部署。</p>
 <p><strong>节点部署方面</strong>建议Spark slave，HDFS datanode，YARN NodeManager三类节点在一起，这些节点在集群中数量最为庞大，最消耗资源，CPU，硬盘，内存资源都可以倾斜。</p>
 <p>其他节点的主要任务是管理，除了namenode对内存要求稍高，其他对硬件消耗都不大。可以考虑混合部署，比如笔者用了五台虚拟机，master，namenode，ResourceManager在一台服务器，其他四台服务器作为spark的slave，hdfs的datanode，yarn的nodemanager。机器资源充足的话也可以单独部署，毕竟这些管理节点的数目都不多，将存储，资源管理，计算的主节点按单节点容灾设计，分开部署消耗最多也不过12台服务器，当然会格外麻烦。建议选择稳定性较高的配置，比如双电源，raid，冗余。</p>
-<p><img src="http://p09u6sy9g.bkt.clouddn.com/1520936358257.png" alt=""></p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1520941014372.png" alt=""></p>
 <p>具体到<strong>硬件配置</strong>作者结合Spark官方和实际项目经验，有如下建议</p>
 <blockquote>
-<p>Spark Slave节点尽可能靠近存储系统（比如HDFS和HBase），如果不能部署在相同节点上，那么请尽可能让它们在物理位置上更近一些以减少网络IO的开销，比如尽可能在相同机架上、同一个路由器下、相同机房里。而且每个节点建议使用4块或更多独立挂载的硬盘，并且不要配置RAID，这样可以提升Spark读写本地缓存数据时的效率。</p>
-<p>Spark节点可以适应几百吉字节大小的内存。更多的内存可以缓存更多的数据，在一些迭代计算场景下性能提升效果非常明显。另外，建议分配最多节点内存总量的75%给Spark使用，其他的留给操作系统。</p>
-<p>一些需要进行shuffle的byKey类操作，比如group-ByKey、reduceByKey、join，它们的瓶颈一般都在网络上，所以建议使用10 Gbit/s以上网络。在Spark程序的Web界面上，可以看到shuffle对于网络使用的状况。</p>
-<p>Spark程序可以适应几十个内核的CPU，而且其计算性能与CPU核数量基本成正比。一般建议8~16个核，可以结合实际负载与成本综合考虑。一般情况下，如果数据已经在内存中了，CPU和网络IO会成为瓶颈。</p>
+<p>存储 : Spark Slave节点尽可能靠近存储系统（比如HDFS和HBase），如果不能部署在相同节点上，那么请尽可能让它们在物理位置上更近一些以减少网络IO的开销，比如尽可能在相同机架上、同一个路由器下、相同机房里。而且每个节点建议使用4块或更多独立挂载的硬盘，并且不要配置RAID，这样可以提升Spark读写本地缓存数据时的效率。</p>
+<p>内存 : Spark节点可以适应几百吉字节大小的内存。更多的内存可以缓存更多的数据，在一些迭代计算场景下性能提升效果非常明显。另外，建议分配最多节点内存总量的75%给Spark使用，其他的留给操作系统。</p>
+<p>网络 : 一些需要进行shuffle的byKey类操作，比如group-ByKey、reduceByKey、join，它们的瓶颈一般都在网络上，所以建议使用10 Gbit/s以上网络。在Spark程序的Web界面上，可以看到shuffle对于网络使用的状况。</p>
+<p>CPU : Spark程序可以适应几十个内核的CPU，而且其计算性能与CPU核数量基本成正比。一般建议8~16个核，可以结合实际负载与成本综合考虑。一般情况下，如果数据已经在内存中了，CPU和网络IO会成为瓶颈。</p>
 </blockquote>
-<p>单机硬件配置会严重影响集群性能，实际生产环境需要根据负载在成本和性能之间取得平衡。</p>
-<h3 id="部署思路"><a href="#部署思路" class="headerlink" title=" 部署思路 "></a><font color="purple"> 部署思路 </font></h3><p>假设，有几千台服务器，刚刚装好系统配好ip，需要搭建一个Spark环境。</p>
+<pre><code>单机硬件配置会严重影响集群性能，实际生产环境需要根据负载在成本和性能之间取得平衡。
+</code></pre><h3 id="部署思路"><a href="#部署思路" class="headerlink" title=" 部署思路 "></a><font color="purple"> 部署思路 </font></h3><p>假设，有几千台服务器，刚刚装好系统配好ip，需要搭建一个Spark环境。</p>
 <p>首先，需要初始化环境，包括创建账号，安装JDK，设置时间同步；</p>
 <p>然后，依次部署zookeeper，hadoop，spark集群并启动服务。</p>
 <p>上述操作在机器少的时候可以手动完成，但是需要在所有机器上操作，既要改配置文件，传软件包，还要执行一些命令，必须使用远程操作工具，笔者之前用的是rsync，还有ansible等等，工具只是实现目标的手段，殊途同归，高效解决问题就行，作者在这里用的是python的fabric。</p>
@@ -538,7 +538,7 @@
 </blockquote>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520937486227.png" alt=""></p>
 <h4 id="部署zookeeper集群"><a href="#部署zookeeper集群" class="headerlink" title="部署zookeeper集群"></a>部署zookeeper集群</h4><blockquote>
-<p>笔者部署自己集群的时候没有用到zookeeper(<em>^_^</em>)，zookeeper主要是对master，namenode，ResourceManager节点进行仲裁，主备切换，属于容灾措施，生产环境必须要有，没有也不影响正常运行。笔者自己搭着玩所以当时没弄，有时间可以玩一玩。</p>
+<p>笔者部署自己集群的时候没有用到zookeeper，zookeeper主要是对master，namenode，ResourceManager节点进行仲裁，主备切换，属于容灾措施，生产环境必须要有，没有也不影响正常运行。笔者自己搭着玩所以当时没弄，有时间可以玩一玩(<em>^_^</em>)</p>
 </blockquote>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520937718173.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520937736023.png" alt=""></p>
@@ -557,7 +557,7 @@
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520938858370.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520938875708.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520938884410.png" alt=""></p>
-<h2 id="编程指南"><a href="#编程指南" class="headerlink" title=" 编程指南 "></a><font color="green"> 编程指南 </font></h2><blockquote>
+<h2 id="编程指南"><a href="#编程指南" class="headerlink" title=" 编程指南 "></a><font color="green"> 编程指南 </font></h2><h3 id="集群工作方式"><a href="#集群工作方式" class="headerlink" title=" 集群工作方式"></a><font color="purple"> 集群工作方式</font></h3><blockquote>
 <p>Spark用scala语言开发，scala语言的函数式编程特性让代码的可读性非常高，做spark开发和看spark源码都需要懂scala，Spark也支持Python，java和R，本节用scala语言为示例讲解运行在spark上的程序的编写。</p>
 </blockquote>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520939651613.png" alt=""></p>
@@ -573,6 +573,9 @@
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520940075655.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520940206450.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520940215345.png" alt=""></p>
+<h3 id="编程核心思想"><a href="#编程核心思想" class="headerlink" title=" 编程核心思想 "></a><font color="purple"> 编程核心思想 </font></h3><p>RDD创建</p>
+<p>RDD transcation 和 action</p>
+<p>未完待续<br>2018/3/13 19:43:35 于北京海淀</p>
 <h1 id="第三章-Spark工作机制"><a href="#第三章-Spark工作机制" class="headerlink" title=" 第三章 Spark工作机制 "></a><font color="#5CACEE"> 第三章 Spark工作机制 </font></h1><p>Spark底层的工作机制，包括调度管理、内存管理、容错机制、监控管理以及Spark程序配置管理，这对理解Spark程序的运行非常有帮助。</p>
 <h1 id="第四章-Spark内核讲解"><a href="#第四章-Spark内核讲解" class="headerlink" title=" 第四章 Spark内核讲解 "></a><font color="#5CACEE"> 第四章 Spark内核讲解 </font></h1><p>深入Spark内核，并结合源码，介绍了核心结构RDD、RDD对象的Transformation和Action操作是如何实现的、SparkContext对象及初始化过程、DAG调度的工作流程。了解这些内容可以帮助读者编写出高质量的Spark程序代码。</p>
 <h1 id="第五章-Spark-SQL和数据仓库"><a href="#第五章-Spark-SQL和数据仓库" class="headerlink" title=" 第五章 Spark SQL和数据仓库 "></a><font color="#5CACEE"> 第五章 Spark SQL和数据仓库 </font></h1><p>介绍Spark SQL，可以代替Hive，用于搭建一个企业级的数据仓库。案例基于淘宝的电商数据建立电商数据仓库，并以日常运营工作为例，通过电商数据库分析电商运营中的各类问题。</p>
@@ -830,7 +833,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text"> 前言 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-Spark和大数据"><span class="nav-number">3.</span> <span class="nav-text"> 第一章 Spark和大数据 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">3.1.</span> <span class="nav-text"> 概述 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据是什么"><span class="nav-number">3.2.</span> <span class="nav-text">  大数据是什么 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据的重要解决方案hadoop"><span class="nav-number">3.3.</span> <span class="nav-text">  大数据的重要解决方案hadoop </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用Spark"><span class="nav-number">3.4.</span> <span class="nav-text">  为什么要用Spark </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark未来发展"><span class="nav-number">3.5.</span> <span class="nav-text">  Spark未来发展 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-Spark基础"><span class="nav-number">4.</span> <span class="nav-text"> 第二章 Spark基础 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark集群部署"><span class="nav-number">4.1.</span> <span class="nav-text"> Spark集群部署 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群总览"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 集群总览 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署思路"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 部署思路 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建账号"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装JDK"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置时间同步"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">设置时间同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署zookeeper集群"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">部署zookeeper集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署hadoop集群"><span class="nav-number">4.1.2.5.</span> <span class="nav-text">部署hadoop集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署spark集群"><span class="nav-number">4.1.2.6.</span> <span class="nav-text">部署spark集群</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键部署高可用hadoop-Spark集群"><span class="nav-number">4.1.3.</span> <span class="nav-text"> 一键部署高可用hadoop+Spark集群 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程指南"><span class="nav-number">4.2.</span> <span class="nav-text"> 编程指南 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Spark工作机制"><span class="nav-number">5.</span> <span class="nav-text"> 第三章 Spark工作机制 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-Spark内核讲解"><span class="nav-number">6.</span> <span class="nav-text"> 第四章 Spark内核讲解 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-Spark-SQL和数据仓库"><span class="nav-number">7.</span> <span class="nav-text"> 第五章 Spark SQL和数据仓库 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第六章-Spark-流式计算"><span class="nav-number">8.</span> <span class="nav-text"> 第六章 Spark 流式计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第七章-Spark-图计算"><span class="nav-number">9.</span> <span class="nav-text"> 第七章 Spark 图计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第八章-Spark-MLlib"><span class="nav-number">10.</span> <span class="nav-text"> 第八章 Spark MLlib </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二级目录"><span class="nav-number">10.1.</span> <span class="nav-text"> 二级目录 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三级目录"><span class="nav-number">10.1.1.</span> <span class="nav-text"> 三级目录 </span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text"> 前言 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-Spark和大数据"><span class="nav-number">3.</span> <span class="nav-text"> 第一章 Spark和大数据 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">3.1.</span> <span class="nav-text"> 概述 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据是什么"><span class="nav-number">3.2.</span> <span class="nav-text">  大数据是什么 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据的重要解决方案hadoop"><span class="nav-number">3.3.</span> <span class="nav-text">  大数据的重要解决方案hadoop </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用Spark"><span class="nav-number">3.4.</span> <span class="nav-text">  为什么要用Spark </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark未来发展"><span class="nav-number">3.5.</span> <span class="nav-text">  Spark未来发展 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-Spark基础"><span class="nav-number">4.</span> <span class="nav-text"> 第二章 Spark基础 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark集群部署"><span class="nav-number">4.1.</span> <span class="nav-text"> Spark集群部署 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群总览"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 集群总览 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署思路"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 部署思路 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建账号"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装JDK"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置时间同步"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">设置时间同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署zookeeper集群"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">部署zookeeper集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署hadoop集群"><span class="nav-number">4.1.2.5.</span> <span class="nav-text">部署hadoop集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署spark集群"><span class="nav-number">4.1.2.6.</span> <span class="nav-text">部署spark集群</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键部署高可用hadoop-Spark集群"><span class="nav-number">4.1.3.</span> <span class="nav-text"> 一键部署高可用hadoop+Spark集群 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程指南"><span class="nav-number">4.2.</span> <span class="nav-text"> 编程指南 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群工作方式"><span class="nav-number">4.2.1.</span> <span class="nav-text"> 集群工作方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程核心思想"><span class="nav-number">4.2.2.</span> <span class="nav-text"> 编程核心思想 </span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Spark工作机制"><span class="nav-number">5.</span> <span class="nav-text"> 第三章 Spark工作机制 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-Spark内核讲解"><span class="nav-number">6.</span> <span class="nav-text"> 第四章 Spark内核讲解 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-Spark-SQL和数据仓库"><span class="nav-number">7.</span> <span class="nav-text"> 第五章 Spark SQL和数据仓库 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第六章-Spark-流式计算"><span class="nav-number">8.</span> <span class="nav-text"> 第六章 Spark 流式计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第七章-Spark-图计算"><span class="nav-number">9.</span> <span class="nav-text"> 第七章 Spark 图计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第八章-Spark-MLlib"><span class="nav-number">10.</span> <span class="nav-text"> 第八章 Spark MLlib </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二级目录"><span class="nav-number">10.1.</span> <span class="nav-text"> 二级目录 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三级目录"><span class="nav-number">10.1.1.</span> <span class="nav-text"> 三级目录 </span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
