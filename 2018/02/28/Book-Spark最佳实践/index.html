@@ -110,7 +110,7 @@
 <meta property="og:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p4wi87x7l.bkt.clouddn.com/22.jpg">
-<meta property="og:updated_time" content="2018-03-13T11:44:00.000Z">
+<meta property="og:updated_time" content="2018-03-14T12:20:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark最佳实践">
 <meta name="twitter:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
@@ -387,7 +387,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,402
+                  12,682
                 </span>
               
 
@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  23
+                  45
                 </span>
               
             </div>
@@ -427,7 +427,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjepkq1l80000ajpvt9hzvdtq"
+                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjeplajmy0000dcpv95q8w2az"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://p4wi87x7l.bkt.clouddn.com/22.jpg" itemprop="contentUrl"/>
               </a>
@@ -573,10 +573,176 @@
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520940075655.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520940206450.png" alt=""></p>
 <p><img src="http://p09u6sy9g.bkt.clouddn.com/1520940215345.png" alt=""></p>
-<h3 id="编程核心思想"><a href="#编程核心思想" class="headerlink" title=" 编程核心思想 "></a><font color="purple"> 编程核心思想 </font></h3><p>RDD创建</p>
-<p>RDD transcation 和 action</p>
-<p>未完待续<br>2018/3/13 19:43:35 于北京海淀</p>
-<h1 id="第三章-Spark工作机制"><a href="#第三章-Spark工作机制" class="headerlink" title=" 第三章 Spark工作机制 "></a><font color="#5CACEE"> 第三章 Spark工作机制 </font></h1><p>Spark底层的工作机制，包括调度管理、内存管理、容错机制、监控管理以及Spark程序配置管理，这对理解Spark程序的运行非常有帮助。</p>
+<h3 id="编程核心思想"><a href="#编程核心思想" class="headerlink" title=" 编程核心思想 "></a><font color="purple"> 编程核心思想 </font></h3><blockquote class="blockquote-center"><p>心之所向，一往无前 </p>
+</blockquote>
+<p>Spark工作的目的是调用经过清洗转换存储好的数据，用各种方法进行处理，实现查询，数据挖掘，流处理，机器学习等项目需求。</p>
+<p>Spark怎么做这件事的？</p>
+<p>第一步，将数据拿进来生成RDD。Spark可以从很多数据源拿到数据，最终都是生成RDD，只是类型不同；</p>
+<p>第二步，Spark调用各种函数语法对RDD进行操作计算，transcation定义RDD上的操作，action触发操作，最终结果也是一个RDD，可以将结果按需要保存到指定位置或者进行下一次迭代处理。</p>
+<p>RDD是Spark最核心的东西，hadoop的hdfs是为生成RDD的数据提供分布式存储，没有hdfs还能从其他渠道得到，hdfs是一种比较好的解决方案而已，yarn是资源调度，起到Spark触发计算的时候各个节点分配调用计算资源的作用，zookeeper是可以说是冗余容错机制，为了保证spark集群/hdfs存储/计算调度主节点的高可用，他们都是为”Spark生成RDD并调用函数进行处理最终得到预期结果”这一目标而服务的。</p>
+<p>那么问题来了，RDD是什么，都可以对RDD进行什么操作？理解了这个问题，Spark可以说已经初窥门径，<strong>RDD的本质</strong>在后面Spark内核章节进行深入解析，循序渐进，这里先教大家怎么用，怎么创建RDD，怎么对它进行操作。</p>
+<h4 id="RDD创建"><a href="#RDD创建" class="headerlink" title="RDD创建"></a>RDD创建</h4><p>RDD生成方式总结起来两大类：由Driver程序的数据集生成，由外部数据集生成，如共享文件系统，HDFS文件和HBase等</p>
+<p>1.从Driver程序的数据集生成</p>
+<blockquote>
+<p>从Driver数据集生成RDD的直接方法是使用SparkContext对象的parallelize方法，其参数是一个Seq对象，或者其他可以被自动转换成Seq的对象也可以作为参数，比如Array，List，scala支持方便的隐式转换。</p>
+<p>SparkContext对象还提供了range方法，通过指定长整数的开始值，结束值及步长，生成一定范围的长整型，最终调用parallelize生成RDD</p>
+<p>这种方式的数据源收到Driver所在节点的资源限制，不适合处理特别大的数据，多适用于交互式环境下的程序调试，小数据量的数据集测试。</p>
+</blockquote>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1520994908729.png" alt=""></p>
+<p>2.从外部数据集生成RDD</p>
+<p>Spark可以从任何Hadoop支持的存储类型的数据源生成RDD，包括本地文件系统，HDFS，HBase，Amazom S3等，还支持文本文件，Sequence文件，以及其他任何Hadoop InputFormat格式的数据。这使得RDD从生成到计算全过程都是分布式的，不会形成资源瓶颈。</p>
+<p>文本文件可以使用SparkContext对象的textFile方法生成，其参数是文件的地址，可以是本地文件系统的完整路径，也可以是以hdfs://、s3n://等开头的URL。</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1520911920198.png" alt=""></p>
+<p>除了最基本的文本文件外，Spark还支持其他类型的文件。   </p>
+<p>•wholeTextFiles可以一次读取一个目录下的许多小文件，并返回&lt;文件名、内容&gt;二元组，而不是像textFile那样每条记录是一行文本，不保留文件信息。  </p>
+<p>•对于SequenceFile格式的文件（Hadoop针对大数据计算使用的一种文件格式），可以使用SparkContext对象的se-quenceFile[K, V]方法，其中K和V分别代表文件中key和value的类型，这些类型必须继承自Hadoop的Writable接口，比如IntWritable和Text。不过Spark提供了便利，可以直接使用Scala基本类型，比如Int和String，它们已经实现了Writable接口，所以我们可以直接这样使用：se-quenceFile[Int, String]。</p>
+<p>对于<strong>HBase文件</strong>，因为HBase使用HDFS作为存储，也是一种Hadoop InputFormat，所以也是用hadoopRDD或newAPIHadoopRDD来读取数据的</p>
+<p><img src="http://p09u6sy9g.bkt.clouddn.com/1520997293217.png" alt=""></p>
+<p>此外，Spark还提供了RDD对象的序列化和反序列化功能，通过RDD.savaAsObjectFile保存的RDD序列化对象，可以使用SparkContext.objectFile重新加载进来，非常简单实用。</p>
+<p>SparkContext对象还提供了binaryFiles方法，以二进制的形式直接读取Hadoop Mapreduce计算的结果文件。</p>
+<p>所有RDD创建方法，都在SparkContext对象中提供，完整的信息可以参考官方API文档，值得注意的一点，从外部创建RDD并不会马上读进内存进行计算，只是保存读取它们的信息，计算时通过DAG就近分配计算资源，避免移动数据，基本不用担心单点资源瓶颈。</p>
+<p>以上就是RDD创建的几种方法，这里只是让读者有个概念，知道有这些个方法即可，真正用到的时候根据实际场景采用合适的方法，命令什么的都是细节。</p>
+<h4 id="RDD操作"><a href="#RDD操作" class="headerlink" title="RDD操作"></a>RDD操作</h4><p>生成了RDD之后对其进行调用各种操作经过计算后得到预期的结果。这些操作分为两类:</p>
+<pre><code>Transformation(转换)
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1520998392297.png" alt=""></p>
+<pre><code>Action(动作)
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1520998410039.png" alt=""></p>
+<p>Spark下所有的Transformation都是一种lazy模式，计算不会马上进行，而是先记录下计算方式，Action被触发时才会启动真正的计算向Driver程序返回结果。这种模式的好处是高效，不需要将每次Transformation的非常大的结果返回Driver，只需要记录下要对RDD进行的操作，当Action触发后将计算完成的最终小很多的结果集返回给Driver，避免了大量的网络IO，数据流动，反观mapreduce，每次迭代都需要将hdfs里的数据取出来进行计算，然后写回去，下次迭代再取，再存，即使现在hadoop也支持memory-cache，尽量避免数据频繁读取，加快计算速度，但是本质上的区别使spark和mapreduce还是有着很明显的效率差异。</p>
+<p>默认情况下除了最终结果集之外的RDD都是临时的，被Transformation或Action使用过后即丢弃，可以对RDD进行持久化或cache操作，这也会触发Transformation进行真正的计算，而且Spark会将RDD的结果保持在集群的内存或磁盘中，甚至复制多份，这样再次访问时不需要重复计算，就可以获取更快的响应速度。</p>
+<pre><code>举个栗子┑(￣Д ￣)┍
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1520999264260.png" alt=""></p>
+<pre><code>上传测试文件到hdfs
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1520999696297.png" alt=""></p>
+<pre><code>第一行从hdfs目录下的文件生成一个名为ff的RDD
+
+第二行生成一个对ff执行flatMap操作后名为words的RDD，flatMap这里的作用是将文档里所有的单词用空格分隔，生成一个连续的字符串。**没有执行实际文件操作**
+
+第三行生成一个对words执行map操作后名为wordPairs的RDD，map在这里的作用是遍历文档里所有单词，如从 &quot;a&quot; 变成 &quot;a,1&quot;。**没有执行实际文件操作**
+
+第四行生成一个对wordPairs执行reduceByKey操作后名为wordCounts的RDD，reduceByKey在这里的作用是将文档里 &quot;key,value&quot;相同&quot;key&quot;后面的value都累加起来，这里就已经实现了对hdfs中README.md文档进行词频统计的目标，该RDD就是期待最后返回的结果RDD，但是这里**仍然没有执行实际文件操作**
+
+前面都是transcation操作，涵盖读取数据源生成RDD，中间调用各种函数对RDD进行转换，每次转换都生成一个新的RDD，最终用collect触发Action操作，这时候才会触发实际的文件操作，读数据到内存进行计算，最后返回一个结果集。
+</code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1520999917431.png" alt=""></p>
+<pre><code>上面只是为了方便理解，实际没人那么写，一条命令直接搞定，完成词频统计就是这么简单干脆。
+</code></pre><p>笔者同时还在学习一部小象学院的Spark视频教程，里面有详细讲解scala，具体形式是在spark环境中用scala做各种操作来演示scala的各种功能，因为Spark就是用scala开发的，编写程序也是用scala，那个scala的实际操作差不多就是spark日常操作的教程，到时候整理出来会在<strong>这里</strong>添加链接，敬请期待，不过那就是另一篇博客了O(∩_∩)O</p>
+<p>2018/3/13 19:23:07 </p>
+<h1 id="第三章-Spark工作机制"><a href="#第三章-Spark工作机制" class="headerlink" title=" 第三章 Spark工作机制 "></a><font color="#5CACEE"> 第三章 Spark工作机制 </font></h1><blockquote class="blockquote-center"><p>有生不生，有化不化。不生者能生生，不化者能化化。 </p>
+</blockquote>
+<p>本章主要内容是Spark底层的工作机制，包括调度管理、内存管理、容错机制、监控管理以及Spark程序配置管理，这对理解Spark程序的运行非常有帮助。</p>
+<h2 id="调度管理"><a href="#调度管理" class="headerlink" title=" 调度管理 "></a><font color="green"> 调度管理 </font></h2><p>普通程序运行在普通电脑上，比如QQ跑在笔记本上，由win10操作系统来进行统一调度分配可以使用的CPU，内存，硬盘资源，Spark集群运行在服务器的linux系统上，这时的资源主要是指CPU core数量和物理内存，Spark支持自身资源调度，master节点自身可以进行资源调度，同时支持与其他调度管理系统一起工作，yarn和mesos，这俩资源调度有俩好处，一是外部调度系统更强大，支持更灵活的调度策略，二是当Spark集群和其他分布式系统一起部署时，可以被统一统筹，避免Spark集群整体对资源的吞噬。</p>
+<p>主要分为两类调度场景：主要是Spark程序之间的调度，另一个时Spark程序内部的调度。</p>
+<h3 id="集群名词解释"><a href="#集群名词解释" class="headerlink" title=" 集群名词解释 "></a><font color="purple"> 集群名词解释 </font></h3><p>1.Driver程序</p>
+<p>集群模式下，用户编写的Spark程序称为Driver程序，每个Driver程序包含一个代表集群环境的SparkContext对象并与之连接，程序的执行从Driver程序开始，中间过程会调用RDD操作（transcation和action），这些操作通过集群资源管理器来调度执行，一般在worker节点执行，所有操作执行结束后返回到Driver程序中，在Driver程序中结束。</p>
+<p>2.SparkContext对象</p>
+<p>每个驱动程序中都有一个SparkContext对象，担负着与集群沟通的职责。</p>
+<ul>
+<li><p>sc对象联系集群管理器，分配CPU，内存等资源；</p>
+</li>
+<li><p>集群管理器在工作节点(worker node)上启动一个执行器；</p>
+</li>
+<li><p>程序代码被分发到相应的工作节点；</p>
+</li>
+<li><p>sc分发任务(task)至各执行器执行。</p>
+</li>
+</ul>
+<p>3.集群管理器</p>
+<p>集群管理器负责集群的资源调度，Spark支持三种资源管理器</p>
+<ul>
+<li>standalone模式，资源管理器是master节点。这是最简单的一种集群模式，不依赖于其他系统，调度策略相对单一，只支持先进先出模式(FIFO，First-In-First-Out)。</li>
+<li>spark部署在hadoop上，资源管理器是yarn集群。yarn支持动态资源管理，更适合多用户场景下的集群管理，而且yarn可以同时调度Spark计算和MR计算，还可以调度其他实现了yarn调度接口的集群计算，是目前最主流的一种资源管理系统</li>
+<li>Apache Mesos，资源管理器是Mesos，是一个专门用于分布式系统资源管理的开源系统，与yarn类似，用c++开发，可以对集群中的资源作弹性管理。</li>
+</ul>
+<p>还有一些需要了解的名词</p>
+<p>Allocation。即“分配”。   </p>
+<p>•App、Application、Spark程序。泛指用户编写的运行在Spark上的程序，不仅是Scala语言编写的，其他支持的语言编写的也是。   </p>
+<p>•节点、Worker节点。集群上的计算节点，一般对应一台物理机器，仅在测试时会出现一台物理机器上启动多个节点。   </p>
+<p>•Worker。每个节点上会启动一个进程，名为Worker，负责管理本节点，运行jps命令可以看到Worker进程在运行   </p>
+<p>•core。Spark标识CPU资源的方式，对应一个或多个物理CPU核心，每个Task运行时至少需要一个core。   </p>
+<p>•执行器。每个Spark程序在每个节点上启动的一个进程，专属于一个Spark程序，与Spark程序有相同的生命周期，负责Spark在节点上启动的Task，管理内存和磁盘。如果一个节点上有多个Spark程序在运行，那么相应地就会启动多个执行器。  </p>
+<p>•Job。一次RDD Action对应一次Job，会提交至资源管理器调度执行。  </p>
+<p>•Stage。Job在执行过程中被分为多个阶段。介于Job与Task之间，是按Shuffle分隔的Task集合。  </p>
+<p>•Task。在执行器上执行的最小单元。比如RDD Transfor-mation操作时对RDD内每个分区的计算都会对应一个Task。</p>
+<h3 id="Spark程序之间的调度"><a href="#Spark程序之间的调度" class="headerlink" title=" Spark程序之间的调度 "></a><font color="purple"> Spark程序之间的调度 </font></h3><p>两种分配策略，静态分配和动态分配。</p>
+<p>静态分配指Spark程序启动时一次性分配所有资源，运行过程中固定不变直至推出。</p>
+<blockquote>
+<p>所有集群管理器都支持静态资源分配，每个Spark程序都分配一个最大可用的资源数量，在程序运行的整个过程都持有它。这种策略简单可靠，<strong>强烈建议</strong>，除非非常确定这种分配方式无法满足需求。</p>
+</blockquote>
+<p>动态分配指运行过程中不断调整分配的资源，可以按需增加或减少，比静态分配复杂很多，需要在实践中不断调试才能达到最优。</p>
+<blockquote>
+<p>Spark 1.2引入了基于负载情况的集群动态资源分配，分配给Spark程序的资源可以增加或减少。这意味着我们的程序可能会在不使用资源的时候将资源还给集群，需要的时候再从集群申请。这个特性在多个程序共享集群资源的时候特别有用。如果分配给Spark程序的资源中有一部分是空闲的，它就可以返还给集群放入资源池，这样可以被其他程序请求使用。在Spark中，动态资源分配的粒度是执行器，即增加或减少执行器。前面已经介绍过，Spark程序在机器的每个节点上只有一个执行器，所以增加或减少执行器意味着为Spark程序服务的节点数据量的增加或减少。通常，每台机器启动一个节点进程，但也不排除启动多个的情况发生。你可以通过设置spark.dynamicAllocation.en-abled来启动这个功能。<br>目前只有在yarn模式下可以使用，未来的版本也支持standalone和mesos模式。</p>
+</blockquote>
+<h3 id="Spark程序内部的调度"><a href="#Spark程序内部的调度" class="headerlink" title=" Spark程序内部的调度 "></a><font color="purple"> Spark程序内部的调度 </font></h3><p>Spark程序内部，不同线程提交的Job可以并行执行，调度器是线程安全的，因此可以支持这种需要同时处理多个请求的服务型应用。</p>
+<p>默认情况下，调度器以FIFO的方式运行Job，每个Job分成多个stage(如map和reduce阶段)，如果最前面Job的Stage有task要运行，优先获取所有资源，然后才是第二个Job，依此类推。如果队列中第一个Job不需要太多资源，那么第二个Job可以马上运行，但如果第一个Job特别大，则后面的Job会明显延迟。</p>
+<p>从Spark0.8开始，可以配置Job间公平共享资源，在公平共享方式下，采用”循环”(round robin)方式为不同Job之间的task分配资源，这样所有的Job可以获得差不多相同的资源，意味着有长时间的Job运行的情况下，短的Job也可以在提交后马上运行，不用等待长Job结束，特别适合多用户场景。</p>
+<p>开启程序内公平调度，只需要在sc中设置spark.scheduler.mode值为FAIR。</p>
+<pre><code>val conf = new SparkConf().setMaster(...).setAppName(...)
+
+conf.set(&quot;spark.scheduler.mode&quot;, &quot;FAIR&quot;)
+
+val sc = new SparkContext(conf)
+</code></pre><p>公平调度还支持对多个Job进行分组，这个分组称为调度池，每个调度池可以设置不同的调度选项，比如想要为一些更重要的Job设置更高的优先级，比如为不同的用户设置不同的资源池，让各个资源池平等共享资源，而不是按Job来共享资源，不做设置的话，新提供的Job会自动进入默认调度池。我们可以指定让Job进入哪个调度池，具体方法是提交任务的线程在SparkContext中设置spark.scheduler.pool，这样该线程提交的所有Job都会使用这个调度池。设置按照线程来进行调度，可以很方便地让一个线程地所有Job在一个用户下。</p>
+<pre><code>sc.setLocalProperty(&quot;spark.scheduler.pool&quot;, &quot;pool1&quot;)
+
+sc.setLocalProperty(&quot;spark.scheduler.pool&quot;, null)
+</code></pre><p>调度池的配置可以放在配置文件<code>conf/fairscheduler.xml.template</code>中，在sc中指定配置文件，每个调度池有如下三个属性。</p>
+<p>schedulingMode，可以FIFO或FAIR，用于控制调度池内的Job是排队执行还是平均共享资源</p>
+<p>weight，用于控制调度池相对于其他调度池的权重，是一个相对值。所有调度池的默认权重都是1，平均共享集群资源，如果某个调度池的是2，那么理论上它可以调用权重为1的资源池两倍的资源。设置一个非常高的权重，比如1k，相当于配置了各个调度池的优先级。实际上，权重为1k的调度池只要有一个Job就会优先启动。</p>
+<p>minShare，设置最小资源值，默认值为0，公平调度器在按权限分配之前，会满足各个资源池的最小资源值，这样可以保证调度池总会获得一些资源，不会被其他高权重的调度池抢光。</p>
+<p>。配置文件中没有出现的调度池都被设置为默认值（schedulingMode为FIFO，weight为1，minShare为0）。</p>
+<pre><code>&lt;allocations&gt;
+  &lt;pool name=&quot;production&quot;&gt;
+    &lt;schedulingMode&gt;FAIR&lt;/schedulingMode&gt;
+    &lt;weight&gt;1&lt;/weight&gt;
+    &lt;minShare&gt;2&lt;/minShare&gt;
+  &lt;/pool&gt;
+  &lt;pool name=&quot;test&quot;&gt;
+    &lt;schedulingMode&gt;FIFO&lt;/schedulingMode&gt;
+    &lt;weight&gt;2&lt;/weight&gt;
+    &lt;minShare&gt;3&lt;/minShare&gt;
+  &lt;/pool&gt;
+&lt;/allocations&gt;    
+</code></pre><h2 id="内存管理"><a href="#内存管理" class="headerlink" title=" 内存管理 "></a><font color="green"> 内存管理 </font></h2><p>相比MR，spark具有巨大的性能优势，很大一部分原因是spark对内存的充分利用和缓存机制。</p>
+<pre><code>RDD持久化
+</code></pre><blockquote>
+<p>如果一个RDD不止一次被用到，那就可以持久化它，将RDD缓存到内存中，内存不够时用磁盘顶上去，这样可以大幅提升程序性能，十倍甚至更多。</p>
+<p>默认情况下，RDD只使用一次，用完即扔，再次使用需要重新计算得到，而持久化操作避免了重复计算，这就是Spark刚出现时被人称作内存计算的原因。</p>
+<p>持久化的方法是调用persist()函数，RDD.unpersist()可以删除持久化。默认只持久化到内存中，可以在调用持久化函数时添加参数设置存储级别，有memory_and_disk，memory_only_ser，memore_and_disk_ser,disk_only，其中memory_only_ser类似默认的memory_only，格式是序列化后的数据，节省内存更消耗CPU</p>
+</blockquote>
+<h2 id="容错机制"><a href="#容错机制" class="headerlink" title=" 容错机制 "></a><font color="green"> 容错机制 </font></h2><p>分布式系统通常运行在一个机器集群，同时运行的几百台机器中有机器发生故障的概率大大增加，容错设计是分布式系统的重要能力。</p>
+<p>Spark以前的集群容错机制，如MR，将计算转换为一个有向无环图(DAG)的任务集合，通过重复执行DAG里的一部分任务来完成容错。由于主要的数据存储在分布式文件系统中，没有提供其他存储的概念，容错过程需要在网络上进行数据复制，增加了大量的消耗，所以分布式编程经常需要做检查点，将某个时刻的中间数据写到存储中。</p>
+<p>RDD处理过程也是一个DAG，每个RDD都会记住创建该数据集需要的操作，自己是由哪个RDD转化而来，这个继承关系叫lineage(血统)，由于创建RDD的操作是相对粗粒度的变换(如map，filter，join)，很多单一的操作应用于许多数据元素，不需要存储真正的数据，当RDD的某个分区丢失时，RDD有足够的信息记录其如何通过其他RDD进行计算，且只需要计算该分区。</p>
+<p>lineage不是完美的，因为RDD之间的依赖有两种，父分区对应多个子分区的宽依赖和父分区对应一个子分区的窄依赖。</p>
+<p>对于窄依赖，只需要重新计算丢失的那一块数据，如map，filter，union，分区相同的join，容错成本较小，但宽依赖容错重算分区时，就会有大量冗余计算。</p>
+<p>所以不同的应用有时需要使用<code>doCheckPoint</code>适当设置数据检查点，RDD的只读特性使得它很容易做检查点。</p>
+<p>某些场景中容错要求更高更复杂，比如计费服务要求零丢失，流计算应用场景系统上游不断产生数据，容错过程会造成数据丢失。为了解决这些问题，spark又提供了预写日志，先将数据写入支持容错的文件系统，然后对数据进行操作。</p>
+<p>这样，容错机制包括从检查点重新计算恢复，从日志恢复，从数据源重发，实现了零丢失。</p>
+<p>Master使用zookeeper容错，在<code>spark-env.sh</code>中添加选项，设置master的恢复模式为zookeeper，设置zookeeper的集群地址和用于恢复的zookeeper目录。或者采用一种更简单的方式，设置恢复模式为filesystem并设置一个恢复目录，该目录会存储必要的恢复信息，当master进程异常时，重启master进程即可。</p>
+<p>slave节点运行着worker，执行器，Driver程序。</p>
+<blockquote>
+<p>Worker异常停止时，会先将自己启动的执行器停止，Driver需要有相应的程序来重启Worker进程。</p>
+<p>执行器异常退出时，Driver没有在规定时间内收到执行器的StatusUpdate，于是Driver会将注册的执行器移除，Worker收到LaunchExecutor指令，再次启动执行器。</p>
+<p>Driver异常退出时，一般要使用检查点重启Driver，重新构造上下文并重启接收器。第一步，恢复检查点记录的元数据块。第二步，未完成作业的重新形成。由于失败而没有处理完成的RDD，将使用恢复的元数据重新生成RDD，然后运行后续的Job重新计算后恢复。</p>
+</blockquote>
+<h2 id="监控管理"><a href="#监控管理" class="headerlink" title=" 监控管理 "></a><font color="green"> 监控管理 </font></h2><p>可以用多种方式来监控Spark程序的运行状况:web界面，metrics，外部系统。</p>
+<p>web:每个Driver的SparkContext都会启动一个Web界面，默认端口是4040，用于显示程序的许多有用信息，包括：调度器Stage、Task列表，RDD大小和内存使用统计概况，环境信息，正在运行的执行器信息。浏览器输入<a href="http://xxx.xxx.xxx.xxx:4040即可访问，" target="_blank" rel="external">http://xxx.xxx.xxx.xxx:4040即可访问，</a></p>
+<p>自定义:开发人员可以通过JSON接口自己开发可视化展示形式，历史服务器和正在运行的spark程序的web界面都支持rest api，所有入口地址都有严格的版本控制，spark保证:<br>    这些地址永远不会在某个版本中删除，任何地址中提供的每个字段都不会被删除；<br>    可能添加新的入口地址；<br>    现有入口地址可能添加新的字段；<br>    每个入口地址在未来都可能添加新版本的API（比如api/V2），新版本不要求向下兼容老版本；<br>    API版本可能被废弃，但前提是新的版本可以与之共存，而且新版本不只是发布主版本，至少有一个次版本发布。</p>
+<p>metrics指标体系:spark支持基于<code>Coda Hale Metrics Library</code>的指标体系，可以主动将运行状态发送给其他系统，方便与其他监控系统进行集成，比如Ganglia。Spark支持的Metrics实例有Master、Applications、Worker、执行器和Driver，支持的接收者类型包含在org.apache.spark.metrics.sink包中，包括ConsoleSink、CSVSink、JmxSink、MetricsServlet、GraphiteSink和Slf4jSink。</p>
+<p>其他监控工具:集群级别可以使用各种工具来监控各节点的CPU，网络，磁盘等负载情况，如zabbix，nagios，ganglia运维工具，操作系统级别可以使用dstat，iostat，iotop，top等linux工具对单点问题进行定位。</p>
+<h2 id="Spark程序配置管理"><a href="#Spark程序配置管理" class="headerlink" title=" Spark程序配置管理 "></a><font color="green"> Spark程序配置管理 </font></h2><p>spark配置文件默认模式是<code>${SPARK_HOME}/conf</code>，可更改的配置项自行按需操作。</p>
+<p>spark属性项的配置可以在三个地方进行设置，优先级依次是 sc对象，命令行参数，spark-defaults.conf。</p>
+<p>可以在<code>spark-defults.conf文件</code>里面可以设置spark运行的诸多参数</p>
+<p>可以在用命令行<code>./bin/spark-submit</code>提交程序时重新指定参数，</p>
+<pre><code>./bin/spark-submit --name &quot;My app&quot; --master local[4] --conf spark.shuffle.spill=false --conf &quot;spark.executor.extraJavaOptions=-XX:+PrintGCDetails -XX:+PrintGCTimeStamps&quot; myApp.jar
+</code></pre><p>在开发spark程序时可以把参数写在代码里，sc对象的优先级最高，不过灵活性差了点，改参数就得改代码。</p>
+<pre><code>val conf = new SparkConf()    
+    .setMaster(&quot;local[2]&quot;)    
+    .setAppName(&quot;CountingSheep&quot;)    
+    .set(&quot;spark.executor.memory&quot;, &quot;1g&quot;)
+
+val sc = new SparkContext(conf)    
+</code></pre><p>在web界面的environment选项里可以看到所有配置的spark属性</p>
+<p>日志配置是另一项单独的配置，使用配置文件目录下的<code>log4j.properties</code>作为配置文件。</p>
+<p>2018/3/14 20:19:48 </p>
 <h1 id="第四章-Spark内核讲解"><a href="#第四章-Spark内核讲解" class="headerlink" title=" 第四章 Spark内核讲解 "></a><font color="#5CACEE"> 第四章 Spark内核讲解 </font></h1><p>深入Spark内核，并结合源码，介绍了核心结构RDD、RDD对象的Transformation和Action操作是如何实现的、SparkContext对象及初始化过程、DAG调度的工作流程。了解这些内容可以帮助读者编写出高质量的Spark程序代码。</p>
 <h1 id="第五章-Spark-SQL和数据仓库"><a href="#第五章-Spark-SQL和数据仓库" class="headerlink" title=" 第五章 Spark SQL和数据仓库 "></a><font color="#5CACEE"> 第五章 Spark SQL和数据仓库 </font></h1><p>介绍Spark SQL，可以代替Hive，用于搭建一个企业级的数据仓库。案例基于淘宝的电商数据建立电商数据仓库，并以日常运营工作为例，通过电商数据库分析电商运营中的各类问题。</p>
 <h1 id="第六章-Spark-流式计算"><a href="#第六章-Spark-流式计算" class="headerlink" title=" 第六章 Spark 流式计算 "></a><font color="#5CACEE"> 第六章 Spark 流式计算 </font></h1><p>章介绍Spark实时流式计算，类似于Storm，但吞吐量方面更有优势。案例是基于一个站点的Web日志建立一个类似百度统计的实时统计系统，是各种实时系统典型的参考例子。</p>
@@ -603,7 +769,7 @@
   <p><span>本文标题:</span><a href="/2018/02/28/Book-Spark最佳实践/">Spark最佳实践</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Chaos 的个人博客">Chaos</a></p>
   <p><span>发布时间:</span>2018年02月28日 - 13:02</p>
-  <p><span>最后更新:</span>2018年03月13日 - 07:03</p>
+  <p><span>最后更新:</span>2018年03月14日 - 08:03</p>
   <p><span>原始链接:</span><a href="/2018/02/28/Book-Spark最佳实践/" title="Spark最佳实践">http://www.lovepanda.tk/2018/02/28/Book-Spark最佳实践/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://www.lovepanda.tk/2018/02/28/Book-Spark最佳实践/"  aria-label="复制成功！"></i></span>
   </p>
@@ -833,7 +999,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text"> 前言 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-Spark和大数据"><span class="nav-number">3.</span> <span class="nav-text"> 第一章 Spark和大数据 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">3.1.</span> <span class="nav-text"> 概述 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据是什么"><span class="nav-number">3.2.</span> <span class="nav-text">  大数据是什么 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据的重要解决方案hadoop"><span class="nav-number">3.3.</span> <span class="nav-text">  大数据的重要解决方案hadoop </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用Spark"><span class="nav-number">3.4.</span> <span class="nav-text">  为什么要用Spark </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark未来发展"><span class="nav-number">3.5.</span> <span class="nav-text">  Spark未来发展 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-Spark基础"><span class="nav-number">4.</span> <span class="nav-text"> 第二章 Spark基础 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark集群部署"><span class="nav-number">4.1.</span> <span class="nav-text"> Spark集群部署 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群总览"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 集群总览 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署思路"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 部署思路 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建账号"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装JDK"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置时间同步"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">设置时间同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署zookeeper集群"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">部署zookeeper集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署hadoop集群"><span class="nav-number">4.1.2.5.</span> <span class="nav-text">部署hadoop集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署spark集群"><span class="nav-number">4.1.2.6.</span> <span class="nav-text">部署spark集群</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键部署高可用hadoop-Spark集群"><span class="nav-number">4.1.3.</span> <span class="nav-text"> 一键部署高可用hadoop+Spark集群 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程指南"><span class="nav-number">4.2.</span> <span class="nav-text"> 编程指南 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群工作方式"><span class="nav-number">4.2.1.</span> <span class="nav-text"> 集群工作方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程核心思想"><span class="nav-number">4.2.2.</span> <span class="nav-text"> 编程核心思想 </span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Spark工作机制"><span class="nav-number">5.</span> <span class="nav-text"> 第三章 Spark工作机制 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-Spark内核讲解"><span class="nav-number">6.</span> <span class="nav-text"> 第四章 Spark内核讲解 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-Spark-SQL和数据仓库"><span class="nav-number">7.</span> <span class="nav-text"> 第五章 Spark SQL和数据仓库 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第六章-Spark-流式计算"><span class="nav-number">8.</span> <span class="nav-text"> 第六章 Spark 流式计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第七章-Spark-图计算"><span class="nav-number">9.</span> <span class="nav-text"> 第七章 Spark 图计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第八章-Spark-MLlib"><span class="nav-number">10.</span> <span class="nav-text"> 第八章 Spark MLlib </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二级目录"><span class="nav-number">10.1.</span> <span class="nav-text"> 二级目录 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三级目录"><span class="nav-number">10.1.1.</span> <span class="nav-text"> 三级目录 </span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text"> 前言 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-Spark和大数据"><span class="nav-number">3.</span> <span class="nav-text"> 第一章 Spark和大数据 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">3.1.</span> <span class="nav-text"> 概述 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据是什么"><span class="nav-number">3.2.</span> <span class="nav-text">  大数据是什么 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据的重要解决方案hadoop"><span class="nav-number">3.3.</span> <span class="nav-text">  大数据的重要解决方案hadoop </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用Spark"><span class="nav-number">3.4.</span> <span class="nav-text">  为什么要用Spark </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark未来发展"><span class="nav-number">3.5.</span> <span class="nav-text">  Spark未来发展 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-Spark基础"><span class="nav-number">4.</span> <span class="nav-text"> 第二章 Spark基础 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark集群部署"><span class="nav-number">4.1.</span> <span class="nav-text"> Spark集群部署 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群总览"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 集群总览 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署思路"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 部署思路 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建账号"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装JDK"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置时间同步"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">设置时间同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署zookeeper集群"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">部署zookeeper集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署hadoop集群"><span class="nav-number">4.1.2.5.</span> <span class="nav-text">部署hadoop集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署spark集群"><span class="nav-number">4.1.2.6.</span> <span class="nav-text">部署spark集群</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键部署高可用hadoop-Spark集群"><span class="nav-number">4.1.3.</span> <span class="nav-text"> 一键部署高可用hadoop+Spark集群 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程指南"><span class="nav-number">4.2.</span> <span class="nav-text"> 编程指南 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群工作方式"><span class="nav-number">4.2.1.</span> <span class="nav-text"> 集群工作方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程核心思想"><span class="nav-number">4.2.2.</span> <span class="nav-text"> 编程核心思想 </span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RDD创建"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">RDD创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RDD操作"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">RDD操作</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Spark工作机制"><span class="nav-number">5.</span> <span class="nav-text"> 第三章 Spark工作机制 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调度管理"><span class="nav-number">5.1.</span> <span class="nav-text"> 调度管理 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群名词解释"><span class="nav-number">5.1.1.</span> <span class="nav-text"> 集群名词解释 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark程序之间的调度"><span class="nav-number">5.1.2.</span> <span class="nav-text"> Spark程序之间的调度 </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark程序内部的调度"><span class="nav-number">5.1.3.</span> <span class="nav-text"> Spark程序内部的调度 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理"><span class="nav-number">5.2.</span> <span class="nav-text"> 内存管理 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容错机制"><span class="nav-number">5.3.</span> <span class="nav-text"> 容错机制 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控管理"><span class="nav-number">5.4.</span> <span class="nav-text"> 监控管理 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark程序配置管理"><span class="nav-number">5.5.</span> <span class="nav-text"> Spark程序配置管理 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-Spark内核讲解"><span class="nav-number">6.</span> <span class="nav-text"> 第四章 Spark内核讲解 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-Spark-SQL和数据仓库"><span class="nav-number">7.</span> <span class="nav-text"> 第五章 Spark SQL和数据仓库 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第六章-Spark-流式计算"><span class="nav-number">8.</span> <span class="nav-text"> 第六章 Spark 流式计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第七章-Spark-图计算"><span class="nav-number">9.</span> <span class="nav-text"> 第七章 Spark 图计算 </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第八章-Spark-MLlib"><span class="nav-number">10.</span> <span class="nav-text"> 第八章 Spark MLlib </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二级目录"><span class="nav-number">10.1.</span> <span class="nav-text"> 二级目录 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三级目录"><span class="nav-number">10.1.1.</span> <span class="nav-text"> 三级目录 </span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -868,7 +1034,7 @@ var jiathis_config={
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">37.7k</span>
+    <span title="Site words total count">44.0k</span>
   
 </div>
 
@@ -890,7 +1056,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共37.7k字</span>
+  <span class="post-count">博客全站共44.0k字</span>
 </div>
 
         
