@@ -110,7 +110,7 @@
 <meta property="og:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p4wi87x7l.bkt.clouddn.com/22.jpg">
-<meta property="og:updated_time" content="2018-03-14T12:20:19.000Z">
+<meta property="og:updated_time" content="2018-03-14T12:21:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark最佳实践">
 <meta name="twitter:description" content="简介 本书是Spark的实战指南，全书共8章，前四章介绍Spark部署，工作机制和内核，后四章通过实战项目介绍Spark SQL，Spark Streaming，Spark GraphX和Spark MLlib功能模块。 通过阅读，读者可以接收的信息和获取的能力包括:  Spark单机及集群部署，一键部署大规模集群的脚本； 对Spark运行过程，数据结构，内核函数进行深入解析； hdfs解决了数">
@@ -427,7 +427,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjeplajmy0000dcpv95q8w2az"
+                 href="http://p4wi87x7l.bkt.clouddn.com/22.jpg" rel="gallery_cjer2157e0000qhpvikcpng0n"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://p4wi87x7l.bkt.clouddn.com/22.jpg" itemprop="contentUrl"/>
               </a>
@@ -625,7 +625,7 @@
 </code></pre><p><img src="http://p09u6sy9g.bkt.clouddn.com/1520999917431.png" alt=""></p>
 <pre><code>上面只是为了方便理解，实际没人那么写，一条命令直接搞定，完成词频统计就是这么简单干脆。
 </code></pre><p>笔者同时还在学习一部小象学院的Spark视频教程，里面有详细讲解scala，具体形式是在spark环境中用scala做各种操作来演示scala的各种功能，因为Spark就是用scala开发的，编写程序也是用scala，那个scala的实际操作差不多就是spark日常操作的教程，到时候整理出来会在<strong>这里</strong>添加链接，敬请期待，不过那就是另一篇博客了O(∩_∩)O</p>
-<p>2018/3/13 19:23:07 </p>
+<p><strong>2018/3/13 19:23:07 </strong></p>
 <h1 id="第三章-Spark工作机制"><a href="#第三章-Spark工作机制" class="headerlink" title=" 第三章 Spark工作机制 "></a><font color="#5CACEE"> 第三章 Spark工作机制 </font></h1><blockquote class="blockquote-center"><p>有生不生，有化不化。不生者能生生，不化者能化化。 </p>
 </blockquote>
 <p>本章主要内容是Spark底层的工作机制，包括调度管理、内存管理、容错机制、监控管理以及Spark程序配置管理，这对理解Spark程序的运行非常有帮助。</p>
@@ -742,7 +742,7 @@ sc.setLocalProperty(&quot;spark.scheduler.pool&quot;, null)
 val sc = new SparkContext(conf)    
 </code></pre><p>在web界面的environment选项里可以看到所有配置的spark属性</p>
 <p>日志配置是另一项单独的配置，使用配置文件目录下的<code>log4j.properties</code>作为配置文件。</p>
-<p>2018/3/14 20:19:48 </p>
+<p><strong>2018/3/14 20:19:48 </strong></p>
 <h1 id="第四章-Spark内核讲解"><a href="#第四章-Spark内核讲解" class="headerlink" title=" 第四章 Spark内核讲解 "></a><font color="#5CACEE"> 第四章 Spark内核讲解 </font></h1><p>深入Spark内核，并结合源码，介绍了核心结构RDD、RDD对象的Transformation和Action操作是如何实现的、SparkContext对象及初始化过程、DAG调度的工作流程。了解这些内容可以帮助读者编写出高质量的Spark程序代码。</p>
 <h1 id="第五章-Spark-SQL和数据仓库"><a href="#第五章-Spark-SQL和数据仓库" class="headerlink" title=" 第五章 Spark SQL和数据仓库 "></a><font color="#5CACEE"> 第五章 Spark SQL和数据仓库 </font></h1><p>介绍Spark SQL，可以代替Hive，用于搭建一个企业级的数据仓库。案例基于淘宝的电商数据建立电商数据仓库，并以日常运营工作为例，通过电商数据库分析电商运营中的各类问题。</p>
 <h1 id="第六章-Spark-流式计算"><a href="#第六章-Spark-流式计算" class="headerlink" title=" 第六章 Spark 流式计算 "></a><font color="#5CACEE"> 第六章 Spark 流式计算 </font></h1><p>章介绍Spark实时流式计算，类似于Storm，但吞吐量方面更有优势。案例是基于一个站点的Web日志建立一个类似百度统计的实时统计系统，是各种实时系统典型的参考例子。</p>
@@ -934,7 +934,7 @@ var jiathis_config={
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -945,7 +945,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -956,7 +956,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -1034,7 +1034,7 @@ var jiathis_config={
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">44.0k</span>
+    <span title="Site words total count">50.4k</span>
   
 </div>
 
@@ -1056,7 +1056,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共44.0k字</span>
+  <span class="post-count">博客全站共50.4k字</span>
 </div>
 
         
